@@ -29,4 +29,4 @@ git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp 
 chmod -R 1770 dvlp/mnt/HOME$ && \
 chmod -R 1770 dvlp/mnt/bak && \
 cd dvlp && \
-git submodule update --init --progress --filter=blob:limit=20m -- kernels 
+git submodule update --init --progress --filter=blob:limit=20m -- kernels mnt
