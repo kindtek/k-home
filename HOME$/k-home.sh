@@ -15,9 +15,10 @@ set -x
                     --target dvlp_repo-k-home \
                     --output type=local,dest=. \
                     --build-arg LINUX=y \
+                    --no-cache-filter=dvlp_repo-build \
                     --progress=plain \
-                    . 2>&1 || exit<<'comment'
-comment
+                    . 2>&1 || exit<<'scratchpad'
+scratchpad
 # 
 #                -----------------------------------------------                   #
 #               |||||||||||||||||||||||||||||||||||||||||||||||||                  #
