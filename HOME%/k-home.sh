@@ -11,6 +11,7 @@ set -x
 #              ---------------------------------------------------                #
 #
                     docker buildx build ${build_cache} \
+                    --file dvlw/dvlp/docker/kali/Dockerfile \
                     --target dvlp_repo-k-home \
                     --output type=local,dest=. \
                     --build-arg WINDOWS=y \
