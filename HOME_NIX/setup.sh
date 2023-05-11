@@ -5,6 +5,57 @@ ssh_dir=$3
 ssh_dir_default=$HOME/.ssh
 confirm="r"
 warning=""
+
+orig_win_user=$win_user
+orig_pwd=$(pwd)
+[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
+while [ ! -d "$win_user" ]; do
+    if [ ! -d "/mnt/c/users" ]; then
+        if [ ! -d "/mnt/c/users/$win_user" ]; then
+            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
+        fi
+        break;
+    fi
+    echo " 
+
+
+integrate windows home directory?
+
+it will be used for kernel installations, WSL configuration management, etc
+
+    choose from:
+    " 
+    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
+
+    read -r -p "
+
+(skip)  C:\\users\\" win_user
+    if [ "$win_user" = "" ]; then
+        win_user=$orig_win_user
+        break
+    fi
+    if [ ! -d "/mnt/c/users/$win_user" ]; then
+        echo "
+
+        
+        
+        
+
+
+
+
+
+
+
+C:\\users\\$win_user is not a home directory"
+    else
+        WIN_USER=$win_user
+        export WIN_USER
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+        PATH="$PATH:/mnt/c/users/$WIN_USER/repos/kindtek"
+    fi
+done
+cd "$orig_pwd" || exit
 echo "
 apt update/upgrade?"
     read -r -p "
