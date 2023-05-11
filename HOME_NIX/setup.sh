@@ -50,9 +50,12 @@ it will be used for kernel installations, WSL configuration management, etc
 C:\\users\\$win_user is not a home directory"
     else
         WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$win_user
+        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
         export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-        PATH="$PATH:/mnt/c/users/$WIN_USER/repos/kindtek"
     fi
 done
 cd "$orig_pwd" || exit
