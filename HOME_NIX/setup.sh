@@ -266,7 +266,7 @@ convert virtual network connection to bridged?"
 read -r -p "
 (no)
 " convert_net
-if [ "${convert_net,,}" != "n" ] && [ "${convert_net,,}" != "n" ]; then
+if [ "${convert_net}" != "" ]; then
     powershell.exe ./bridge-wsl2-net.ps1
     echo "
 
@@ -307,7 +307,7 @@ read -r -p "
 (no)
 " build_kde
 if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
-    ./start-kex.sh
+    ./start-kde.sh
 fi
 
 echo "operation complete ..."
