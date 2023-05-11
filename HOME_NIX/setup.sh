@@ -266,7 +266,7 @@ convert virtual network connection to bridged?"
 read -r -p "
 (no)
 " convert_net
-if [ "${convert_net}" != "" ]; then
+if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     powershell.exe ./bridge-wsl2-net.ps1
     echo "
 
