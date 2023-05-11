@@ -28,5 +28,5 @@ cd dvlw && \
 git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell 2>/dev/null && \
 cd dvlp && \
 git submodule update --init --progress --filter=blob:limit=20m -- kernels mnt && \
-chmod -R 1770 dvlp/mnt/HOME$ && \
+chmod -R 1770 dvlp/mnt/HOME_NIX && \
 chmod -R 1770 dvlp/mnt/bak 
