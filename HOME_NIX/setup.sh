@@ -8,6 +8,14 @@ warning=""
 
 orig_win_user=$win_user
 orig_pwd=$(pwd)
+echo "
+initialize/update dependencies?"
+    read -r -p "
+(yes)
+" update_upgrade
+if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
+    sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
+fi
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
 while [ ! -d "$win_user" ]; do
     if [ ! -d "/mnt/c/users" ]; then
@@ -59,14 +67,7 @@ C:\\users\\$win_user is not a home directory"
     fi
 done
 cd "$orig_pwd" || exit
-echo "
-initialize/update dependencies?"
-    read -r -p "
-(yes)
-" update_upgrade
-if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
-fi
+
 if [ -f "$HOME/.ssh/known_hosts" ]; then
     echo "
 regenerate ssh keys?"
