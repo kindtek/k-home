@@ -60,13 +60,12 @@ C:\\users\\$win_user is not a home directory"
 done
 cd "$orig_pwd" || exit
 echo "
-apt update/upgrade?"
+initialize/update dependencies?"
     read -r -p "
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    echo "  now running apt-get update and apt-get upgrade"
-    sudo apt-get -y update && sudo apt-get -y upgrade
+    sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
 fi
 if [ -f "$HOME/.ssh/known_hosts" ]; then
     echo "
