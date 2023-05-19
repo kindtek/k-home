@@ -207,6 +207,7 @@ if [ "$confirm" != "" ]; then
     press ENTER to confirm and generate credentials
 
     [r]etry / e[x]it / (continue) " confirm
+        if [ "$confirm" == "continue" ] || [ "$confirm" == "" ]; then break; fi
         if [ "$confirm" == "exit" ] || [ "$confirm" == "x" ]; then exit; fi
         if [ "${confirm,,}" != "r" ] && [ "${confirm,,}" != "retry" ]; then exit; fi
         if [ "${confirm,,}" == "r" ] || [ "${confirm,,}" == "retry" ]; then 
