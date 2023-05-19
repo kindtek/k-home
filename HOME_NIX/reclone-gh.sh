@@ -1,5 +1,5 @@
 #!/bin/bash
-apt-get install -y git
+sudo apt-get install -y git
 
 echo "  WARNING!
     Any changes you made in $HOME/dvlw are about to be erased.
@@ -9,8 +9,8 @@ read -r -p "
 (continue)
 " reclone
 if [ "$reclone" = "" ]; then
-    echo 'rm -rf dvlw/* || echo "could not remove dvlw directory .."'
-    echo 'rm -rf dvlw/.* || echo "could not remove git server .."'
+    rm -rf dvlw/* || echo "could not remove dvlw directory .."
+    rm -rf dvlw/.* || echo "could not remove git server .."
 fi
 
 repo_owner=kindtek && \
