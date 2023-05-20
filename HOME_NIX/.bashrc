@@ -139,6 +139,7 @@ fi
 # some more ls aliases
 alias ll='ls -l'
 alias la='ls -A'
+alias lal='ls -al'
 alias l='ls -CF'
 
 # Alias definitions.
