@@ -37,9 +37,8 @@ win_user=${1}
 #
                     docker buildx build ${build_cache} \
                     --file dvlw/dvlp/docker/kali/Dockerfile \
-                    --target dvlp_repo-k-home \
+                    --target dvlp_k-home-nix \
                     --output type=local,dest=. \
-                    --build-arg LINUX=y \
                     --no-cache-filter=dvlp_repo-build \
                     --progress=plain \
                     . 2>&1 || exit<<'scratchpad'

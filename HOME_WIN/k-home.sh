@@ -6,18 +6,20 @@ mkdir -p logs
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
+win_user=${1}
+
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #
 #              ---------------------------------------------------                #
 #
                     docker buildx build ${build_cache} \
                     --file dvlw/dvlp/docker/kali/Dockerfile \
-                    --target dvlp_repo-k-home \
+                    --target dvlp_k-home-win \
                     --output type=local,dest=. \
-                    --build-arg WINDOWS=y \
+                    --no-cache-filter=dvlp_repo-build \
                     --progress=plain \
-                    . 2>&1 || exit<<'comment'
-comment
+                    . 2>&1 || exit<<'scratchpad'
+scratchpad
 # 
 #                -----------------------------------------------                   #
 #               |||||||||||||||||||||||||||||||||||||||||||||||||                  #
