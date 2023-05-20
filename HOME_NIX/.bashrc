@@ -80,7 +80,7 @@ if [ "$color_prompt" = yes ]; then
         prompt_color='\[\033[;94m\]'
         info_color='\[\033[1;31m\]'
         # Skull emoji for root terminal
-        #prompt_symbol=💀
+        prompt_symbol=💀
     fi
     case "$PROMPT_ALTERNATIVE" in
         twoline)
