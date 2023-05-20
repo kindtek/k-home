@@ -7,11 +7,14 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
         Exit
     }
 }
+
+
 $remoteport = bash.exe -c "ifconfig eth0 | grep 'inet '"
 $found = $remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
 
 if( $found ){
   $remoteport = $matches[0];
+  Write-Output "IP found: $($matches[0])"
 } else{
   Write-Output "The Script Exited, the ip address of WSL 2 cannot be found";
   exit;
@@ -19,7 +22,7 @@ if( $found ){
 
 #[Ports]
 
-#All the ports you want to forward separated by coma
+# All the ports you want to forward separated by comma
 $ports=@(80,443,10000,3000,5000);
 
 
