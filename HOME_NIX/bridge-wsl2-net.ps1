@@ -33,11 +33,12 @@ $ports_a = $ports -join ",";
 
 
 #Remove Firewall Exception Rules
-Invoke-Expression "Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' ";
+Invoke-Expression "Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Outbound' ";
+Invoke-Expression "Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Inbound' ";
 
 #adding Exception Rules for inbound and outbound Rules
-Invoke-Expression "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Outbound -LocalPort $ports_a -Action Allow -Protocol TCP";
-Invoke-Expression "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Inbound -LocalPort $ports_a -Action Allow -Protocol TCP";
+Invoke-Expression "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Outbound' -Direction Outbound -LocalPort $ports_a -Action Allow -Protocol TCP";
+Invoke-Expression "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Inbound' -Direction Inbound -LocalPort $ports_a -Action Allow -Protocol TCP";
 
 for( $i = 0; $i -lt $ports.length; $i++ ){
   $port = $ports[$i];
