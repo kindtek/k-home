@@ -8,6 +8,8 @@ warning=""
 
 orig_win_user=$win_user
 orig_pwd=$(pwd)
+
+# update install apt-utils dialog kali-linux-headless upgrade
 echo "
 initialize/update dependencies?"
     read -r -p "
@@ -16,58 +18,31 @@ initialize/update dependencies?"
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
 fi
-[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
-while [ ! -d "$win_user" ]; do
-    if [ ! -d "/mnt/c/users" ]; then
-        if [ ! -d "/mnt/c/users/$win_user" ]; then
-            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
-        fi
-        break;
-    fi
-    echo " 
 
+# cdir install
+echo "
+install cdir?"
+read -r -p "
+(no)
+" install_cdir
+if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
+    sudo apt-get update -y && sudo apt-get autoremove -y && \
+    sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
+    pip3 install pip --upgrade --no-warn-script-location --no-deps && \
+    pip3 install cdir --user
+fi
 
-integrate windows home directory?
+# k-home
+echo "
+pull k-home files from repo to $HOME?"
+read -r -p "
+(no)
+" update_home
+if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
+    ./k-home.sh "$WIN_USER"
+fi
 
-it will be used for kernel installations, WSL configuration management, etc
-
-    choose from:
-    " 
-    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
-
-    read -r -p "
-
-(skip)  C:\\users\\" win_user
-    if [ "$win_user" = "" ]; then
-        win_user=$orig_win_user
-        break
-    fi
-    if [ ! -d "/mnt/c/users/$win_user" ]; then
-        echo "
-
-        
-        
-        
-
-
-
-
-
-
-
-C:\\users\\$win_user is not a home directory"
-    else
-        WIN_USER=$win_user
-        WIN_USER_HOME=/mnt/c/users/$win_user
-        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-    fi
-done
-cd "$orig_pwd" || exit
-
+# ssh gen
 if [ -f "$HOME/.ssh/known_hosts" ]; then
     echo "
 regenerate ssh keys?"
@@ -75,11 +50,12 @@ regenerate ssh keys?"
 (no)
 " regen_ssh
     if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "n" ] || [ "${regen_ssh,,}" = "no" ]; then
-        confirm=""
+        confirm_regen=""
     fi
 fi
-if [ "$confirm" != "" ]; then 
-    while [ "${confirm,,}" = "r" ] || [ "${confirm,,}" = "retry" ]; do
+
+if [ "$confirm_regen" != "" ]; then 
+    while [ "${confirm_regen,,}" = "r" ] || [ "${confirm_regen,,}" = "retry" ]; do
         clear -x
         echo "
 
@@ -207,10 +183,10 @@ if [ "$confirm" != "" ]; then
     press ENTER to confirm and generate credentials
 
     [r]etry / e[x]it / (continue) " confirm
-        if [ "$confirm" == "continue" ] || [ "$confirm" == "" ]; then break; fi
-        if [ "$confirm" == "exit" ] || [ "$confirm" == "x" ]; then exit; fi
-        if [ "${confirm,,}" != "r" ] && [ "${confirm,,}" != "retry" ]; then exit; fi
-        if [ "${confirm,,}" == "r" ] || [ "${confirm,,}" == "retry" ]; then 
+        if [ "$confirm_regen" == "continue" ] || [ "$confirm_regen" == "" ]; then break; fi
+        if [ "$confirm_regen" == "exit" ] || [ "$confirm_regen" == "x" ]; then exit; fi
+        if [ "${confirm_regen,,}" != "r" ] && [ "${confirm_regen,,}" != "retry" ]; then exit; fi
+        if [ "${confirm_regen,,}" == "r" ] || [ "${confirm_regen,,}" == "retry" ]; then 
             echo "
         retrying ... ";
             unset ssh_dir git_uname git_email warning;
@@ -316,22 +292,125 @@ if [ "$confirm" != "" ]; then
         fi
 fi
 
+# CUDA install
 echo "
-convert virtual network connection to bridged?"
+install CUDA?"
+read -r -p "
+(no)
+" install_cuda
+if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
+    sudo apt-get install --no-install-recommends -y nvidia-cuda-toolkit
+fi
+
+# enable virtual network
+echo "
+convert virtual network connection to bridged? (requires elevated access privileges)"
 read -r -p "
 (no)
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
-    powershell.exe ./bridge-wsl2-net.ps1
-    echo "
+    powershell.exe ./bridge-wsl2-net.ps1 || pwsh ./bridge-wsl2-net.ps1 || echo "
+------------------------------- copy_start -------------------------------
 
-if this operation fails copy/pasta the code below into a windows shell:
+" && tail -n +10 bridge-wsl2-net.ps1 && echo "
 
------------------------------------------------------------------------
+------------------------------- copy_end ---------------------------------
 
-"
-    cat bridge-wsl2-net.ps1
-fi 
+Ooops ... failed to automatically add WSL firewall rules.
+to manually update:
+
+1)  open a windows shell with admin privileges
+        
+        shortcut: 
+            - [WIN + X] then [a]    (opens admin window)
+            - [<-] then [ENTER]     (confirm elevated access privileges)
+
+
+2)  copypasta (copy code between copy_start and copy_end and paste into terminal)
+
+
+" && read -r -p "(continue)"
+elif [ "${convert_net,,}"  = "revert" ]; then
+    powershell.exe ./bridge-wsl2-net.ps1 || pwsh ./bridge-wsl2-net.ps1 || echo "
+------------------------------- copy_start -------------------------------
+
+" && echo "#Remove Firewall Exception Rules
+Invoke-Expression \"Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Outbound'\";
+Invoke-Expression \"Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock Inbound'\";" && echo "
+
+------------------------------- copy_end ---------------------------------
+
+Ooops ... failed to automatically remove WSL firewall rules.
+to manually update:
+
+1)  open a windows shell with admin privileges
+        
+        shortcut: 
+            - [WIN + X] then [a]    (opens admin window)
+            - [<-] then [ENTER]     (confirm elevated access privileges)
+
+
+2)  copypasta (copy code between copy_start and copy_end and paste into terminal)
+
+
+" && read -r -p "(continue)"
+fi
+
+# %USERPROFILE% integration
+[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
+while [ ! -d "$win_user" ]; do
+    if [ ! -d "/mnt/c/users" ]; then
+        if [ ! -d "/mnt/c/users/$win_user" ]; then
+            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
+        fi
+        break;
+    fi
+    echo " 
+
+
+integrate windows home directory?
+
+this directory will be used for:
+    - WSL configuration management
+    - kernel installations
+    - sync home directory with repo
+
+    choose from:
+    " 
+    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
+
+    read -r -p "
+
+(skip)  C:\\users\\" win_user
+    if [ "$win_user" = "" ]; then
+        win_user=$orig_win_user
+        break
+    fi
+    if [ ! -d "/mnt/c/users/$win_user" ]; then
+        echo "
+
+        
+        
+        
+
+
+
+
+
+
+
+C:\\users\\$win_user is not a home directory"
+    else
+        WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$win_user
+        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+    fi
+done
+cd "$orig_pwd" || exit
 
 echo "
 build kernel for WSL?"
@@ -341,9 +420,9 @@ read -r -p "
 if [ "${install_kernel,,}"  = "y" ] || [ "${install_kernel,,}" = "yes" ]; then
     if [ "$(read -r -p '
 (install with zfs)')" = "" ]; then
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic "" zfs
+        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic "" "zfs" "$WIN_USER"
     else
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic
+        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic "" "" "$WIN_USER"
     fi
 fi
 
@@ -353,7 +432,7 @@ read -r -p "
 (no)
 " build_kex
 if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-    ./start-kex.sh
+    ./start-kex.sh "$WIN_USER"
 fi
 
 echo "
@@ -362,8 +441,10 @@ read -r -p "
 (no)
 " build_kde
 if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
-    ./start-kde.sh
+    ./start-kde.sh "$WIN_USER"
 fi
+
+
 
 echo "operation complete ..."
 
