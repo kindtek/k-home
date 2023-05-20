@@ -172,30 +172,5 @@ alias cdir='source cdir.sh'
 alias grep='grep --color=auto'
 alias powershell=pwsh
 alias vi="vi -c 'set verbose showmode'"
-
-# alias goto_hell='chroot --userspec=$_DVL:hell /hell bash'
-# alias dvl_run='chroot --userspec=$_DVL:hell /hell'
-
-# alias goto_halo='chroot --userspec=$_AGL:halo /halo bash'
-# alias agl_run='chroot --userspec=$_AGL:halo /halo'
-
-# alias su_r00t='chroot --userspec=r00t:r00t /halo bash'
-# alias r00t_run='chroot --userspec=r00t:r00t /halo'
-
-# alias su_g0d='chroot --userspec=g0d:g0d /halo bash'
-# alias g0d_run='chroot --userspec=g0d:g0d /halo'
-
-
-# # cdir troubleshooting from chroot
-# find . -path ./mnt -prune -o -name 'cdir.sh'
-# cp /usr/local/bin/cdir* /halo/usr/local/bin/
-# cp -r /usr/local/lib/python* /halo/usr/local/lib/
-# PATH=$PATH:/g0d/bin
-
-# # install troubleshooting
-# rm /var/lib/dpkg/statoverride
-# rm /var/lib/dpkg/lock
-# dpkg --configure -a
-# apt-get -f install
-
-# for package in $(apt list --installed | grep -P ".*(?=/)" -o); do apt install --reinstall -y $package; done; 
+alias reinstall_all_packages_no_suggests='for package in $(apt list --installed | grep -P ".*(?=/)" -o); do apt-get --reinstall --no-install-suggests -y install $package; done;'
+alias reinstall_all_packages_with_suggests='for package in $(apt list --installed | grep -P ".*(?=/)" -o); do apt-get --reinstall --install-suggests -y install $package; done;'
