@@ -1,1 +1,1 @@
-## these files are synced with windows kache
+## these files are synced with windows home directory
