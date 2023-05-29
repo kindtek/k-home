@@ -413,16 +413,38 @@ done
 cd "$orig_pwd" || exit
 
 echo "
-build kernel for WSL?"
+build basic kernel for WSL? (ZFS optional)"
 read -r -p "
 (no)
-" install_kernel
-if [ "${install_kernel,,}"  = "y" ] || [ "${install_kernel,,}" = "yes" ]; then
+" install_basic_kernel
+if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_basic_kernel,,}" = "yes" ]; then
     if [ "$(read -r -p '
-(install with zfs)')" = "" ]; then
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic "" "zfs" "$WIN_USER"
+(install with zfs filesystem)')" = "" ]; then
+        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
+        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
     else
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh basic "" "" "$WIN_USER"
+        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "" "$WIN_USER" && \
+        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+    fi
+else
+    echo "
+    build latest kernel for WSL? (ZFS unavailable)"
+    read -r -p "
+    (no)
+    " install_latest_kernel
+    if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "latest" "" "" "$WIN_USER" && \
+        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+    else
+        echo "
+        build stable kernel for WSL? (ZFS unavailable)"
+        read -r -p "
+        (no)
+        " install_stable_kernel
+        if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
+            sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "stable" "" "" "$WIN_USER" && \
+            sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+        fi
     fi
 fi
 
