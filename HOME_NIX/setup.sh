@@ -430,6 +430,7 @@ if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_basic_kernel,,}" = "ye
     if [ "$(read -r -p '
 (install with zfs filesystem)
 ')" = "" ]; then
+        echo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp"
         sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp" && \
         sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
     else
