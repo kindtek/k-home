@@ -4,6 +4,16 @@ ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
 
+if [ "$win_user" != "" ]; then
+        echo "setting linux environment variables for $win_user"
+        WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$win_user
+        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+fi
 orig_win_user=$win_user
 orig_pwd=$(pwd)
 
@@ -410,7 +420,7 @@ this directory will be used for:
 
 C:\\users\\$win_user is not a home directory"
     else
-        echo 'setting linux environment variables'
+        echo "setting linux environment variables for $win_user"
         WIN_USER=$win_user
         WIN_USER_HOME=/mnt/c/users/$win_user
         WIN_USER_KACHE=/mnt/c/users/$win_user/kache
