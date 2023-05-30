@@ -441,12 +441,15 @@ if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_basic_kernel,,}" = "ye
     if [ "$(read -r -p '
 (install with zfs filesystem)
 ')" = "" ]; then
-        echo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp"
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp" && \
-        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+        cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+        sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp" && \
+        sudo bash install-kernel.sh "$WIN_USER" "latest"
+        cd "$orig_pwd" || exit
     else
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "basic" "" "" "$WIN_USER" "$timestamp" && \
-        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+        cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+        sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER" "$timestamp" && \
+        sudo bash install-kernel.sh "$WIN_USER" "latest"
+        cd "$orig_pwd" || exit
     fi
 else
     echo "
@@ -455,8 +458,10 @@ else
     (no)
     " install_latest_kernel
     if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
-        sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "latest" "" "" "$WIN_USER" "$timestamp" && \
-        sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+        cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+        sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" "$timestamp" && \
+        sudo bash install-kernel.sh "$WIN_USER" "latest"
+        cd "$orig_pwd" || exit
     else
         echo "
         build stable kernel for WSL? (ZFS unavailable)"
@@ -464,8 +469,10 @@ else
         (no)
         " install_stable_kernel
         if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
-            sudo bash /hal/dvlw/dvlp/kernels/linux/build-import-kernel.sh "stable" "" "" "$WIN_USER" "$timestamp" && \
-            sudo bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" "latest"
+            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+            sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER" "$timestamp" && \
+            sudo bash install-kernel.sh "$WIN_USER" "latest"
+            cd "$orig_pwd" || exit
         fi
     fi
 fi
