@@ -431,7 +431,6 @@ C:\\users\\$win_user is not a home directory"
     fi
 done
 cd "$orig_pwd" || exit
-timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
 build/install kernel for WSL?"
