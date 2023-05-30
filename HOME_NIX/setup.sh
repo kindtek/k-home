@@ -1,7 +1,5 @@
 #!/bin/bash
-git_uname=$1
-git_email=$2
-ssh_dir=$3
+win_user=$1
 ssh_dir_default=$HOME/.ssh
 confirm="r"
 warning=""
