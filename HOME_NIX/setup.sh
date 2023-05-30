@@ -437,7 +437,7 @@ build/install kernel for WSL?"
     read -r -p "
 (yes)
 " build_kernel
-if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
+if [ "${build_kernel,,}" != "n" ] && [ "${build_kernel,,}" != "n0" ]; then
     sudo apt -y update && sudo apt -y install bison dwarves flex libelf-dev && sudo apt -y upgrade 
 fi
 echo "
