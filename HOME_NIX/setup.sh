@@ -436,7 +436,7 @@ timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
 echo "
 build/install kernel for WSL?"
     read -r -p "
-(no)
+(yes)
 " build_kernel
 if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
     sudo apt -y update && sudo apt -y install bison dwarves flex libelf-dev && sudo apt -y upgrade 
