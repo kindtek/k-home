@@ -58,6 +58,8 @@ generate ssh keys?"
 " regen_ssh
     if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "y" ] || [ "${regen_ssh,,}" = "yes" ]; then
         confirm_regen="r"
+    else 
+        confirm_regen=""
     fi
 fi
 
