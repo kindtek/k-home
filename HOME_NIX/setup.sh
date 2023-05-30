@@ -1,7 +1,7 @@
 #!/bin/bash
 win_user=$1
 ssh_dir_default=$HOME/.ssh
-confirm="r"
+confirm_regen="r"
 warning=""
 
 orig_win_user=$win_user
@@ -180,7 +180,7 @@ if [ "$confirm_regen" != "" ]; then
 
     press ENTER to confirm and generate credentials
 
-    [r]etry / e[x]it / (continue) " confirm
+    [r]etry / e[x]it / (continue) " confirm_regen
         if [ "$confirm_regen" == "continue" ] || [ "$confirm_regen" == "" ]; then break; fi
         if [ "$confirm_regen" == "exit" ] || [ "$confirm_regen" == "x" ]; then exit; fi
         if [ "${confirm_regen,,}" != "r" ] && [ "${confirm_regen,,}" != "retry" ]; then exit; fi
