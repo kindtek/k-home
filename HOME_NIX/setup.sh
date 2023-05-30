@@ -410,6 +410,7 @@ this directory will be used for:
 
 C:\\users\\$win_user is not a home directory"
     else
+        echo 'setting linux environment variables'
         WIN_USER=$win_user
         WIN_USER_HOME=/mnt/c/users/$win_user
         WIN_USER_KACHE=/mnt/c/users/$win_user/kache
