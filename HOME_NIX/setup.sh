@@ -438,9 +438,12 @@ read -r -p "
 (no)
 " install_basic_kernel
 if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_basic_kernel,,}" = "yes" ]; then
-    if [ "$(read -r -p '
-(install with zfs filesystem)
-')" = "" ]; then
+    echo "
+build basic kernel for WSL with ZFS?"
+read -r -p "
+(yes)
+" install_basic_zfs_kernel
+    if [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
         cd "$HOME/dvlw/dvlp/kernels/linux" || exit
         sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" "$timestamp" && \
         sudo bash install-kernel.sh "$WIN_USER" "latest"
