@@ -50,6 +50,15 @@ regenerate ssh keys?"
     if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "n" ] || [ "${regen_ssh,,}" = "no" ]; then
         confirm_regen=""
     fi
+else
+    echo "
+generate ssh keys?"
+    read -r -p "
+(yes)
+" regen_ssh
+    if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "y" ] || [ "${regen_ssh,,}" = "yes" ]; then
+        confirm_regen="r"
+    fi
 fi
 
 if [ "$confirm_regen" != "" ]; then 
