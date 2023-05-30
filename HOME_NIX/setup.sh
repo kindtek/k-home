@@ -446,7 +446,9 @@ build/install kernel for WSL?"
 (yes)
 " build_kernel
 if [ "${build_kernel,,}" != "n" ] && [ "${build_kernel,,}" != "n0" ]; then
-    sudo apt -y update && sudo apt -y install bison dwarves flex libelf-dev && sudo apt -y upgrade 
+    sudo apt -y update && sudo apt -y install alien autoconf bison bc build-essential cpio dbus-user-session daemonize dwarves fakeroot \
+    flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
+    python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade 
 fi
 echo "
 build basic kernel for WSL? (ZFS optional)"
@@ -509,17 +511,21 @@ read -r -p "
 (no)
 " build_kex
 if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+    sudo apt install -y virtualbox vlc x11-apps \
+    xrdp xfce4 xfce4-goodies \
+    lightdm \
+    kali-defaults kali-root-login desktop-base kali-win-kex
     ./start-kex.sh "$WIN_USER"
 fi
 
-echo "
-build KDE gui?"
-read -r -p "
-(no)
-" build_kde
-if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
-    ./start-kde.sh "$WIN_USER"
-fi
+# echo "
+# build KDE gui?"
+# read -r -p "
+# (no)
+# " build_kde
+# if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
+#     ./start-kde.sh "$WIN_USER"
+# fi
 
 
 
