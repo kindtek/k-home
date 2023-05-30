@@ -31,3 +31,5 @@ TXT
 eval cat "logs/$filename.sh" 2>&1 | tee --append "logs/$filename.log" && \
 # execute .sh file && log all output
 bash "logs/${filename}.sh"  2>&1 | tee --append "logs/${filename}.log" 
+
+chown -R "$(id -un):$(id -Gn | grep -o --color=never '^\w*\b')" ./*.sh

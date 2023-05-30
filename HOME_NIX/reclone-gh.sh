@@ -1,7 +1,10 @@
 #!/bin/bash
 sudo apt-get install -y git
 
-echo "  WARNING!
+echo "
+
+WARNING!
+
     Any changes you made in $HOME/dvlw are about to be erased.
 
     continue or exit?"
