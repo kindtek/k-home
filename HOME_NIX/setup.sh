@@ -432,6 +432,15 @@ C:\\users\\$win_user is not a home directory"
 done
 cd "$orig_pwd" || exit
 timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
+# update install apt-utils dialog kali-linux-headless upgrade
+echo "
+build/install kernel for WSL?"
+    read -r -p "
+(no)
+" build_kernel
+if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
+    sudo apt -y update && sudo apt -y install bison flex libelf-dev && sudo apt -y upgrade 
+fi
 echo "
 build basic kernel for WSL? (ZFS optional)"
 read -r -p "
@@ -476,6 +485,8 @@ else
             sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER" "$timestamp" && \
             sudo bash install-kernel.sh "$WIN_USER" "latest"
             cd "$orig_pwd" || exit
+        else
+            sudo bash install-kernel.sh "$WIN_USER" "latest"
         fi
     fi
 fi
