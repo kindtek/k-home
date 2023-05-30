@@ -40,6 +40,15 @@ if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
     pip3 install cdir --user
 fi
 
+# reclone
+echo "
+reclone devels-workshop?"
+read -r -p "
+(no)
+" reclone_gh
+if [ "${reclone_gh,,}"  = "y" ] || [ "${reclone_gh,,}" = "yes" ]; then
+    ./reclone-gh.sh
+fi
 # k-home
 echo "
 pull k-home files from repo to $HOME?"
@@ -49,7 +58,6 @@ read -r -p "
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     ./k-home.sh "$WIN_USER"
 fi
-
 # ssh gen
 if [ -f "$HOME/.ssh/known_hosts" ]; then
     echo "
