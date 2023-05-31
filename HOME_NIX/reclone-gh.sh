@@ -12,8 +12,8 @@ read -r -p "
 (continue)
 " reclone
 if [ "$reclone" = "" ]; then
-    rm -rf dvlw/* || echo "could not remove dvlw directory .."
-    rm -rf dvlw/.* || echo "could not remove git server .."
+    sudo rm -rf dvlw/* || echo "could not remove dvlw directory .."
+    sudo rm -rf dvlw/.* || echo "could not remove git server .."
 fi
 
 repo_owner=kindtek && \
