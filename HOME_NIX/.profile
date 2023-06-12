@@ -26,4 +26,4 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-source "/etc/bash.bashrc"
+# source "/etc/bash.bashrc"
