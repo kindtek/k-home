@@ -16,8 +16,7 @@ $found = $remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
 if ( $found ) {
   $remoteport = $matches[0];
   Write-Output "IP found: $($matches[0])"
-}
-else {
+} else {
   Write-Output "The Script Exited, the ip address of WSL 2 cannot be found";
   exit;
 }
