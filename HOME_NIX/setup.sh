@@ -336,7 +336,7 @@ read -r -p "
 (no)
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
-    powershell.exe ./bridge-wsl2-net.ps1 || pwsh ./bridge-wsl2-net.ps1 || echo "
+    powershell.exe ".${HOME}/bridge-wsl2-net.ps1" || pwsh ".${HOME}/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
 
 " && tail -n +10 bridge-wsl2-net.ps1 && echo "
@@ -498,9 +498,6 @@ else
             sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER"  && \
             sudo bash install-kernel.sh "$WIN_USER" "latest"
             cd "$orig_pwd" || exit
-        else
-            echo sudo bash install-kernel.sh "$WIN_USER" "latest"
-            sudo bash install-kernel.sh "$WIN_USER" "latest"
         fi
     fi
 fi
