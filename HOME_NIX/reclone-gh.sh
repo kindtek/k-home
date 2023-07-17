@@ -1,16 +1,23 @@
 #!/bin/bash
-sudo apt-get install -y git
 
-echo "
+if [ "$1" = "autodel" ]; then
+    reclone=""
+else
+    sudo apt-get install -y git
 
-WARNING!
+    echo "
 
-    Any changes you made in $HOME/dvlw are about to be erased.
+    WARNING!
 
-    continue or exit?"
-read -r -p "
-(continue)
-" reclone
+        Any changes you made in $HOME/dvlw are about to be erased.
+
+        continue or exit?"
+    read -r -p "
+    (continue)
+    " reclone
+fi
+
+
 if [ "$reclone" = "" ]; then
     sudo rm -rf dvlw/* || echo "could not remove dvlw directory .."
     sudo rm -rf dvlw/.* || echo "could not remove git server .."
