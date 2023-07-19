@@ -336,6 +336,7 @@ read -r -p "
 (no)
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
+    sudo apt install net-tools
     powershell.exe ".${HOME}/bridge-wsl2-net.ps1" || pwsh ".${HOME}/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
 
