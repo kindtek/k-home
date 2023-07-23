@@ -13,7 +13,7 @@ set -x
 #              ---------------------------------------------------                #
 #
                     docker buildx build ${build_cache} \
-                    --file repos/kindtek/dvlw/dvlp/docker/kali/Dockerfile \
+                    --file ${WIN_USER_HOME}repos/kindtek/dvlw/dvlp/docker/kali/Dockerfile \
                     --target dvlp_k-home-win \
                     --output type=local,dest=. \
                     --no-cache-filter=dvlp_repo-build \
