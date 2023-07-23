@@ -69,6 +69,14 @@ if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     cp "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
 fi
+echo "
+pull k-home files from repo to /etc?"
+read -r -p "
+(no)
+" update_home
+if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
+    sudo cp "./$HOME/dvlw/dvlp/mnt/HOME_NIX/etc/" "./etc/"
+fi
 # %USERPROFILE% integration
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
 while [ ! -d "$win_user" ]; do
