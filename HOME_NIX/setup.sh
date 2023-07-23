@@ -16,7 +16,15 @@ if [ "$win_user" != "" ]; then
 fi
 orig_win_user=$win_user
 orig_pwd=$(pwd)
-
+# CUDA install
+echo "
+install CUDA?"
+read -r -p "
+(no)
+" install_cuda
+if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
+    sudo apt install -y nvidia-cuda-toolkit
+fi
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
 initialize/update dependencies?"
@@ -383,16 +391,6 @@ if [ "$confirm_regen" != "" ]; then
     
 ';
         fi
-fi
-
-# CUDA install
-echo "
-install CUDA?"
-read -r -p "
-(no)
-" install_cuda
-if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
-    sudo apt-get install --no-install-recommends -y nvidia-cuda-toolkit
 fi
 
 # enable virtual network
