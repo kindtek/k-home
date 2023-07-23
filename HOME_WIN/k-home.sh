@@ -14,7 +14,7 @@ win_user=${1}
 #              ---------------------------------------------------                #
 #
                     docker buildx build ${build_cache} \
-                    --file dvlw/dvlp/docker/kali/Dockerfile \
+                    --file repos/kindtek/dvlw/dvlp/docker/kali/Dockerfile \
                     --target dvlp_k-home-win \
                     --output type=local,dest=. \
                     --no-cache-filter=dvlp_repo-build \
