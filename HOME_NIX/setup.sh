@@ -131,7 +131,9 @@ if [ "$WIN_USER" != "" ]; then
     " update_home
     if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
         cp "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
+        cd "$WIN_USER_HOME" || exit
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
+        cd "$orig_pwd" || exit
     fi
 fi
 # ssh gen
