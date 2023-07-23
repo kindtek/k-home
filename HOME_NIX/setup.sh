@@ -429,7 +429,7 @@ to manually update:
 
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
-    powershell.exe ./bridge-wsl2-net.ps1 || pwsh ./bridge-wsl2-net.ps1 || echo "
+    powershell.exe "./${HOME}dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh "./${HOME}dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
 
 " && echo "#Remove Firewall Exception Rules
