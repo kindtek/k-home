@@ -34,7 +34,7 @@ read -r -p "
 (no)
 " install_cdir
 if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
-    sudo apt-get update -y && sudo apt-get autoremove -y && \
+    sudo apt-get update -y && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
     pip3 install cdir --user
@@ -56,7 +56,17 @@ read -r -p "
 (no)
 " update_home
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    ./k-home.sh "$WIN_USER"
+    bash "$HOME/k-home.sh" "$WIN_USER"
+fi
+if [ "$win_user" != "" ]; then
+    echo "
+    pull k-home files from repo to $WIN_USER_HOME ?"
+    read -r -p "
+    (no)
+    " update_home
+    if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
+        bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
+    fi
 fi
 # ssh gen
 if [ -f "$HOME/.ssh/known_hosts" ]; then
