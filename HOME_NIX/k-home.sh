@@ -7,7 +7,6 @@ mkdir -p logs
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
-win_user=${1}
 
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #

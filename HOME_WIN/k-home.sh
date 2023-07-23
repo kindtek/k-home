@@ -1,13 +1,12 @@
 #!/bin/bash
 timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
-filename=k-home-win_$timestamp
+filename=k-home-win_${timestamp}
 
 # log save location 
 mkdir -p logs
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
-win_user=${1}
 
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #
