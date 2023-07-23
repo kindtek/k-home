@@ -130,7 +130,7 @@ if [ "$WIN_USER" != "" ]; then
     (no)
     " update_home
     if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-        cp "$WIN_USER/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER/k-home.sh"
+        cp "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
     fi
 fi
