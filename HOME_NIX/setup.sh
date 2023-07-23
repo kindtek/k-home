@@ -66,7 +66,7 @@ read -r -p "
 (no)
 " update_home
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    cp "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
+    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
 fi
 echo "
@@ -75,7 +75,7 @@ read -r -p "
 (no)
 " update_home
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    sudo cp "$HOME/dvlw/dvlp/mnt/etc/" "./etc/"
+    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "./etc/"
 fi
 # %USERPROFILE% integration
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
@@ -135,12 +135,12 @@ done
 cd "$orig_pwd" || exit
 if [ "$WIN_USER" != "" ]; then
     echo "
-    pull k-home files from repo to $WIN_USER_HOME ?"
+pull k-home files from repo to $WIN_USER_HOME ?"
     read -r -p "
-    (no)
-    " update_home
+(no)
+" update_home
     if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-        cp "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
+        cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
         cd "$WIN_USER_HOME" || exit
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
         cd "$orig_pwd" || exit
