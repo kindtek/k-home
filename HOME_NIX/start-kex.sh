@@ -21,7 +21,7 @@ sudo /etc/init.d/xrdp start
 if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 fi
-pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/"$win_user"/Kex-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
+pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/Kex-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
 oops. no gui
 
  ¯\_(ツ)_/¯

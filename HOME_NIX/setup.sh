@@ -415,6 +415,8 @@ read -r -p "
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo apt install net-tools
+    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
+
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -438,6 +440,8 @@ to manually update:
 
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
+    sudo apt install net-tools
+    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1"  || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
