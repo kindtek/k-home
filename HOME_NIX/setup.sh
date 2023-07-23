@@ -407,10 +407,10 @@ read -r -p "
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo apt install net-tools
-    powershell.exe -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
+    powershell.exe -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" -ExecutionPolicy RemoteSigned || pwsh -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" -ExecutionPolicy RemoteSigned|| echo "
 ------------------------------- copy_start -------------------------------
 
-" && tail -n +10 \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\" && echo "
+" && tail -n +10 ${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1 && echo "
 
 ------------------------------- copy_end ---------------------------------
 
@@ -429,7 +429,7 @@ to manually update:
 
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
-    powershell.exe -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
+    powershell.exe -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" -ExecutionPolicy RemoteSigned || pwsh -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" -ExecutionPolicy RemoteSigned || echo "
 ------------------------------- copy_start -------------------------------
 
 " && echo "#Remove Firewall Exception Rules
