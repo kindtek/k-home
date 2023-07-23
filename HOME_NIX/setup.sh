@@ -75,7 +75,7 @@ read -r -p "
 (no)
 " update_home
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "./etc/"
+    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/" "./"
 fi
 # %USERPROFILE% integration
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
