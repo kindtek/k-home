@@ -58,7 +58,63 @@ read -r -p "
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     bash "$HOME/k-home.sh" "$WIN_USER"
 fi
-if [ "$win_user" != "" ]; then
+# %USERPROFILE% integration
+[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
+while [ ! -d "$win_user" ]; do
+    if [ ! -d "/mnt/c/users" ]; then
+        if [ ! -d "/mnt/c/users/$win_user" ]; then
+            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
+        fi
+        break;
+    fi
+    echo " 
+
+
+integrate windows home directory?
+
+this directory will be used for:
+    - WSL configuration management
+    - kernel installations
+    - sync home directory with repo
+
+    choose from:
+    " 
+    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
+
+    read -r -p "
+
+(skip)  C:\\users\\" win_user
+    if [ "$win_user" = "" ]; then
+        win_user=$orig_win_user
+        break
+    fi
+    if [ ! -d "/mnt/c/users/$win_user" ]; then
+        echo "
+
+        
+        
+        
+
+
+
+
+
+
+
+C:\\users\\$win_user is not a home directory"
+    else
+        echo "setting linux environment variables for $win_user"
+        WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$win_user
+        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+    fi
+done
+cd "$orig_pwd" || exit
+if [ "$WIN_USER" != "" ]; then
     echo "
     pull k-home files from repo to $WIN_USER_HOME ?"
     read -r -p "
@@ -394,62 +450,6 @@ to manually update:
 " && read -r -p "(continue)"
 fi
 
-# %USERPROFILE% integration
-[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
-while [ ! -d "$win_user" ]; do
-    if [ ! -d "/mnt/c/users" ]; then
-        if [ ! -d "/mnt/c/users/$win_user" ]; then
-            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
-        fi
-        break;
-    fi
-    echo " 
-
-
-integrate windows home directory?
-
-this directory will be used for:
-    - WSL configuration management
-    - kernel installations
-    - sync home directory with repo
-
-    choose from:
-    " 
-    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
-
-    read -r -p "
-
-(skip)  C:\\users\\" win_user
-    if [ "$win_user" = "" ]; then
-        win_user=$orig_win_user
-        break
-    fi
-    if [ ! -d "/mnt/c/users/$win_user" ]; then
-        echo "
-
-        
-        
-        
-
-
-
-
-
-
-
-C:\\users\\$win_user is not a home directory"
-    else
-        echo "setting linux environment variables for $win_user"
-        WIN_USER=$win_user
-        WIN_USER_HOME=/mnt/c/users/$win_user
-        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-    fi
-done
-cd "$orig_pwd" || exit
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
 build/install kernel for WSL?"
