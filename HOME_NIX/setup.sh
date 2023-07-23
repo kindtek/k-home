@@ -32,6 +32,8 @@ initialize/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
+    sudo locale-gen en_US.UTF-8
+    sudo dpkg-reconfigure locales
     sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
 fi
 
