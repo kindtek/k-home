@@ -504,7 +504,7 @@ build basic kernel for WSL with ZFS?"
         fi
     else
         echo "
-        build latest kernel for WSL? (ZFS unavailable)"
+        build stable kernel for WSL? (ZFS unavailable)"
         read -r -p "
         (no)
         " install_latest_kernel
@@ -516,14 +516,14 @@ build basic kernel for WSL with ZFS?"
             cd "$orig_pwd" || exit
         else
             echo "
-            build stable kernel for WSL? (ZFS unavailable)"
+            build stable kernel for WSL? (ZFS included)"
             read -r -p "
             (no)
             " install_stable_kernel
             if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
                 cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                echo sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER" 
-                sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER"  && \
+                echo sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER" 
+                sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER"  && \
                 sudo bash install-kernel.sh "$WIN_USER" "latest"
                 cd "$orig_pwd" || exit
             fi
