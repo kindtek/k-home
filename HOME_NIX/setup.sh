@@ -34,7 +34,7 @@ initialize/update dependencies?"
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo locale-gen en_US.UTF-8
     sudo dpkg-reconfigure locales
-    sudo apt -y update && sudo apt -y install apt-utils dialog kali-linux-headless && sudo apt -y upgrade 
+    sudo apt -y update && sudo apt -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless 
 fi
 
 # cdir install
