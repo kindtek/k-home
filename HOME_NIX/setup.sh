@@ -36,7 +36,8 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo dpkg-reconfigure locales && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless 
+    sudo dpkg --add-architecture i386 && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386
 fi
 
 # cdir install
