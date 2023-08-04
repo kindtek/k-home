@@ -475,7 +475,7 @@ build/install kernel for WSL?"
 (no)
 " build_kernel
 if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
-    sudo apt -y update && sudo apt -y install alien autoconf bison bc build-essential cpio dbus-user-session daemonize dwarves fakeroot \
+    sudo apt -y update && sudo apt -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
     flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
     python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade 
 echo "
