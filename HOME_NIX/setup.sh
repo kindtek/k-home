@@ -536,13 +536,25 @@ read -r -p "
 (no)
 " build_kex
 if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+
+    if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
+        ./reclone-gh.sh
+    fi
+    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
     sudo apt install -y virtualbox vlc x11-apps \
     xrdp xfce4 xfce4-goodies \
     lightdm \
     kali-defaults kali-root-login desktop-base kali-win-kex
-    ./start-kex.sh "$WIN_USER"
 fi
 
+echo "
+start KEX gui?"
+read -r -p "
+(yes)
+" start_kex
+    if [ "${start_kex}" = "" ] || [ "${start_kex,,}" = "y" ] || [ "${start_kex,,}" = "yes" ]; then
+        ./start-kex.sh "$WIN_USER"
+    fi
 # echo "
 # build KDE gui?"
 # read -r -p "
