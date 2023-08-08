@@ -545,6 +545,7 @@ if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
     xrdp xfce4 xfce4-goodies \
     lightdm \
     kali-defaults kali-root-login desktop-base kali-win-kex
+    sudo dpkg-reconfigure libdvd-pkg
 fi
 
 echo "
