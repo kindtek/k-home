@@ -541,7 +541,7 @@ if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
         ./reclone-gh.sh
     fi
     sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
-    sudo apt install -y virtualbox vlc x11-apps \
+    sudo apt install -y powershell virtualbox vlc x11-apps \
     xrdp xfce4 xfce4-goodies \
     lightdm \
     kali-defaults kali-root-login desktop-base kali-win-kex
