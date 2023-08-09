@@ -74,7 +74,7 @@ if [ "${reclone_gh,,}"  = "y" ] || [ "${reclone_gh,,}" = "yes" ]; then
     ./reclone-gh.sh
 fi
 # k-home
-ls -al "$HOME"
+bash ls -al "$HOME"
 echo "
 pull k-home files from repo to $HOME?"
 read -r -p "
@@ -83,7 +83,7 @@ read -r -p "
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
-    ls -al "$HOME"
+    bash ls -al "$HOME"
 fi
 echo "
 
@@ -151,6 +151,7 @@ C:\\users\\$win_user is not a home directory"
 done
 cd "$orig_pwd" || exit
 if [ "$WIN_USER" != "" ]; then
+    bash ls -al "$WIN_USER_HOME"
     echo "
 pull k-home files from repo to $WIN_USER_HOME ?"
     read -r -p "
@@ -161,6 +162,7 @@ pull k-home files from repo to $WIN_USER_HOME ?"
         cd "$WIN_USER_HOME" || exit
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
         cd "$orig_pwd" || exit
+        bash ls -al "$WIN_USER_HOME"
     fi
 fi
 # ssh gen
@@ -572,6 +574,6 @@ read -r -p "
 
 
 
-echo "operation complete ..."
+echo "setup operation complete ..."
 
 
