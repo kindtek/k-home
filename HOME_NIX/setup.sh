@@ -37,7 +37,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo dpkg --add-architecture i386 && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386
 fi
 
 # cdir install
@@ -480,7 +480,7 @@ build/install kernel for WSL?"
 if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
     sudo apt -y update && sudo apt -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
     flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
-    python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade 
+    python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
 echo "
 build stable kernel for WSL? (ZFS included)"
     read -r -p "

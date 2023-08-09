@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo apt-get update -y && sudo apt-get -y upgrade
 win_user=${1:-'no-user-selectedlkadjfasdf'}
 port_num=${2:-3390}
 
@@ -20,7 +19,8 @@ done
 if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 fi
-sudo "$(/etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || kill | sudo lsof -i tcp:$port_num
+sudo "$(/etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix/; 
+sudo lsof /tmp/.X11-unix
 
 pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/Kex-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
 oops. no gui
@@ -29,4 +29,10 @@ oops. no gui
 '
 
 kex --win --start-client --sound
-# stop: kex --win --stop
+# stop: 
+# kex --win --stop
+# fix perms
+# sudo chmod 1777 /tmp/.X11-unix
+# reset
+# sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix/; lsof /tmp/.X11-unix
+# sudo apt remove -y kali-win-kex && sudo apt install -y kali-win-kex
