@@ -16,15 +16,15 @@ if [ "$win_user" != "" ]; then
 fi
 orig_win_user=$win_user
 orig_pwd=$(pwd)
-# CUDA install
-echo "
-install CUDA?"
-read -r -p "
-(no)
-" install_cuda
-if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
-    sudo apt install -y nvidia-cuda-toolkit
-fi
+# # CUDA install
+# echo "
+# install CUDA?"
+# read -r -p "
+# (no)
+# " install_cuda
+# if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
+#     sudo apt install -y nvidia-cuda-toolkit
+# fi
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
 initialize/update dependencies?"
@@ -536,16 +536,7 @@ read -r -p "
 (no)
 " build_kex
 if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-
-    if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
-        ./reclone-gh.sh
-    fi
-    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
-    sudo apt install -y powershell virtualbox vlc x11-apps \
-    xrdp xfce4 xfce4-goodies \
-    lightdm \
-    kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo dpkg-reconfigure libdvd-pkg
+    ./build-kex.sh "$WIN_USER"
 fi
 
 echo "
