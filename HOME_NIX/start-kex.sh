@@ -19,10 +19,8 @@ while [ ! -d "/mnt/c/users/$win_user" ]; do
 done
 if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
-else
-    sudo /etc/init.d/xrdp stop
 fi
-sudo /etc/init.d/xrdp start
+sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start
 pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/Kex-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
 oops. no gui
 
