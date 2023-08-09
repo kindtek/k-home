@@ -32,4 +32,4 @@ eval cat "logs/$filename.sh" 2>&1 | tee --append "logs/$filename.log" && \
 bash "logs/${filename}.sh"  2>&1 | tee --append "logs/${filename}.log" 
 # owner/group perms
 chown -R "$(id -un):$(id -Gn | grep -o --color=never '^\w*\b')" ./*.sh
-sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh
+sudo chmod +x k-home.sh start-kde.sh build-kex.sh start-kex.sh setup.sh reclone-gh.sh 
