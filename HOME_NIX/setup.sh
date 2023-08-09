@@ -4,16 +4,27 @@ ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
 
-if [ "$win_user" != "" ]; then
-        echo "setting linux environment variables for $win_user"
-        WIN_USER=$win_user
-        WIN_USER_HOME=/mnt/c/users/$win_user
-        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+# if [ "$win_user" != "" ]; then
+#         echo "setting linux environment variables for $win_user using args"
+#         WIN_USER=$win_user
+#         WIN_USER_HOME=/mnt/c/users/$win_user
+#         WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+#         export WIN_USER
+#         export WIN_USER_HOME
+#         export WIN_USER_KACHE
+#         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+# else 
+if  [ "$WIN_USER" != "" ] && [ "$win_user" == "$WIN_USER" ] || [ "$win_user" == "" ]; then
+        echo "setting linux environment variables for $WIN_USER using previous setting"
+        win_user=$WIN_USER
+        WIN_USER_HOME=/mnt/c/users/$WIN_USER
+        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
+# fi
 orig_win_user=$win_user
 orig_pwd=$(pwd)
 # # CUDA install
@@ -63,6 +74,7 @@ if [ "${reclone_gh,,}"  = "y" ] || [ "${reclone_gh,,}" = "yes" ]; then
     ./reclone-gh.sh
 fi
 # k-home
+ls -al "$HOME"
 echo "
 pull k-home files from repo to $HOME?"
 read -r -p "
@@ -71,8 +83,10 @@ read -r -p "
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
+    ls -al "$HOME"
 fi
 echo "
+
 pull k-home files from repo to /etc?"
 read -r -p "
 (no)
