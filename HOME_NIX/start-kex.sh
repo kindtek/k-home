@@ -19,10 +19,10 @@ done
 if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 fi
-sudo "$(/etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix/; 
+sudo "$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix; 
 sudo lsof /tmp/.X11-unix
 
-pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/Kex-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
+pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
 oops. no gui
 
  ¯\_(ツ)_/¯
@@ -34,5 +34,8 @@ kex --win --start-client --sound
 # fix perms
 # sudo chmod 1777 /tmp/.X11-unix
 # reset
+# sudo mount -o remount,rw /tmp/.X11-unix
 # sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix/; lsof /tmp/.X11-unix
+# ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/
+# sudo umount /tmp/.X11-unix
 # sudo apt remove -y kali-win-kex && sudo apt install -y kali-win-kex
