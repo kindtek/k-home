@@ -508,6 +508,16 @@ to manually update:
 " && read -r -p "(continue)"
 fi
 
+echo "
+import kernel to WSL?"
+read -r -p "
+(yes)"
+if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ] || [ "${build_kernel,,}" = "" ]; then
+    sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
+    # bash update-initramfs -u -k !wsl_default_kernel!
+    bash /hal/reclone-gh.sh autodel
+    bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest
+fi
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
 build/install kernel for WSL?"
