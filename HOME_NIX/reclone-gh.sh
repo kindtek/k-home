@@ -2,6 +2,7 @@
 
 if [ "$1" = "autodel" ]; then
     reclone=""
+    sudo apt-get install -yq git
 else
     sudo apt-get install -y git
 

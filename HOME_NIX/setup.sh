@@ -43,12 +43,17 @@ initialize/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo locale-gen en_US.UTF-8 && \
-    sudo dpkg-reconfigure locales && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo locale-gen en_US.UTF-8 && \
+    sudo dpkg-reconfigure locales && \
     sudo dpkg --add-architecture i386 && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386 && \
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
 # cdir install
@@ -58,10 +63,15 @@ read -r -p "
 (no)
 " install_cdir
 if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
-    sudo apt-get update -y && \
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
-    pip3 install cdir --user
+    pip3 install cdir --user && \
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
 # reclone
@@ -433,9 +443,14 @@ read -r -p "
 (no)
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
     sudo apt install net-tools
     sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
-
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -459,8 +474,14 @@ to manually update:
 
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
     sudo apt install net-tools
     sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1"  || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -494,7 +515,7 @@ build/install kernel for WSL?"
 (no)
 " build_kernel
 if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
-    sudo apt -y update && sudo apt -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
+    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
     flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
     python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
 echo "
