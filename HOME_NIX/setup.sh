@@ -511,8 +511,8 @@ fi
 echo "
 import kernel to WSL?"
 read -r -p "
-(yes)"
-if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ] || [ "${build_kernel,,}" = "" ]; then
+(yes)" import_kernel
+if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
     sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
     # bash update-initramfs -u -k !wsl_default_kernel!
     bash /hal/reclone-gh.sh autodel
