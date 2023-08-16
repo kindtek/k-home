@@ -27,6 +27,7 @@ fi
 # fi
 orig_win_user=$win_user
 orig_pwd=$(pwd)
+nix_user=$(whoami)
 # # CUDA install
 # echo "
 # install CUDA?"
@@ -95,14 +96,16 @@ if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     bash "$HOME/k-home.sh" "$WIN_USER"
     ls -al "$HOME"
 fi
-echo "
+if [ "$nix_user" != "r00t" ]; then
+    echo "
 
-pull k-home files from repo to /etc?"
-read -r -p "
-(no)
-" update_home
-if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
+    pull k-home files from repo to /etc?"
+    read -r -p "
+    (no)
+    " update_home
+    if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
+        sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
+    fi
 fi
 # %USERPROFILE% integration
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
@@ -518,7 +521,8 @@ if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${im
     # bash update-initramfs -u -k !wsl_default_kernel!
     bash /hal/reclone-gh.sh autodel
     bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest
-else
+fi
+if [ "$nix_user" = "r00t" ]; then
     echo "
 build/install kernel for WSL?"
     read -r -p "
@@ -575,6 +579,7 @@ build basic kernel for WSL with ZFS?"
         fi
     fi
 fi
+
 # update install apt-utils dialog kali-linux-headless upgrade
 
 echo "
