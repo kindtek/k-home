@@ -583,15 +583,6 @@ fi
 # update install apt-utils dialog kali-linux-headless upgrade
 
 echo "
-build KEX gui?"
-read -r -p "
-(no)
-" build_kex
-if [ "${build_kex,,}"  = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-    ./build-kex.sh "$WIN_USER"
-fi
-
-echo "
 start KEX gui?"
 read -r -p "
 (yes)
