@@ -20,9 +20,9 @@ if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
     ./reclone-gh.sh
 fi
 echo "
-pull k-home files from repo to /etc?"
+    pull k-home files from repo to /etc?"
 read -r -p "
-(yes)
+    (yes)
 " update_home
 if [ "${update_home,,}" = "" ] || [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
     sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
