@@ -16,11 +16,32 @@ while [ ! -d "/mnt/c/users/$win_user" ]; do
     read -r -p "
 " win_user
 done
+if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
+    ./reclone-gh.sh
+fi
+echo "
+pull k-home files from repo to /etc?"
+read -r -p "
+(yes)
+" update_home
+if [ "${update_home,,}" = "" ] || [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
+    sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
+fi
+
 if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 fi
-"$(/etc/init.d/xrdp stop && /etc/init.d/xrdp start && /etc/init.d/xrdp restart)" || sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix; 
-sudo lsof /tmp/.X11-unix
+"$(/etc/init.d/xrdp stop && /etc/init.d/xrdp start && /etc/init.d/xrdp restart)" || \
+sudo rm -rf /var/lib/apt/lists && \
+sudo rm -rf /var/cache/apt/archives/*.deb && \
+sudo apt update -y && sudo apt upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && sudo dpkg-reconfigure libdvd-pkg && \
+sudo apt install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex 
+sudo rm -rf /var/lib/apt/lists && \
+sudo rm -rf /var/cache/apt/archives/*.deb && \
+sudo apt update -yq && sudo apt upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
+sudo kill "$(lsof -t /tmp/.X11-unix)" && sudo rm -rf /tmp/.X11-unix && \
+sudo lsof /tmp/.X11-unix 
+"$(/etc/init.d/xrdp stop && /etc/init.d/xrdp start && /etc/init.d/xrdp restart)"
 
 pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
 oops. no gui
