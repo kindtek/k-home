@@ -34,8 +34,9 @@ fi
 "$(/etc/init.d/xrdp stop && /etc/init.d/xrdp start && /etc/init.d/xrdp restart)" || \
 sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
-sudo apt update -y && sudo apt upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && sudo dpkg-reconfigure libdvd-pkg && \
-sudo apt install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
+sudo apt update -y && sudo apt upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && \
+sudo apt install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkglightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
+sudo dpkg-reconfigure libdvd-pkg && \
 sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
 sudo apt update -yq && sudo apt upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
