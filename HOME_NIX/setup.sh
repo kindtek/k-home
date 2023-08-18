@@ -588,14 +588,21 @@ read -r -p "
 (yes)
 " install_brave
 if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
+    sudo rm -rf /var/cache/apt && \
+    sudo rm -rf /var/cache/dvlp/archives && \
+    sudo rm -rf /etc/ssl/certs
     sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
     sudo apt-get --reinstall -y install ca-certificates && \
     sudo update-ca-certificates && \
     sudo apt-get install --install-recommends -y apt-transport-https curl 
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
     sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
-    sudo apt update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
+    # sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
+    # # sudo dpkg-reconfigure libdvd-pkg 
     sudo apt install -y brave-browser virtualbox vlc x11-apps
+    
 fi
 
 echo "

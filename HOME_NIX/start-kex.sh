@@ -17,37 +17,26 @@ while [ ! -d "/mnt/c/users/$win_user" ]; do
 " win_user
 done
 if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
-    ./reclone-gh.sh
-fi
-echo "
-    pull k-home files from repo to /etc?"
-read -r -p "
-    (yes)
-" update_home
-if [ "${update_home,,}" = "" ] || [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
+    ./reclone-gh.sh && \
     sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
-fi
-
-if [ ! -f "/mnt/c/users/$win_user/KEX-GUI.rdp" ]; then
     sudo cp /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 fi
+
+
 "$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || \
 sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
 sudo apt update -y && sudo apt upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && \
 sudo apt install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkg lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
 sudo dpkg-reconfigure libdvd-pkg && \
-sudo rm -rf /var/lib/apt/lists && \
-sudo rm -rf /var/cache/apt/archives/*.deb && \
-sudo apt update -yq && sudo apt upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
-sudo kill "$(sudo lsof -t /tmp/.X11-unix)" || sudo rm -rf /tmp/.X11-unix && \
-"$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)"
+sudo kill "$(sudo lsof -t /tmp/.X11-unix)" || sudo rm -rf /tmp/.X11-unix
+# "$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)"
+# Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\Documents\RDP-Name.rdp"
+# pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
+# oops. no gui
 
-pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
-oops. no gui
-
- ¯\_(ツ)_/¯
-'
+#  ¯\_(ツ)_/¯
+# '
 
 kex --win --start-client --sound
 # stop: 
