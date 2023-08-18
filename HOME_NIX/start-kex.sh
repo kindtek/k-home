@@ -25,8 +25,8 @@ fi
 
 sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
-sudo apt update -y && sudo apt upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && \
-sudo apt install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkg lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
+sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && \
+sudo apt-get install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkg lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
 sudo dpkg-reconfigure libdvd-pkg 
 "$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || \
 sudo kill "$(sudo lsof -t /tmp/.X11-unix)" || sudo rm -rf /tmp/.X11-unix
