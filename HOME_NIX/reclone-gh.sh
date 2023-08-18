@@ -34,9 +34,9 @@ echo repo_name: "$repo_name" && \
 echo repo_url: "$repo_url" && \
 echo repo_path: "$repo_path" && \
 echo repo_branch: "$repo_branch" && \
-git clone "$repo_url" --single-branch --branch "$repo_branch" --filter=blob:limit=13k --progress -- "$repo_path" 2>/dev/null && \
+git clone "$repo_url" --single-branch --branch "$repo_branch" --filter=blob:limit=13k --progress -- "$repo_path" && \
 cd dvlw && \
-git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell 2>/dev/null && \
+git submodule update --init --remote --filter=blob:limit=13k --progress -- dvlp dvl-adv powerhell && \
 cd dvlp && \
 git submodule update --init --progress --filter=blob:limit=20m -- kernels mnt && \
 chmod -R 1770 mnt/HOME_NIX && \
