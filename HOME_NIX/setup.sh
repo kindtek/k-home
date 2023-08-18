@@ -35,7 +35,7 @@ nix_user=$(whoami)
 # (no)
 # " install_cuda
 # if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
-#     sudo apt install -y nvidia-cuda-toolkit
+#     sudo apt-get install -y nvidia-cuda-toolkit
 # fi
 # update install apt-utils dialog kali-linux-headless upgrade
 echo "
@@ -44,17 +44,22 @@ initialize/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo rm -rf /var/cache/aptarchives && \
+    sudo rm -rf /var/cache/dvlp/archives && \
+    sudo rm -rf /etc/ssl/certs
+    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+    sudo apt-get --reinstall -yq install ca-certificates && \
+    sudo update-ca-certificates && \
+    sudo apt-get remove -yq ca-certificates-java && \
+    sudo apt-get install --install-recommends -yq apt-transport-https curl
     sudo locale-gen en_US.UTF-8 && \
     sudo dpkg-reconfigure locales && \
     sudo dpkg --add-architecture i386 && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-    sudo apt -y install apt-utils console-setup dialog kali-linux-headless wine32:i386 && \
+    sudo apt-get -y update && sudo apt-get-y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get -y install apt-utils console-setup dialog kali-linux-headless wine32:i386 && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
 # cdir install
@@ -66,13 +71,13 @@ read -r -p "
 if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
     pip3 install cdir --user && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
 # reclone
@@ -448,12 +453,12 @@ read -r -p "
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
-    sudo apt install net-tools
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
+    sudo apt-get install -y powershell net-tools
     sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -479,12 +484,12 @@ to manually update:
 elif [ "${convert_net,,}"  = "revert" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
-    sudo apt install net-tools
-    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get install net-tools
+    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y powershell wine32:i386
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1"  || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -520,7 +525,7 @@ if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${im
     sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
     # bash update-initramfs -u -k !wsl_default_kernel!
     bash /hal/reclone-gh.sh autodel
-    bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest
+    bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME"
 fi
 if [ "$nix_user" = "r00t" ]; then
     echo "
@@ -529,9 +534,9 @@ build/install kernel for WSL?"
 (no)
 " build_kernel
     if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
-        sudo apt -y update && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
+        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
         flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
-        python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
+        python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
     echo "
 build stable kernel for WSL? (ZFS included)"
         read -r -p "
@@ -588,20 +593,21 @@ read -r -p "
 (yes)
 " install_brave
 if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-    sudo rm -rf /var/cache/apt && \
+    sudo rm -rf /var/cache/apt-get && \
     sudo rm -rf /var/cache/dvlp/archives && \
     sudo rm -rf /etc/ssl/certs
-    sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
-    sudo apt-get --reinstall -y install ca-certificates && \
+    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+    sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
-    sudo apt-get install --install-recommends -y apt-transport-https curl 
+    sudo apt-get remove -yq ca-certificates-java && \
+    sudo apt-get install --install-recommends -yq apt-transport-https curl 
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
     sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
     # sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
     # # sudo dpkg-reconfigure libdvd-pkg 
-    sudo apt install -y brave-browser virtualbox vlc x11-apps
+    sudo apt-get install -yq brave-browser virtualbox vlc x11-apps
     
 fi
 
