@@ -619,7 +619,8 @@ read -r -p "
 if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
 
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo apt --reinstall --no-install-suggests -y kali-defaults kali-root-login desktop-base kali-win-kex
+    sudo apt --reinstall --no-install-suggests -y kali-defaults kali-root-login kali-win-kex
+    sudo apt --reinstall --no-install-suggests -y desktop-base
     
 fi
 # echo "

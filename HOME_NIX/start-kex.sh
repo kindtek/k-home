@@ -25,20 +25,24 @@ sudo cp -rfv /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
 
 kex --win --start-client --sound || sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
-sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get --with-new-pkgs upgrade -y && \
-sudo apt-get install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkg lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
-sudo dpkg-reconfigure libdvd-pkg 
-"$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)" || \
-sudo kill "$(sudo lsof -t /tmp/.X11-unix)" || sudo rm -rf /tmp/.X11-unix || kex --win --start-client --sound
+sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
+sudo apt-get install -yq powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex || \
+( sudo apt-get install -y powershell virtualbox vlc x11-apps powershell xrdp xfce4 xfce4-goodies libdvd-pkg lightdm kali-defaults kali-root-login desktop-base kali-win-kex && \
+sudo dpkg-reconfigure libdvd-pkg )
+( ( sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart ) && kex --win --start-client --sound ) || \
+( sudo kill "$(sudo lsof -t /tmp/.X11-unix)" || sudo rm -rf /tmp/.X11-unix && kex --win --start-client --sound )
 # "$(sudo /etc/init.d/xrdp stop && sudo /etc/init.d/xrdp start && sudo /etc/init.d/xrdp restart)"
 # Start-Process "$env:windir\system32\mstsc.exe" -ArgumentList "$env:userprofile\Documents\RDP-Name.rdp"
 # pwsh -Command /mnt/c/Windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-GUI.rdp /v:localhost:"$port_num" /admin /f /multimon || echo '
+# pwsh -command "/mnt/c/windows/system32/mstsc.exe /mnt/c/users/"$win_user"/KEX-gui.rdp /v:localhost:3390 /admin /f /multimon"
+# pwsh -command "/mnt/c/windows/system32/mstsc.exe /mnt/c/users/n8kin/KEX-gui.rdp"
 # oops. no gui
 
 #  ¯\_(ツ)_/¯
 # '
 # stop: 
 # kex --win --stop
+# sudo apt install -y tigervnc-tools
 # fix perms
 # sudo chmod 1777 /tmp/.X11-unix
 # reset
