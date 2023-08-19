@@ -56,7 +56,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo dpkg-reconfigure locales && \
     sudo dpkg --add-architecture i386 && \
     sudo apt-get -y update && sudo apt-get-y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-    sudo apt-get -y install apt-utils console-setup dialog kali-linux-headless wine32:i386 && \
+    sudo apt-get -y install apt-utils kali-linux-headless wine32:i386 && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
@@ -527,7 +527,7 @@ if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${im
     bash /hal/reclone-gh.sh autodel
     bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME"
 fi
-if [ "$nix_user" = "r00t" ]; then
+if [ "$nix_user" = "root" ]; then
     echo "
 build/install kernel for WSL?"
     read -r -p "
@@ -612,13 +612,16 @@ if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install
 fi
 
 echo "
-start KEX gui?"
+build full KEX gui?"
 read -r -p "
 (yes)
-" start_kex
-    if [ "${start_kex}" = "" ] || [ "${start_kex,,}" = "y" ] || [ "${start_kex,,}" = "yes" ]; then
-        ./start-kex.sh "$WIN_USER"
-    fi
+" build_kex
+if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+
+    # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+    sudo apt --reinstall --no-install-suggests -y kali-defaults kali-root-login desktop-base kali-win-kex
+    
+fi
 # echo "
 # build KDE gui?"
 # read -r -p "
@@ -628,8 +631,24 @@ read -r -p "
 #     ./start-kde.sh "$WIN_USER"
 # fi
 
-
+sudo apt-get install -y console-setup dialog
 
 echo "setup operation complete ..."
-
-
+# sudo apt-get install -y aptitude
+# sudo aptitude purge nvidia-current
+# sudo systemctl set-default graphical.target
+# sudo apt-get install xserver-xephyr accountsservice dialog apt-utils
+# sudo systemctl unmask lightdm.service
+# sudo systemctl daemon-reload
+# sudo echo 'exit 0' > /usr/sbin/policy-rc.d
+# sudo chmod +x /usr/sbin/policy-rc.d
+# sudo dpkg-reconfigure locales lightdm
+# sudo systemctl enable xrdp-sesman.service
+# sudo systemctl enable xrdp.service
+# sudo systemctl enable systemd-journald-audit.socket
+# sudo systemctl enable upower.service
+# sudo apt-get -y install lightdm-gtk-greeter
+# sudo apt-get install -y --reinstall lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+# sudo mkdir -p /var/lib/lightdm/data
+# sudo apt-get install --reinstall gnome-session
+# make modules_install
