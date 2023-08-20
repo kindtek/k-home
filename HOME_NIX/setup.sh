@@ -51,11 +51,11 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
     sudo apt-get remove -yq ca-certificates-java && \
-    sudo apt-get install --install-recommends -yq apt-transport-https curl
     sudo locale-gen en_US.UTF-8 && \
     sudo dpkg-reconfigure locales && \
+    sudo apt-get install --install-recommends -yq apt-transport-https curl
     sudo dpkg --add-architecture i386 && \
-    sudo apt-get -y update && sudo apt-get-y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get -y install apt-utils kali-linux-headless wine32:i386 && \
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /var/cache/apt/archives/*.deb && \
@@ -587,42 +587,55 @@ fi
 
 # update install apt-utils dialog kali-linux-headless upgrade
 
-echo "
-install brave browser?"
-read -r -p "
-(yes)
-" install_brave
-if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-    sudo rm -rf /var/cache/apt-get && \
-    sudo rm -rf /var/cache/dvlp/archives && \
-    sudo rm -rf /etc/ssl/certs
-    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
-    sudo apt-get --reinstall -yq install ca-certificates && \
-    sudo update-ca-certificates && \
-    sudo apt-get remove -yq ca-certificates-java && \
-    sudo apt-get install --install-recommends -yq apt-transport-https curl 
-    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
-    sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
-    # sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
-    # # sudo dpkg-reconfigure libdvd-pkg 
-    sudo apt-get install -yq brave-browser virtualbox vlc x11-apps
-    
-fi
 
 echo "
-build full KEX gui?"
+build minimal KEX gui?"
 read -r -p "
 (yes)
 " build_kex
 if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
 
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo apt --reinstall --no-install-suggests -y kali-defaults kali-root-login kali-win-kex
-    sudo apt --reinstall --no-install-suggests -y desktop-base
-    
-fi
+    sudo apt-get kali-defaults kali-root-login kali-win-kex
+    sudo apt-get desktop-base
+fi 
+echo "
+    build full KEX gui?"
+    read -r -p "
+    (yes)
+    " build_kex
+    if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+
+        # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+        sudo apt --reinstall -y kali-defaults kali-root-login kali-win-kex
+        sudo apt --reinstall -y desktop-base
+    fi
+
+echo "
+        install brave browser?"
+        read -r -p "
+        (yes)
+        " install_brave
+        if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
+            sudo rm -rf /var/cache/apt-get && \
+            sudo rm -rf /var/cache/dvlp/archives && \
+            sudo rm -rf /etc/ssl/certs
+            sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+            sudo apt-get --reinstall -yq install ca-certificates && \
+            sudo update-ca-certificates && \
+            sudo apt-get remove -yq ca-certificates-java && \
+            sudo apt-get install --install-recommends -yq apt-transport-https curl 
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
+            sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
+            # sudo rm -rf /var/lib/apt/lists && \
+            sudo rm -rf /var/cache/apt/archives/*.deb && \
+            sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
+            # # sudo dpkg-reconfigure libdvd-pkg 
+            sudo apt-get install -yq brave-browser virtualbox vlc x11-apps
+            
+        fi
+
+
 # echo "
 # build KDE gui?"
 # read -r -p "
