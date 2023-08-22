@@ -14,8 +14,8 @@ warning=""
 #         export WIN_USER_KACHE
 #         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 # else 
-if  [ "$WIN_USER" != "" ] && [ "$win_user" == "$WIN_USER" ] || [ "$win_user" == "" ]; then
-        echo "setting linux environment variables for $WIN_USER using previous setting"
+if   [ "$WIN_USER" != "" ] && [ "$win_user" == "$WIN_USER" ] || [ "$win_user" == "" ] && [ "$WIN_USER" != "" ] ; then
+        echo "setting linux environment variables for $WIN_USER"
         win_user=$WIN_USER
         WIN_USER_HOME=/mnt/c/users/$WIN_USER
         WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
@@ -38,6 +38,82 @@ nix_user=$(whoami)
 #     sudo apt-get install -y nvidia-cuda-toolkit
 # fi
 # update install apt-utils dialog kali-linux-headless upgrade
+if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
+    echo "
+    import kernel to WSL?"
+    read -r -p "
+    (yes)
+    " import_kernel
+    if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
+        kernel_tar=$(ls *.tar.gz)
+        sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
+        cd "/mnt/c/users/$WIN_USER" && \
+        sudo tar -czvf "$kernel_tar" -C kache . | tail -n 5 && \
+        # bash update-initramfs -u -k !wsl_default_kernel!
+        bash /hal/reclone-gh.sh autodel && \
+        bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME"
+    fi
+fi
+if [ "$nix_user" = "root" ]; then
+    echo "
+build/install kernel for WSL?"
+    read -r -p "
+(no)
+" build_kernel
+    if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
+        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
+        flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
+        python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
+    echo "
+build stable kernel for WSL? (ZFS included)"
+        read -r -p "
+(no)
+    " install_stable_kernel
+        if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
+            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+            echo sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER" 
+            sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER"  && \
+            sudo bash install-kernel.sh "$WIN_USER" "latest"
+            cd "$orig_pwd" || exit
+        else 
+        
+            echo "
+build latest kernel for WSL? (ZFS available)"
+            read -r -p "
+(no)
+        " install_latest_kernel
+            if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                echo sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" 
+                sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" && \
+                sudo bash install-kernel.sh "$WIN_USER" "latest"
+                cd "$orig_pwd" || exit
+            fi 
+
+            echo "
+build basic kernel for WSL with ZFS?"
+            read -r -p "
+(yes)
+    " install_basic_zfs_kernel
+            if [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
+                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                echo sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER"
+                sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
+                sudo bash install-kernel.sh "$WIN_USER" "latest"
+                cd "$orig_pwd" || exit
+            else
+                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                echo sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER"
+                sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER" && \
+                sudo bash install-kernel.sh "$WIN_USER" "latest"
+                cd "$orig_pwd" || exit
+            fi       
+        fi
+    fi
+fi
+
+# update install apt-utils dialog kali-linux-headless upgrade
+
 echo "
 initialize/update dependencies?"
     read -r -p "
@@ -515,78 +591,6 @@ to manually update:
 
 " && read -r -p "(continue)"
 fi
-
-echo "
-import kernel to WSL?"
-read -r -p "
-(yes)
-" import_kernel
-if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-    sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
-    # bash update-initramfs -u -k !wsl_default_kernel!
-    bash /hal/reclone-gh.sh autodel
-    bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME"
-fi
-if [ "$nix_user" = "root" ]; then
-    echo "
-build/install kernel for WSL?"
-    read -r -p "
-(no)
-" build_kernel
-    if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
-        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
-        flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
-        python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
-    echo "
-build stable kernel for WSL? (ZFS included)"
-        read -r -p "
-(no)
-    " install_stable_kernel
-        if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
-            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-            echo sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER" 
-            sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER"  && \
-            sudo bash install-kernel.sh "$WIN_USER" "latest"
-            cd "$orig_pwd" || exit
-        else 
-        
-            echo "
-build latest kernel for WSL? (ZFS available)"
-            read -r -p "
-(no)
-        " install_latest_kernel
-            if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
-                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                echo sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" 
-                sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" && \
-                sudo bash install-kernel.sh "$WIN_USER" "latest"
-                cd "$orig_pwd" || exit
-            fi 
-
-            echo "
-build basic kernel for WSL with ZFS?"
-            read -r -p "
-(yes)
-    " install_basic_zfs_kernel
-            if [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
-                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                echo sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER"
-                sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
-                sudo bash install-kernel.sh "$WIN_USER" "latest"
-                cd "$orig_pwd" || exit
-            else
-                cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                echo sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER"
-                sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER" && \
-                sudo bash install-kernel.sh "$WIN_USER" "latest"
-                cd "$orig_pwd" || exit
-            fi       
-        fi
-    fi
-fi
-
-# update install apt-utils dialog kali-linux-headless upgrade
-
 
 echo "
 build minimal KEX gui?"
