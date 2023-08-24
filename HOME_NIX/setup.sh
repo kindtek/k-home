@@ -38,6 +38,62 @@ nix_user=$(whoami)
 #     sudo apt-get install -y nvidia-cuda-toolkit
 # fi
 # update install apt-utils dialog kali-linux-headless upgrade
+# %USERPROFILE% integration
+[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
+while [ ! -d "$win_user" ]; do
+    if [ ! -d "/mnt/c/users" ]; then
+        if [ ! -d "/mnt/c/users/$win_user" ]; then
+            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
+        fi
+        break;
+    fi
+    echo " 
+
+
+integrate windows home directory?
+
+this directory will be used for:
+    - WSL configuration management
+    - kernel installations
+    - sync home directory with repo
+
+    choose from:
+    " 
+    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
+
+    read -r -p "
+
+(skip)  C:\\users\\" win_user
+    if [ "$win_user" = "" ]; then
+        win_user=$orig_win_user
+        break
+    fi
+    if [ ! -d "/mnt/c/users/$win_user" ]; then
+        echo "
+
+        
+        
+        
+
+
+
+
+
+
+
+C:\\users\\$win_user is not a home directory"
+    else
+        echo "setting linux environment variables for $win_user"
+        WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$win_user
+        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+    fi
+done
+
 if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     echo "
     import kernel to WSL?"
@@ -46,7 +102,7 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     " import_kernel
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         kernel_tar=$(ls *.tar.gz)
-        sudo cp -rf /kache/. /mnt/c/users/"$WIN_USER"/kache/.
+        sudo cp -rf /kache/. "/mnt/c/users/$WIN_USER/kache/."
         cd "/mnt/c/users/$WIN_USER" && \
         sudo tar -czvf "$kernel_tar" -C kache . | tail -n 5 && \
         # bash update-initramfs -u -k !wsl_default_kernel!
@@ -188,61 +244,7 @@ if [ "$nix_user" != "r00t" ]; then
         sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
     fi
 fi
-# %USERPROFILE% integration
-[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
-while [ ! -d "$win_user" ]; do
-    if [ ! -d "/mnt/c/users" ]; then
-        if [ ! -d "/mnt/c/users/$win_user" ]; then
-            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
-        fi
-        break;
-    fi
-    echo " 
 
-
-integrate windows home directory?
-
-this directory will be used for:
-    - WSL configuration management
-    - kernel installations
-    - sync home directory with repo
-
-    choose from:
-    " 
-    ls -da /mnt/c/users/*/ | tail -n +4 | sed -r -e 's/^\/mnt\/c\/users\/([ A-Za-z0-9]*)*\/+$/\t\1/g'
-
-    read -r -p "
-
-(skip)  C:\\users\\" win_user
-    if [ "$win_user" = "" ]; then
-        win_user=$orig_win_user
-        break
-    fi
-    if [ ! -d "/mnt/c/users/$win_user" ]; then
-        echo "
-
-        
-        
-        
-
-
-
-
-
-
-
-C:\\users\\$win_user is not a home directory"
-    else
-        echo "setting linux environment variables for $win_user"
-        WIN_USER=$win_user
-        WIN_USER_HOME=/mnt/c/users/$win_user
-        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-    fi
-done
 cd "$orig_pwd" || exit
 if [ "$WIN_USER" != "" ]; then
     ls -al "$WIN_USER_HOME"
