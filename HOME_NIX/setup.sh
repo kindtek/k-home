@@ -127,9 +127,9 @@ build stable kernel for WSL? (ZFS included)"
     " install_stable_kernel
         if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-            echo sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER" 
-            sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER"  && \
-            sudo bash install-kernel.sh "$WIN_USER" "latest"
+            echo sudo bash build-import-kernel.sh "stable" '' "zfs" "$WIN_USER" 
+            sudo bash build-import-kernel.sh 'stable' '' 'zfs' "$WIN_USER"  && \
+            sudo bash install-kernel.sh "$WIN_USER" 'latest'
             cd "$orig_pwd" || exit
         else 
         
@@ -602,8 +602,8 @@ read -r -p "
 if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
 
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo apt-get kali-defaults kali-root-login kali-win-kex
-    sudo apt-get desktop-base
+    sudo apt-get install -y kali-defaults kali-root-login kali-win-kex
+    sudo apt-get install -y desktop-base
 fi 
 echo "
     build full KEX gui?"
