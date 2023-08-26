@@ -1,9 +1,11 @@
 #!/bin/bash
 win_user=$1
+orig_win_user=$win_user
 ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
-
+orig_pwd=$(pwd)
+nix_user=$(whoami)
 # if [ "$win_user" != "" ]; then
 #         echo "setting linux environment variables for $win_user using args"
 #         WIN_USER=$win_user
@@ -14,9 +16,17 @@ warning=""
 #         export WIN_USER_KACHE
 #         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 # else 
-if   [ "$WIN_USER" != "" ] && [ "$win_user" == "$WIN_USER" ] || [ "$win_user" == "" ] && [ "$WIN_USER" != "" ] ; then
-        echo "setting linux environment variables for $WIN_USER"
-        win_user=$WIN_USER
+
+if [ -d "/mnt/c/$win_user" ]; then
+        WIN_USER=$win_user
+        WIN_USER_HOME=/mnt/c/users/$WIN_USER
+        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+elif [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
+        # WIN_USER=$win_user
         WIN_USER_HOME=/mnt/c/users/$WIN_USER
         WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
@@ -24,10 +34,7 @@ if   [ "$WIN_USER" != "" ] && [ "$win_user" == "$WIN_USER" ] || [ "$win_user" ==
         export WIN_USER_KACHE
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
-# fi
-orig_win_user=$win_user
-orig_pwd=$(pwd)
-nix_user=$(whoami)
+
 # # CUDA install
 # echo "
 # install CUDA?"
@@ -101,7 +108,7 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     (yes)
     " import_kernel
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-        kernel_tar=$(ls *.tar.gz)
+        kernel_tar=$(ls /kache/*.tar.gz)
         sudo cp -rf /kache/. "/mnt/c/users/$WIN_USER/kache/."
         cd "/mnt/c/users/$WIN_USER" && \
         sudo tar -czvf "$kernel_tar" -C kache . | tail -n 5 && \
