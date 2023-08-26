@@ -6,6 +6,7 @@ confirm_regen="r"
 warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
+sudo echo 'exit 0' > /usr/sbin/policy-rc.d
 # if [ "$win_user" != "" ]; then
 #         echo "setting linux environment variables for $win_user using args"
 #         WIN_USER=$win_user
