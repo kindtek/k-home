@@ -661,8 +661,9 @@ echo 'start services?'
 read -r -p "
 (yes)" start_services
 if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
-    echo 'exit 0' > /usr/sbin/policy-rc.d
-    sudo apt-get install -y console-setup dialog
+    sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+    sudo apt-get install -yq console-setup dialog
+    sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq 
 fi
 
 echo "setup operation complete ..."
