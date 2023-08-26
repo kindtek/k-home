@@ -1,32 +1,13 @@
 #!/bin/bash
-win_user=$1
-orig_win_user=$win_user
+WIN_USER=$1
+orig_win_user=$WIN_USER
 ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
-# if [ "$win_user" != "" ]; then
-#         echo "setting linux environment variables for $win_user using args"
-#         WIN_USER=$win_user
-#         WIN_USER_HOME=/mnt/c/users/$win_user
-#         WIN_USER_KACHE=/mnt/c/users/$win_user/kache
-#         export WIN_USER
-#         export WIN_USER_HOME
-#         export WIN_USER_KACHE
-#         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-# else 
 
-if [ -d "/mnt/c/$win_user" ]; then
-        WIN_USER=$win_user
-        WIN_USER_HOME=/mnt/c/users/$WIN_USER
-        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-elif [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
-        # WIN_USER=$win_user
+if [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         WIN_USER_HOME=/mnt/c/users/$WIN_USER
         WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
@@ -34,23 +15,12 @@ elif [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         export WIN_USER_KACHE
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
-
-# # CUDA install
-# echo "
-# install CUDA?"
-# read -r -p "
-# (no)
-# " install_cuda
-# if [ "${install_cuda,,}"  = "y" ] || [ "${install_cuda,,}" = "yes" ]; then
-#     sudo apt-get install -y nvidia-cuda-toolkit
-# fi
-# update install apt-utils dialog kali-linux-headless upgrade
 # %USERPROFILE% integration
 [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
-while [ ! -d "$win_user" ]; do
+while [ ! -d "$WIN_USER" ]; do
     if [ ! -d "/mnt/c/users" ]; then
-        if [ ! -d "/mnt/c/users/$win_user" ]; then
-            echo "/mnt/c/users/$win_user is not a directory - skipping prompt for home directory"
+        if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
+            echo "/mnt/c/users/$WIN_USER is not a directory - skipping prompt for home directory"
         fi
         break;
     fi
@@ -70,12 +40,12 @@ this directory will be used for:
 
     read -r -p "
 
-(skip)  C:\\users\\" win_user
-    if [ "$win_user" = "" ]; then
-        win_user=$orig_win_user
+(skip)  C:\\users\\" WIN_USER
+    if [ "$WIN_USER" = "" ]; then
+        WIN_USER=$orig_win_user
         break
     fi
-    if [ ! -d "/mnt/c/users/$win_user" ]; then
+    if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
         echo "
 
         
@@ -88,10 +58,9 @@ this directory will be used for:
 
 
 
-C:\\users\\$win_user is not a home directory"
+C:\\users\\$WIN_USER is not a home directory"
     else
-        echo "setting linux environment variables for $win_user"
-        WIN_USER=$win_user
+        echo "setting linux environment variables for $WIN_USER"
         WIN_USER_HOME=/mnt/c/users/$win_user
         WIN_USER_KACHE=/mnt/c/users/$win_user/kache
         export WIN_USER
