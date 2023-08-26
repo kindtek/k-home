@@ -78,12 +78,13 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     " import_kernel
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         kernel_tar=$(ls /kache/*.tar.gz)
-        sudo cp -rf /kache/. "/mnt/c/users/$WIN_USER/kache/."
+        sudo cp -rfv /kache/. "/mnt/c/users/$WIN_USER/kache/."
         cd "/mnt/c/users/$WIN_USER" && \
         sudo tar -czvf "$kernel_tar" -C kache . | tail -n 5 && \
         # bash update-initramfs -u -k !wsl_default_kernel!
         bash /hal/reclone-gh.sh autodel && \
-        bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME"
+        bash /hal/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && \
+        cd "$orig_pwd"
     fi
 fi
 if [ "$nix_user" = "root" ]; then
