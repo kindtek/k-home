@@ -83,12 +83,12 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         
         sudo mkdir -p "/mnt/c/users/$WIN_USER/kache"
+        bash $HOME/reclone-gh.sh autodel && \
         sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
         cd "/mnt/c/users/$WIN_USER/kache" && \
         sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
         # bash update-initramfs -u -k !wsl_default_kernel! 
         sudo apt-get -yq install powershell net-tools && \
-        bash $HOME/reclone-gh.sh autodel && \
         bash $HOME/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && \
         cd "$orig_pwd" || cd "$orig_pwd" 
     fi
