@@ -6,7 +6,6 @@ confirm_regen="r"
 warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
-sudo echo 'exit 0' > /usr/sbin/policy-rc.d
 # if [ "$win_user" != "" ]; then
 #         echo "setting linux environment variables for $win_user using args"
 #         WIN_USER=$win_user
@@ -658,8 +657,13 @@ echo "
 # if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
 #     ./start-kde.sh "$WIN_USER"
 # fi
-
-sudo apt-get install -y console-setup dialog
+echo 'start services?'
+read -r -p "
+(yes)" start_services
+if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
+    echo 'exit 0' > /usr/sbin/policy-rc.d
+    sudo apt-get install -y console-setup dialog
+fi
 
 echo "setup operation complete ..."
 # sudo apt-get install -y aptitude
