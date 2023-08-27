@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ "$1" != "" ]; then
+    sudo apt-get install -yq git
+else
+    sudo apt-get install -y git
+fi
 dvlw_owner=kindtek
 dvlw_fullname=devels-workshop
 dvlw_name=dvlw
