@@ -222,6 +222,59 @@ if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
+echo "
+build minimal KEX gui?"
+read -r -p "
+(yes)
+" build_kex
+if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+
+    # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+    sudo apt-get install --install-recommends -yq apt-transport-https curl
+    sudo dpkg --add-architecture i386 && \
+    sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless lightdm virtualbox vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get install -y desktop-base
+fi 
+echo "
+    build full KEX gui?"
+    read -r -p "
+    (yes)
+    " build_kex
+    if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+        sudo apt --reinstall -y desktop-base
+    fi
+
+echo "
+        install brave browser?"
+        read -r -p "
+        (yes)
+        " install_brave
+        if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
+            sudo rm -rf /var/cache/apt-get && \
+            sudo rm -rf /var/cache/dvlp/archives && \
+            sudo rm -rf /etc/ssl/certs
+            sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+            sudo apt-get --reinstall -yq install ca-certificates && \
+            sudo update-ca-certificates && \
+            sudo apt-get remove -yq ca-certificates-java && \
+            sudo apt-get install --install-recommends -yq apt-transport-https curl 
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
+            sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
+            # sudo rm -rf /var/lib/apt/lists && \
+            sudo rm -rf /var/cache/apt/archives/*.deb && \
+            sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
+            # # sudo dpkg-reconfigure libdvd-pkg 
+            sudo apt-get install -yq brave-browser virtualbox vlc x11-apps
+            
+        fi
+
+# services can be turned on now
+sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+
 # reclone
 echo "
 reclone devels-workshop?"
@@ -239,6 +292,8 @@ read -r -p "
 (no)
 " update_home
 if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
+    sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+    sudo service docker start
     cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
     ls -al "$HOME"
@@ -266,6 +321,8 @@ pull k-home files from repo to $WIN_USER_HOME ?"
     if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
         cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
         cd "$WIN_USER_HOME" || exit
+        sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+        sudo service docker start
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
         cd "$orig_pwd" || exit
         ls -al "$WIN_USER_HOME"
@@ -540,13 +597,9 @@ read -r -p "
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
-    sudo apt-get install -y powershell net-tools
-    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install wine32:i386
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y &&
+    sudo dpkg --add-architecture i386 &&
+    sudo apt-get install -y powershell net-tools wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -571,13 +624,8 @@ to manually update:
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
     sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
-    sudo apt-get install net-tools
-    sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y powershell wine32:i386
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get install net-tools powershell wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1"  || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -605,56 +653,6 @@ to manually update:
 fi
 
 echo "
-build minimal KEX gui?"
-read -r -p "
-(yes)
-" build_kex
-if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-
-    # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo apt-get install --install-recommends -yq apt-transport-https curl
-    sudo dpkg --add-architecture i386 && \
-    sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-    sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless lightdm virtualbox vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
-    sudo apt-get install -y desktop-base
-fi 
-echo "
-    build full KEX gui?"
-    read -r -p "
-    (yes)
-    " build_kex
-    if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-        sudo apt --reinstall -y desktop-base
-    fi
-
-echo "
-        install brave browser?"
-        read -r -p "
-        (yes)
-        " install_brave
-        if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-            sudo rm -rf /var/cache/apt-get && \
-            sudo rm -rf /var/cache/dvlp/archives && \
-            sudo rm -rf /etc/ssl/certs
-            sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
-            sudo apt-get --reinstall -yq install ca-certificates && \
-            sudo update-ca-certificates && \
-            sudo apt-get remove -yq ca-certificates-java && \
-            sudo apt-get install --install-recommends -yq apt-transport-https curl 
-            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
-            sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
-            # sudo rm -rf /var/lib/apt/lists && \
-            sudo rm -rf /var/cache/apt/archives/*.deb && \
-            sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
-            # # sudo dpkg-reconfigure libdvd-pkg 
-            sudo apt-get install -yq brave-browser virtualbox vlc x11-apps
-            
-        fi
-
-echo "
 
 finishing up...
 
@@ -671,7 +669,6 @@ finishing up...
 # read -r -p "
 # (yes)" start_services
 # if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
-    sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
     sudo apt-get install -yq console-setup dialog
     sudo apt-get update -yq && sudo apt-get --with-new-pkgs upgrade -y
 # fi
