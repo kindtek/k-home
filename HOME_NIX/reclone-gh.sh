@@ -29,23 +29,23 @@ fi
 orig_path="$(pwd)"
 cd "$dvlw_path" || exit
 if [ -e "$dvlp_path/.git" ]; then
-    git submodule update --remote --progress -- $dvlp_name || cd "$dvlp_path" && git reset --hard && cd .. && git submodule update --remote --progress -- $dvlp_name 
+    git submodule update --remote --progress -- $dvlp_name || cd "$dvlp_path" && git reset --hard && cd .. && git submodule update --init --remote --progress -- $dvlp_name 
 else
     git submodule update --init --remote --progress -- $dvlp_name
 fi
 if [ -e "$dadv_path/.git" ]; then
-    git submodule update --remote --progress -- $dadv_name || cd "$dadv_path" && git reset --hard && git reset --hard && cd .. && git submodule update --remote --progress -- $dadv_name
+    git submodule update --remote --progress -- $dadv_name || cd "$dadv_path" && git reset --hard && git reset --hard && cd .. && git submodule update --init --remote --progress -- $dadv_name
 else
     git submodule update --init --remote --progress -- $dadv_name
 fi
 if [ -e "$phell_path/.git" ]; then
-    git submodule update --remote --progress -- $phell_name || cd "$phell_path" && git reset --hard && cd .. && git submodule update --remote --progress -- $phell_name
+    git submodule update --remote --progress -- $phell_name || cd "$phell_path" && git reset --hard && cd .. && git submodule update --init --remote --progress -- $phell_name
 else
     git submodule update --init --remote --progress -- $phell_name
 fi
 cd "$dvlp_path" || exit
 if [ -e "$mnt_path/.git" ]; then
-    git submodule update --remote --progress -- $mnt_name || cd "$phell_path" && git reset --hard && cd .. && git submodule update --remote --progress -- $mnt_name
+    git submodule update --remote --progress -- $mnt_name || cd "$phell_path" && git reset --hard && cd .. && git submodule update --init --remote --progress -- $mnt_name
 else
     git submodule update --init --remote --progress -- $mnt_name
 fi
