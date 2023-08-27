@@ -187,7 +187,7 @@ fi
 # update install apt-utils dialog kali-linux-headless upgrade
 
 echo "
-initialize/update dependencies?"
+install/update dependencies?"
     read -r -p "
 (yes)
 " update_upgrade
@@ -200,14 +200,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo update-ca-certificates && \
     sudo apt-get remove -yq ca-certificates-java && \
     sudo locale-gen en_US.UTF-8 && \
-    sudo dpkg-reconfigure locales && \
-    sudo apt-get install --install-recommends -yq apt-transport-https curl
-    sudo dpkg --add-architecture i386 && \
-    sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-    sudo apt-get -y install apt-utils kali-linux-headless wine32:i386 && \
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo dpkg-reconfigure locales 
 fi
 
 # cdir install
@@ -618,7 +611,13 @@ read -r -p "
 if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
 
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-    sudo apt-get install -y kali-defaults kali-root-login kali-win-kex
+    sudo apt-get install --install-recommends -yq apt-transport-https curl
+    sudo dpkg --add-architecture i386 && \
+    sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless lightdm virtualbox vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /var/cache/apt/archives/*.deb && \
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
     sudo apt-get install -y desktop-base
 fi 
 echo "
@@ -627,9 +626,6 @@ echo "
     (yes)
     " build_kex
     if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
-
-        # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-        sudo apt --reinstall -y kali-defaults kali-root-login kali-win-kex
         sudo apt --reinstall -y desktop-base
     fi
 
@@ -657,7 +653,11 @@ echo "
             
         fi
 
+echo "
 
+finishing up...
+
+"
 # echo "
 # build KDE gui?"
 # read -r -p "
@@ -666,14 +666,14 @@ echo "
 # if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
 #     ./start-kde.sh "$WIN_USER"
 # fi
-echo 'start services?'
-read -r -p "
-(yes)" start_services
-if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
+# echo 'start services?'
+# read -r -p "
+# (yes)" start_services
+# if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
     sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
     sudo apt-get install -yq console-setup dialog
-    sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq 
-fi
+    sudo apt-get update -yq && sudo apt-get --with-new-pkgs upgrade -y
+# fi
 
 echo "setup operation complete ..."
 # sudo apt-get install -y aptitude
