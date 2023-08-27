@@ -16,8 +16,8 @@ if [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 # %USERPROFILE% integration
-[ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || exit
-while [ ! -d "$WIN_USER" ]; do
+while [ ! -d "/mnt/c/users/$WIN_USER" ]; do
+    [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || break
     if [ ! -d "/mnt/c/users" ]; then
         if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
             echo "/mnt/c/users/$WIN_USER is not a directory - skipping prompt for home directory"
@@ -61,8 +61,8 @@ this directory will be used for:
 C:\\users\\$WIN_USER is not a home directory"
     else
         echo "setting linux environment variables for $WIN_USER"
-        WIN_USER_HOME=/mnt/c/users/$win_user
-        WIN_USER_KACHE=/mnt/c/users/$win_user/kache
+        WIN_USER_HOME=/mnt/c/users/$WIN_USER
+        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
@@ -83,14 +83,13 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         
         sudo mkdir -p "/mnt/c/users/$WIN_USER/kache"
-        bash $HOME/reclone-gh.sh autodel && \
+        bash "$HOME/reclone-gh.sh force" && \
         sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
         cd "/mnt/c/users/$WIN_USER/kache" && \
         sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
         # bash update-initramfs -u -k !wsl_default_kernel! 
         sudo apt-get -yq install powershell net-tools && \
-        bash $HOME/dvlw/dvlp/kernels/linux/install-kernel.sh "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && \
-        cd "$orig_pwd" || cd "$orig_pwd" 
+        bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
     fi
 fi
 if [ "$nix_user" = "root" ]; then

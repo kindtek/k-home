@@ -56,7 +56,7 @@ else
 fi
 
 cd "$orig_path" && exit
-# if [ "$1" = "autodel" ]; then
+# if [ "$1" = "force" ]; then
 #     reclone=""
 #     sudo apt-get install -yq git
 # else
