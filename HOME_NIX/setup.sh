@@ -1,19 +1,18 @@
 #!/bin/bash
-WIN_USER=$1
 orig_win_user=$WIN_USER
+WIN_USER=$1
 ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
 
-if [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
+if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         WIN_USER_HOME=/mnt/c/users/$WIN_USER
         WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
-        # todo: check path before updating
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 if [ "$WIN_USER_HOME" = "" ]; then
@@ -22,7 +21,6 @@ if [ "$WIN_USER_HOME" = "" ]; then
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
-        # todo: check path before updating
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 # %USERPROFILE% integration
