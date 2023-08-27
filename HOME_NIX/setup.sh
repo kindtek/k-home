@@ -117,14 +117,14 @@ build stable kernel for WSL? (ZFS available)"
         " install_stable_zfs_kernel
             if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 else
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "stable" "" "" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 fi 
@@ -143,14 +143,14 @@ build latest kernel for WSL? (ZFS available)"
         " install_latest_zfs_kernel
                 if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "latest" "" "zfs" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "latest" "" "zfs" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 else
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "latest" "" "" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 fi 
@@ -169,14 +169,14 @@ build basic kernel for WSL (ZFS available ZFS)?"
         " install_basic_zfs_kernel
                 if [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 else
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER"
-                    sudo bash build-import-kernel.sh "basic" "" "" "$WIN_USER" && \
+                    echo sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER"
+                    sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER" && \
                     sudo bash install-kernel.sh "$WIN_USER" "latest"
                     cd "$orig_pwd" || exit
                 fi 
