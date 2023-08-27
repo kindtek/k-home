@@ -272,7 +272,7 @@ echo "
         fi
 
 # services can be turned on now
-sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
 # make files executable
 sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh 
 
