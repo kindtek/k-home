@@ -83,7 +83,7 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         
         sudo mkdir -p "/mnt/c/users/$WIN_USER/kache"
-        bash "$HOME/reclone-gh.sh force" && \
+        bash "$HOME/k-home.sh" && \
         sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
         cd "/mnt/c/users/$WIN_USER/kache" && \
         sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
@@ -192,9 +192,8 @@ install/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo rm -rf /var/cache/aptarchives && \
-    sudo rm -rf /var/cache/dvlp/archives && \
-    sudo rm -rf /etc/ssl/certs
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /etc/ssl/certs && \
     sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
     sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
@@ -211,13 +210,10 @@ read -r -p "
 " install_cdir
 if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
     sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
     pip3 install cdir --user && \
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /var/cache/apt/archives/*.deb && \
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
@@ -253,8 +249,6 @@ echo "
         (yes)
         " install_brave
         if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-            sudo rm -rf /var/cache/apt-get && \
-            sudo rm -rf /var/cache/dvlp/archives && \
             sudo rm -rf /etc/ssl/certs
             sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
             sudo apt-get --reinstall -yq install ca-certificates && \
@@ -276,15 +270,6 @@ echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
 # make files executable
 sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh 
 
-# reclone
-echo "
-reclone devels-workshop?"
-read -r -p "
-(no)
-" reclone_gh
-if [ "${reclone_gh,,}"  = "y" ] || [ "${reclone_gh,,}" = "yes" ]; then
-    ./reclone-gh.sh
-fi
 # k-home
 ls -al "$HOME"
 echo "
