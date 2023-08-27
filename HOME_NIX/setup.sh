@@ -13,6 +13,16 @@ if [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
+        # todo: check path before updating
+        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+fi
+if [ "$WIN_USER_HOME" = "" ]; then
+        WIN_USER_HOME=/mnt/c/users/$WIN_USER
+        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+        export WIN_USER
+        export WIN_USER_HOME
+        export WIN_USER_KACHE
+        # todo: check path before updating
         PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 # %USERPROFILE% integration
@@ -271,9 +281,9 @@ echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
 sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh 
 
 # k-home
-ls -al "$HOME"
+ls -al "$HOME" && \
 echo "
-pull k-home files from repo to $HOME?"
+pull k-home files from repo to $HOME?" && \
 read -r -p "
 (no)
 " update_home
@@ -297,7 +307,7 @@ if [ "$nix_user" != "r00t" ]; then
 fi
 
 cd "$orig_pwd" || exit
-if [ "$WIN_USER" != "" ]; then
+if [ "$WIN_USER_HOME" != "" ]; then
     ls -al "$WIN_USER_HOME"
     echo "
 pull k-home files from repo to $WIN_USER_HOME ?"
