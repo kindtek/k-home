@@ -7,7 +7,7 @@ warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
 
-if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
+if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
         WIN_USER_HOME=/mnt/c/users/$WIN_USER
         WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
         export WIN_USER
@@ -48,12 +48,13 @@ this directory will be used for:
 
     read -r -p "
 
-(skip)  C:\\users\\" WIN_USER
+(skip)  C:\\users\\
+" WIN_USER
     if [ "$WIN_USER" = "" ]; then
         WIN_USER=$orig_win_user
         break
     fi
-    if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
+    if [ ! -d "$WIN_USER_KACHE" ]; then
         echo "
 
         
@@ -74,7 +75,7 @@ C:\\users\\$WIN_USER is not a home directory"
         export WIN_USER
         export WIN_USER_HOME
         export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+        PATH="$PATH:$WIN_USER_KACHE"
     fi
 done
 
@@ -90,14 +91,14 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     " import_kernel
     if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
         
-        sudo mkdir -p "/mnt/c/users/$WIN_USER/kache"
+        sudo mkdir -p "$WIN_USER_HOME/kache"
+        sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
         bash "$HOME/k-home.sh" && \
         sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
-        cd "/mnt/c/users/$WIN_USER/kache" && \
+        cd "$WIN_USER_HOME/kache" && \
         sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
         # bash update-initramfs -u -k !wsl_default_kernel! 
         sudo apt-get -yq install powershell net-tools && \
-        sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
         bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
     fi
 fi
@@ -116,13 +117,13 @@ build/install kernel for WSL?"
 build stable kernel for WSL? (ZFS available)"
         read -r -p "
 (no)
-    " install_stable_kernel
+" install_stable_kernel
         if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
                 echo "
     build stable kernel for WSL with ZFS?"
             read -r -p "
     (no)
-        " install_stable_zfs_kernel
+    " install_stable_zfs_kernel
             if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                     echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
@@ -142,13 +143,13 @@ build stable kernel for WSL? (ZFS available)"
 build latest kernel for WSL? (ZFS available)"
             read -r -p "
 (no)
-        " install_latest_kernel
+" install_latest_kernel
             if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
                 echo "
     build latest kernel for WSL with ZFS?"
                 read -r -p "
     (no)
-        " install_latest_zfs_kernel
+    " install_latest_zfs_kernel
                 if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                     echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
@@ -168,14 +169,14 @@ build latest kernel for WSL? (ZFS available)"
 build basic kernel for WSL (ZFS available ZFS)?"
             read -r -p "
 (yes)
-    " install_basic_kernel
-            if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+" install_basic_kernel
+            if [ "${install_basic_kernel,,}"  = "" ] || [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
                 echo "
     build basic kernel for WSL with ZFS?"
                 read -r -p "
     (yes)
-        " install_basic_zfs_kernel
-                if [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
+    " install_basic_zfs_kernel
+                if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                     echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
                     sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
@@ -191,6 +192,29 @@ build basic kernel for WSL (ZFS available ZFS)?"
             fi      
         fi
     fi
+    if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
+        kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
+        kernel_tar_file=$(echo "$kernel_tar_path") 
+        kernel_tar_filename=${kernel_tar_file%.*}
+        kernel_tar_filename=${kernel_tar_filename%.*}
+        echo "
+        import ${kernel_tar_filename} into WSL?"
+        read -r -p "
+        (yes)
+        " import_kernel
+        if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
+            
+            sudo mkdir -p "$WIN_USER_HOME/kache"
+            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
+            bash "$HOME/k-home.sh" && \
+            sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
+            cd "$WIN_USER_HOME/kache" && \
+            sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+            # bash update-initramfs -u -k !wsl_default_kernel! 
+            sudo apt-get -yq install powershell net-tools && \
+            bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+        fi
+    fi    
 fi
 
 # update install apt-utils dialog kali-linux-headless upgrade
