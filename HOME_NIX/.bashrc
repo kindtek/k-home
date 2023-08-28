@@ -136,10 +136,10 @@ fi
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias lal='ls -al'
 alias l='ls -CF'
+alias ll='ls -CFlh'
+alias la='ls -CFAh'
+alias lal='ls -CFalh'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -163,6 +163,7 @@ fi
 
 export PATH="$PATH:$HOME/.local/bin:$HOME/dvlw/scripts:$HOME/dvlw/dvlp/scripts"
 export WSL_DISTRO_NAME=$WSL_DISTRO_NAME
+export WIN_USER=$WIN_USER
 export _AGL=${_AGL:-agl}
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
