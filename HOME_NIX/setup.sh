@@ -70,7 +70,7 @@ this directory will be used for:
 
         break
     fi
-    if [ ! -d "/mnt/c/$WIN_USER" ]; then
+    if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
         echo "
 
         
