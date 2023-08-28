@@ -119,9 +119,9 @@ install_cdir=n
 [ -f '.local/bin/cdir.sh' ] || echo "
 install cdir?"
 read -r -p "
-(no)
+(yes)
 " install_cdir
-if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
+if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
@@ -149,6 +149,7 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
             sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
             cd "$WIN_USER_HOME/kache" && \
             sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
             # bash update-initramfs -u -k !wsl_default_kernel! 
             sudo apt-get -yq install powershell net-tools && \
             bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
