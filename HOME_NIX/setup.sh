@@ -7,7 +7,7 @@ warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
 
-if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
+if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
     WIN_USER_HOME=/mnt/c/users/$WIN_USER
     WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
     export WIN_USER
@@ -23,14 +23,14 @@ elif [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$orig_win_user" ]; then
     export WIN_USER_KACHE
     PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
-if [ "$WIN_USER_HOME" = "" ] && [ "$WIN_USER" != "" ]; then
+if [ "$WIN_USER_HOME" = "" ] && [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
     WIN_USER_HOME=/mnt/c/users/$WIN_USER
     WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
     export WIN_USER
     export WIN_USER_HOME
     export WIN_USER_KACHE
     PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
-elif [ "$WIN_USER_HOME" = "" ] && [ "$orig_win_user" != "" ]; then
+elif [ "$WIN_USER_HOME" = "" ] && [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$orig_win_user" ]; then
     WIN_USER=$orig_win_user
     WIN_USER_HOME=/mnt/c/users/$WIN_USER
     WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
@@ -40,7 +40,7 @@ elif [ "$WIN_USER_HOME" = "" ] && [ "$orig_win_user" != "" ]; then
     PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 # %USERPROFILE% integration
-while [ ! -d "/mnt/c/users/$WIN_USER" ]; do
+while [ ! -d "$WIN_USER_HOME" ]; do
     [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || break
     if [ ! -d "/mnt/c/users" ]; then
         if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
@@ -70,7 +70,7 @@ this directory will be used for:
 
         break
     fi
-    if [ ! -d "$WIN_USER_KACHE" ]; then
+    if [ ! -d "/mnt/c/$WIN_USER" ]; then
         echo "
 
         
