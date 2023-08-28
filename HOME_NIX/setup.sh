@@ -133,7 +133,7 @@ fi
 if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     while [ "${import_kernel,,}" = "n" ]  || [ "${import_kernel,,}" = "no" ]; do 
         kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
-        kernel_tar_file=$(echo "$kernel_tar_path") 
+        kernel_tar_file=${kernel_tar_path##*/}
         kernel_tar_filename=${kernel_tar_file%.*}
         kernel_tar_filename=${kernel_tar_filename%.*}  
         echo "
@@ -143,13 +143,13 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
         " import_kernel
         if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
             
-            sudo mkdir -p "$WIN_USER_HOME/kache"
-            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
+            sudo mkdir -p "$WIN_USER_KACHE"
+            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
             bash "$HOME/k-home.sh" && \
-            sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
-            cd "$WIN_USER_HOME/kache" && \
+            sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
+            cd "$WIN_USER_KACHE" && \
             sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
+            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
             # bash update-initramfs -u -k !wsl_default_kernel! 
             sudo apt-get -yq install powershell net-tools && \
             bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
