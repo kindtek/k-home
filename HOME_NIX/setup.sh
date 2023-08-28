@@ -203,9 +203,10 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo rm -rf /var/lib/apt/lists && \
     sudo rm -rf /etc/ssl/certs && \
     sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+    sudo apt-get install -yq powershell net-tools zstd && \
     sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
-    sudo apt-get remove -yq ca-certificates-java && \
+    # sudo apt-get remove -yq ca-certificates-java 
     sudo locale-gen en_US.UTF-8 && \
     sudo dpkg-reconfigure locales 
 fi
