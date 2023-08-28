@@ -80,123 +80,11 @@ C:\\users\\$WIN_USER is not a home directory"
 done
 
 if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
-    kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
-    kernel_tar_file=$(echo "$kernel_tar_path") 
-    kernel_tar_filename=${kernel_tar_file%.*}
-    kernel_tar_filename=${kernel_tar_filename%.*}
-    echo "
-    import ${kernel_tar_filename} into WSL?"
-    read -r -p "
-    (yes)
-    " import_kernel
-    if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-        
-        sudo mkdir -p "$WIN_USER_HOME/kache"
-        sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
-        bash "$HOME/k-home.sh" && \
-        sudo cp -rfv "$kernel_tar_path" "/mnt/c/users/$WIN_USER$kernel_tar_path" && \
-        cd "$WIN_USER_HOME/kache" && \
-        sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-        # bash update-initramfs -u -k !wsl_default_kernel! 
-        sudo apt-get -yq install powershell net-tools && \
-        bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
-    fi
-fi
-if [ "$nix_user" = "root" ]; then
-    echo "
-build/install kernel for WSL?"
-    read -r -p "
-(no)
-" build_kernel
-    if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
-        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
-        flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
-        python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && \
-        sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
-    echo "
-build stable kernel for WSL? (ZFS available)"
-        read -r -p "
-(no)
-" install_stable_kernel
-        if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
-                echo "
-    build stable kernel for WSL with ZFS?"
-            read -r -p "
-    (no)
-    " install_stable_zfs_kernel
-            if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                else
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                fi 
-        else 
-        
-            echo "
-build latest kernel for WSL? (ZFS available)"
-            read -r -p "
-(no)
-" install_latest_kernel
-            if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
-                echo "
-    build latest kernel for WSL with ZFS?"
-                read -r -p "
-    (no)
-    " install_latest_zfs_kernel
-                if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                else
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                fi 
-            fi 
-
-            echo "
-build basic kernel for WSL (ZFS available ZFS)?"
-            read -r -p "
-(yes)
-" install_basic_kernel
-            if [ "${install_basic_kernel,,}"  = "" ] || [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
-                echo "
-    build basic kernel for WSL with ZFS?"
-                read -r -p "
-    (yes)
-    " install_basic_zfs_kernel
-                if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                else
-                    cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER" && \
-                    sudo bash install-kernel.sh "$WIN_USER" "latest"
-                    cd "$orig_pwd" || exit
-                fi 
-            fi      
-        fi
-    fi
-    if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
+    while [ "${import_kernel,,}" != "n" ]  && [ "${import_kernel,,}" != "no" ]; do 
         kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
         kernel_tar_file=$(echo "$kernel_tar_path") 
         kernel_tar_filename=${kernel_tar_file%.*}
-        kernel_tar_filename=${kernel_tar_filename%.*}
+        kernel_tar_filename=${kernel_tar_filename%.*}  
         echo "
         import ${kernel_tar_filename} into WSL?"
         read -r -p "
@@ -214,8 +102,100 @@ build basic kernel for WSL (ZFS available ZFS)?"
             sudo apt-get -yq install powershell net-tools && \
             bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
         fi
-    fi    
+        if [ "$nix_user" = "root" ]; then
+            echo "
+        build/install kernel for WSL?"
+            read -r -p "
+        (no)
+        " build_kernel
+            if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
+                sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
+                flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
+                python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && \
+                sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
+            echo "
+        build stable kernel for WSL? (ZFS available)"
+                read -r -p "
+        (no)
+        " install_stable_kernel
+                if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
+                        echo "
+            build stable kernel for WSL with ZFS?"
+                    read -r -p "
+            (no)
+            " install_stable_zfs_kernel
+                    if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        fi 
+                else 
+                
+                    echo "
+        build latest kernel for WSL? (ZFS available)"
+                    read -r -p "
+        (no)
+        " install_latest_kernel
+                    if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                        echo "
+            build latest kernel for WSL with ZFS?"
+                        read -r -p "
+            (no)
+            " install_latest_zfs_kernel
+                        if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        fi 
+                    fi 
+
+                    echo "
+        build basic kernel for WSL (ZFS available ZFS)?"
+                    read -r -p "
+        (yes)
+        " install_basic_kernel
+                    if [ "${install_basic_kernel,,}"  = "" ] || [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                        echo "
+            build basic kernel for WSL with ZFS?"
+                        read -r -p "
+            (yes)
+            " install_basic_zfs_kernel
+                        if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/kernels/linux" || exit
+                            echo sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER"
+                            sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER" && \
+                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            cd "$orig_pwd" || exit
+                        fi 
+                    fi      
+                fi
+            fi    
+        fi
+    done
 fi
+
 
 # update install apt-utils dialog kali-linux-headless upgrade
 
