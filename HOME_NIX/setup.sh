@@ -97,6 +97,7 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
         sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
         # bash update-initramfs -u -k !wsl_default_kernel! 
         sudo apt-get -yq install powershell net-tools && \
+        sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_HOME/kache"
         bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
     fi
 fi
