@@ -8,20 +8,36 @@ orig_pwd=$(pwd)
 nix_user=$(whoami)
 
 if [ "$WIN_USER" != "$orig_win_user" ] && [ "$WIN_USER" != "" ] && [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
-        WIN_USER_HOME=/mnt/c/users/$WIN_USER
-        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+    WIN_USER_HOME=/mnt/c/users/$WIN_USER
+    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+    export WIN_USER
+    export WIN_USER_HOME
+    export WIN_USER_KACHE
+    PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+elif [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$orig_win_user" ]; then
+    WIN_USER=$orig_win_user
+    WIN_USER_HOME=/mnt/c/users/$WIN_USER
+    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+    export WIN_USER
+    export WIN_USER_HOME
+    export WIN_USER_KACHE
+    PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
-if [ "$WIN_USER_HOME" = "" ]; then
-        WIN_USER_HOME=/mnt/c/users/$WIN_USER
-        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+if [ "$WIN_USER_HOME" = "" ] && [ "$WIN_USER" != "" ]; then
+    WIN_USER_HOME=/mnt/c/users/$WIN_USER
+    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+    export WIN_USER
+    export WIN_USER_HOME
+    export WIN_USER_KACHE
+    PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
+elif [ "$WIN_USER_HOME" = "" ] && [ "$orig_win_user" != "" ]; then
+    WIN_USER=$orig_win_user
+    WIN_USER_HOME=/mnt/c/users/$WIN_USER
+    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
+    export WIN_USER
+    export WIN_USER_HOME
+    export WIN_USER_KACHE
+    PATH="$PATH:/mnt/c/users/$WIN_USER/kache"
 fi
 # %USERPROFILE% integration
 while [ ! -d "/mnt/c/users/$WIN_USER" ]; do
@@ -51,7 +67,7 @@ this directory will be used for:
 (skip)  C:\\users\\
 " WIN_USER
     if [ "$WIN_USER" = "" ]; then
-        WIN_USER=$orig_win_user
+
         break
     fi
     if [ ! -d "$WIN_USER_KACHE" ]; then
@@ -78,6 +94,41 @@ C:\\users\\$WIN_USER is not a home directory"
         PATH="$PATH:$WIN_USER_KACHE"
     fi
 done
+
+# update install apt-utils dialog kali-linux-headless upgrade
+
+echo "
+install/update dependencies?"
+    read -r -p "
+(yes)
+" update_upgrade
+if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo rm -rf /etc/ssl/certs && \
+    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+    sudo apt-get install -yq powershell net-tools zstd && \
+    sudo apt-get --reinstall -yq install ca-certificates && \
+    sudo update-ca-certificates && \
+    # sudo apt-get remove -yq ca-certificates-java 
+    sudo locale-gen en_US.UTF-8 && \
+    sudo dpkg-reconfigure locales 
+fi
+
+# cdir install
+install_cdir=n
+[ -f '.local/bin/cdir.sh' ] || echo "
+install cdir?"
+read -r -p "
+(no)
+" install_cdir
+if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
+    sudo rm -rf /var/lib/apt/lists && \
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
+    sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
+    pip3 install pip --upgrade --no-warn-script-location --no-deps && \
+    pip3 install cdir --user && \
+    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+fi
 
 if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     while [ "${import_kernel,,}" != "n" ]  && [ "${import_kernel,,}" != "no" ]; do 
@@ -196,40 +247,6 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     done
 fi
 
-
-# update install apt-utils dialog kali-linux-headless upgrade
-
-echo "
-install/update dependencies?"
-    read -r -p "
-(yes)
-" update_upgrade
-if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /etc/ssl/certs && \
-    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
-    sudo apt-get install -yq powershell net-tools zstd && \
-    sudo apt-get --reinstall -yq install ca-certificates && \
-    sudo update-ca-certificates && \
-    # sudo apt-get remove -yq ca-certificates-java 
-    sudo locale-gen en_US.UTF-8 && \
-    sudo dpkg-reconfigure locales 
-fi
-
-# cdir install
-echo "
-install cdir?"
-read -r -p "
-(no)
-" install_cdir
-if [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-    sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
-    pip3 install pip --upgrade --no-warn-script-location --no-deps && \
-    pip3 install cdir --user && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
-fi
 
 echo "
 build minimal KEX gui?"
