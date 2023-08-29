@@ -111,7 +111,7 @@ fi
 install_cdir=n
 [ -f '.local/bin/cdir.sh' ] || echo "
 install cdir?"
-read -r -p "
+[ -f '.local/bin/cdir.sh' ] || read -r -p "
 (yes)
 " install_cdir
 if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
