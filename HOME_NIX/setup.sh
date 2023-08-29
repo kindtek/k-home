@@ -284,7 +284,7 @@ import ${kernel_tar_filename} into WSL?"
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-stable --detach
-                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-stable:/kache/ /
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -306,7 +306,7 @@ import ${kernel_tar_filename} into WSL?"
                         if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest-zfs --detach
-                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-latest-zfs:/kache/ /
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -314,7 +314,7 @@ import ${kernel_tar_filename} into WSL?"
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest --detach
-                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-latest:/kache/ /
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -336,7 +336,7 @@ import ${kernel_tar_filename} into WSL?"
                         if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic-zfs --detach
-                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-basic-zfs:/kache/ /
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -344,7 +344,7 @@ import ${kernel_tar_filename} into WSL?"
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic --detach
-                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-basic:/kache/ /
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
