@@ -243,6 +243,8 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
                         fi 
                     fi      
                 fi
+            else
+                import_kernel="n"
             fi    
         fi
     done
