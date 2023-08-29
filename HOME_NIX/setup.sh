@@ -275,14 +275,14 @@ import ${kernel_tar_filename} into WSL?"
             " install_stable_zfs_kernel
                     if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-stable-zfs --detach
-                            docker compose cp kernel-maker-stable-zfs:/kache /kache
+                            docker compose up --build make-kernel-stable-zfs --detach
+                            docker compose cp make-kernel-stable-zfs:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-stable --detach
-                            docker compose cp kernel-maker-stable:/kache /kache
+                            docker compose up --build make-kernel-stable --detach
+                            docker compose cp make-kernel-stable:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
@@ -301,14 +301,14 @@ import ${kernel_tar_filename} into WSL?"
             " install_latest_zfs_kernel
                         if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-latest-zfs --detach
-                            docker compose cp kernel-maker-latest-zfs:/kache /kache
+                            docker compose up --build make-kernel-latest-zfs --detach
+                            docker compose cp make-kernel-latest-zfs:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-latest --detach
-                            docker compose cp kernel-maker-latest:/kache /kache
+                            docker compose up --build make-kernel-latest --detach
+                            docker compose cp make-kernel-latest:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
@@ -327,14 +327,14 @@ import ${kernel_tar_filename} into WSL?"
             " install_basic_zfs_kernel
                         if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-basic-zfs --detach
-                            docker compose cp kernel-maker-basic-zfs:/kache /kache
+                            docker compose up --build make-kernel-basic-zfs --detach
+                            docker compose cp make-kernel-basic-zfs:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                            docker compose up --build kernel-maker-basic --detach
-                            docker compose cp kernel-maker-basic:/kache /kache
+                            docker compose up --build make-kernel-basic --detach
+                            docker compose cp make-kernel-basic:/kache /kache
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
