@@ -7,7 +7,7 @@ warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
 
-if  [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
+if  [ "$WIN_USER" != "" ] && [ -d "/mnt/c/users/$WIN_USER" ]; then
     echo "setting linux environment variables for $WIN_USER"
     set -x
     WIN_USER_HOME=/mnt/c/users/$WIN_USER
@@ -17,7 +17,7 @@ if  [ "$WIN_USER" != "" ] && [ -d "/mnt/c/$WIN_USER" ]; then
     export WIN_USER_KACHE
     PATH="$PATH:$WIN_USER_KACHE"
     set +x
-elif [ "$orig_win_user" != "" ] && [ -d "/mnt/c/$orig_win_user" ]; then
+elif [ "$orig_win_user" != "" ] && [ -d "/mnt/c/users/$orig_win_user" ]; then
     WIN_USER=$orig_win_user
     echo "setting linux environment variables for $WIN_USER"
     set -x
