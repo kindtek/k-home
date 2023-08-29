@@ -23,7 +23,7 @@ set -x
                     --file dvlw/dvlp/docker/kali/Dockerfile \
                     --target dvlp_k-home-nix \
                     --output type=local,dest=. \
-                    --no-cache-filter=dvlp_repo-kernel \
+                    --no-cache \
                     --progress=plain \
                     . 2>&1 || exit<<'scratchpad'
 scratchpad
