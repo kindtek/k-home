@@ -137,12 +137,12 @@ import ${kernel_tar_filename} into WSL?"
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER"
                 sudo mkdir -p "$WIN_USER_KACHE"
-                sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
+                sudo chown -R "${nix_user}:$(id -g -n)" "$kernel_tar_path"
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
                 sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-                sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
+                # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
