@@ -276,13 +276,17 @@ import ${kernel_tar_filename} into WSL?"
                     if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-stable-zfs --detach
-                            docker compose cp make-kernel-stable-zfs:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-stable --detach
-                            docker compose cp make-kernel-stable:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
@@ -302,13 +306,17 @@ import ${kernel_tar_filename} into WSL?"
                         if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest-zfs --detach
-                            docker compose cp make-kernel-latest-zfs:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest --detach
-                            docker compose cp make-kernel-latest:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
@@ -328,13 +336,17 @@ import ${kernel_tar_filename} into WSL?"
                         if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic-zfs --detach
-                            docker compose cp make-kernel-basic-zfs:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic --detach
-                            docker compose cp make-kernel-basic:/kache/ /kache/
+                            sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
+                            sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
