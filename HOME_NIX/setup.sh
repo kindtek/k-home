@@ -130,29 +130,30 @@ if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
-if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
     while [ "${import_kernel,,}" = "n" ]  || [ "${import_kernel,,}" = "no" ]; do 
-        kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
-        kernel_tar_file=${kernel_tar_path##*/}
-        kernel_tar_filename=${kernel_tar_file%.*}
-        kernel_tar_filename=${kernel_tar_filename%.*}  
-        echo "
-        import ${kernel_tar_filename} into WSL?"
-        read -r -p "
-        (yes)
-        " import_kernel
-        if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-            
-            sudo mkdir -p "$WIN_USER_KACHE"
-            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
-            bash "$HOME/k-home.sh" && \
-            sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
-            cd "$WIN_USER_KACHE" && \
-            sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-            sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
-            # bash update-initramfs -u -k !wsl_default_kernel! 
-            sudo apt-get -yq install powershell net-tools && \
-            bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+        if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
+            kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
+            kernel_tar_file=${kernel_tar_path##*/}
+            kernel_tar_filename=${kernel_tar_file%.*}
+            kernel_tar_filename=${kernel_tar_filename%.*}  
+            echo "
+            import ${kernel_tar_filename} into WSL?"
+            read -r -p "
+            (yes)
+            " import_kernel
+            if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
+                
+                sudo mkdir -p "$WIN_USER_KACHE"
+                sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
+                bash "$HOME/k-home.sh" && \
+                sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
+                cd "$WIN_USER_KACHE" && \
+                sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+                sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
+                # bash update-initramfs -u -k !wsl_default_kernel! 
+                sudo apt-get -yq install powershell net-tools && \
+                bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+            fi
         fi
         if [ "$nix_user" = "root" ]; then
             echo "
@@ -248,7 +249,6 @@ if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
             fi    
         fi
     done
-fi
 
 
 echo "
@@ -273,8 +273,7 @@ echo "
         sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
         sudo apt-get install -y desktop-base
     else
-        sudo apt-get -y install apt-utils kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-        sudo apt --reinstall -y desktop-base
+        sudo apt-get -y install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
     fi
 fi 
 
