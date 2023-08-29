@@ -147,6 +147,7 @@ import ${kernel_tar_filename} into WSL?"
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
+                echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' latest latest '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
             
             fi
