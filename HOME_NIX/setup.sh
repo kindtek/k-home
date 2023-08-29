@@ -135,9 +135,11 @@ import ${kernel_tar_filename} into WSL?"
 (yes)
 " import_kernel
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
+            set -x
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER"
                 sudo mkdir -p "$WIN_USER_KACHE"
                 sudo chown -R "${nix_user}:${nix_group}" "$kernel_tar_path"
+            set +x
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
@@ -146,6 +148,7 @@ import ${kernel_tar_filename} into WSL?"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+            
             fi
         fi
         if [ "$nix_user" = "root" ]; then
