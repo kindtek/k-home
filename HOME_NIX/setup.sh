@@ -144,7 +144,7 @@ import ${kernel_tar_filename} into WSL?"
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
                 sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-                sudo chmod +x "${nix_user}:${nix_group}" "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
