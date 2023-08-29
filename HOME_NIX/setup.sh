@@ -143,7 +143,7 @@ import ${kernel_tar_filename} into WSL?"
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
-                sudo tar --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+                sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
