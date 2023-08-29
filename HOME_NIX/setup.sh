@@ -135,7 +135,7 @@ import ${kernel_tar_filename} into WSL?"
 (yes)
 " import_kernel
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-                
+                WIN_USER_KACHE="/mnt/c/users/$WIN_USER"
                 sudo mkdir -p "$WIN_USER_KACHE"
                 sudo chown -R "${_AGL:agl}:halo" "$WIN_USER_KACHE"
                 bash "$HOME/k-home.sh" && \
