@@ -138,13 +138,13 @@ import ${kernel_tar_filename} into WSL?"
             set -x
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 sudo mkdir -p "$WIN_USER_KACHE"
-                sudo chown -R "${nix_user}:${nix_group}" "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
             set +x
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
-                tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
-                # sudo chown -R "${nix_user}:${nix_group}" "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+                sudo chmod +x "${nix_user}:${nix_group}" "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
