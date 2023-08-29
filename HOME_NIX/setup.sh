@@ -246,7 +246,9 @@ fi
                 fi
             else
                 import_kernel="n"
-            fi    
+            fi 
+        else
+            import_kernel="n"
         fi
     done
 
