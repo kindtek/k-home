@@ -88,8 +88,6 @@ C:\\users\\$WIN_USER is not a home directory"
         set +x
     fi
 done
-# interop
-USERNAME=$WIN_USER
 # update install apt-utils dialog kali-linux-headless upgrade
 
 echo "
@@ -261,6 +259,8 @@ import ${kernel_tar_filename} into WSL?"
                 yes "y" | echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
                 sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
                 sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
+                # interop
+                USERNAME=$WIN_USER
                 sudo service docker start
             echo "
         build stable kernel for WSL? (ZFS available)"
