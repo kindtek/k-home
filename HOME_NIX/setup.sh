@@ -97,7 +97,7 @@ install/update dependencies?"
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /etc/ssl/certs && \
+    sudo rm -rf /etc/ssl/certs 
     sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
     sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
