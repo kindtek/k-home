@@ -88,7 +88,8 @@ C:\\users\\$WIN_USER is not a home directory"
         set +x
     fi
 done
-
+# interop
+USERNAME=$WIN_USER
 # update install apt-utils dialog kali-linux-headless upgrade
 
 echo "
@@ -245,8 +246,103 @@ import ${kernel_tar_filename} into WSL?"
             else
                 import_kernel="n"
             fi 
+        
         else
-            import_kernel="n"
+            echo "
+        build/install kernel for WSL?"
+            read -r -p "
+        (no)
+        " build_kernel
+            if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
+                sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+                sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
+                sudo mkdir -pv /etc/apt/keyrings && \
+                sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null && \
+                yes "y" | echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+                sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+                sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
+                sudo service docker start
+            echo "
+        build stable kernel for WSL? (ZFS available)"
+                read -r -p "
+        (no)
+        " install_stable_kernel
+                if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
+                        echo "
+            build stable kernel for WSL with ZFS?"
+                    read -r -p "
+            (no)
+            " install_stable_zfs_kernel
+                    if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-stable-zfs --detach
+                            docker compose cp kernel-maker-stable-zfs:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-stable --detach
+                            docker compose cp kernel-maker-stable:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        fi 
+                else 
+                
+                    echo "
+        build latest kernel for WSL? (ZFS available)"
+                    read -r -p "
+        (no)
+        " install_latest_kernel
+                    if [ "${install_latest_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                        echo "
+            build latest kernel for WSL with ZFS?"
+                        read -r -p "
+            (no)
+            " install_latest_zfs_kernel
+                        if [ "${install_latest_zfs_kernel,,}"  = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-latest-zfs --detach
+                            docker compose cp kernel-maker-latest-zfs:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-latest --detach
+                            docker compose cp kernel-maker-latest:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        fi 
+                    fi 
+
+                    echo "
+        build basic kernel for WSL (ZFS available ZFS)?"
+                    read -r -p "
+        (yes)
+        " install_basic_kernel
+                    if [ "${install_basic_kernel,,}"  = "" ] || [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                        echo "
+            build basic kernel for WSL with ZFS?"
+                        read -r -p "
+            (yes)
+            " install_basic_zfs_kernel
+                        if  [ "${install_basic_zfs_kernel,,}"  = "" ] || [ "${install_basic_zfs_kernel,,}"  = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-basic-zfs --detach
+                            docker compose cp kernel-maker-basic-zfs:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        else
+                            cd "$HOME/dvlw/dvlp/docker/kali" || exit
+                            docker compose up --build kernel-maker-basic --detach
+                            docker compose cp kernel-maker-basic:/kache /kache
+                            docker compose down
+                            cd "$orig_pwd" || exit
+                        fi 
+                    fi      
+                fi
+            else
+                import_kernel="n"
+            fi 
         fi
     done
 
