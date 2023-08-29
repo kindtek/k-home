@@ -6,6 +6,7 @@ confirm_regen="r"
 warning=""
 orig_pwd=$(pwd)
 nix_user=$(whoami)
+nix_group=$(id -g -n)
 
 if  [ "$WIN_USER" != "" ] && [ -d "/mnt/c/users/$WIN_USER" ]; then
     echo "setting linux environment variables for $WIN_USER"
@@ -96,8 +97,7 @@ install/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo rm -rf /etc/ssl/certs 
+    sudo rm -rf /var/lib/apt/lists
     sudo apt-get --reinstall -yq install ca-certificates && \
     sudo update-ca-certificates && \
     sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
@@ -137,7 +137,7 @@ import ${kernel_tar_filename} into WSL?"
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER"
                 sudo mkdir -p "$WIN_USER_KACHE"
-                sudo chown -R "${nix_user}:$(id -g -n)" "$kernel_tar_path"
+                sudo chown -R "${nix_user}:${nix_group}" "$kernel_tar_path"
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
