@@ -136,7 +136,7 @@ import ${kernel_tar_filename} into WSL?"
 " import_kernel
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
             set -x
-                WIN_USER_KACHE="/mnt/c/users/$WIN_USER"
+                WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 sudo mkdir -p "$WIN_USER_KACHE"
                 sudo chown -R "${nix_user}:${nix_group}" "$WIN_USER_KACHE" "$kernel_tar_path"
             set +x
