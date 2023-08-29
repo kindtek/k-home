@@ -130,7 +130,7 @@ if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install
     sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
 fi
 
-    while [ "${import_kernel,,}" = "n" ]  || [ "${import_kernel,,}" = "no" ]; do 
+    while [ "${import_kernel,,}" != "n" ]  && [ "${import_kernel,,}" != "no" ]; do 
         if ls /kache/*.tar.gz 1> /dev/null 2>&1; then
             kernel_tar_path=$(ls -txr1 /kache/*.tar.gz  | tail --lines=1)
             kernel_tar_file=${kernel_tar_path##*/}
