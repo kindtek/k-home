@@ -267,13 +267,13 @@ echo "
         sudo apt-get install --install-recommends -yq apt-transport-https curl
         sudo dpkg --add-architecture i386 && \
         sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-        sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+        sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
         sudo rm -rf /var/lib/apt/lists && \
         sudo rm -rf /var/cache/apt/archives/*.deb && \
         sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
         sudo apt-get install -y desktop-base
     else
-        sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+        sudo apt-get -y install apt-utils kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
         sudo apt --reinstall -y desktop-base
     fi
 fi 
