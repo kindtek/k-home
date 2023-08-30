@@ -118,7 +118,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
             read -r -p "
             (no)
             " rebuild_pkgs_wsug
-            if [ "${rebuild_pkgs_wsug,,}" = "" ] || [ "${rebuild_pkgs_wsug,,}" = "n" ] || [ "${rebuild_pkgs_wsug,,}" = "n" ]; then 
+            if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "y" ]; then 
                 reinstall_all_packages_no_suggests
             else
                 reinstall_all_packages_with_suggests
