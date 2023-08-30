@@ -159,6 +159,7 @@ import ${kernel_tar_filename} into WSL?"
         (no)
         " build_kernel
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
+                import_kernel='y'
                 sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
                 flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
                 python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && \
@@ -252,6 +253,7 @@ import ${kernel_tar_filename} into WSL?"
         (no)
         " build_kernel
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
+                import_kernel='y'
                 sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
                 sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
                 sudo mkdir -pv /etc/apt/keyrings && \
