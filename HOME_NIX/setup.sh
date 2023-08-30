@@ -153,11 +153,15 @@ import ${kernel_tar_filename} into WSL?"
             fi
         fi
         if [ "$nix_user" = "root" ]; then
-            echo "
-        build/install kernel for WSL?"
-            read -r -p "
-        (no)
-        " build_kernel
+            if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
+                echo "
+            build/install kernel for WSL?"
+                read -r -p "
+            (no)
+            " build_kernel
+            else
+                build_kernel=n
+            fi
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
                 import_kernel='y'
                 sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
@@ -247,11 +251,15 @@ import ${kernel_tar_filename} into WSL?"
             fi 
         
         else
-            echo "
-        build/install kernel for WSL?"
-            read -r -p "
-        (no)
-        " build_kernel
+            if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
+                echo "
+            build/install kernel for WSL?"
+                read -r -p "
+            (no)
+            " build_kernel
+            else
+                build_kernel=n
+            fi
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
                 import_kernel='y'
                 sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
