@@ -96,9 +96,36 @@ install/update dependencies?"
 (yes)
 " update_upgrade
 if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
-    sudo rm -rf /var/lib/apt/lists
-    sudo apt-get --reinstall -yq install ca-certificates && \
-    sudo update-ca-certificates && \
+    echo "
+    rebuild apt and certificate registries?"
+        read -r -p "
+    (no)
+    " rebuild_reg
+    if [ "${rebuild_reg,,}" = "" ] || [ "${rebuild_reg,,}" = "n" ] || [ "${rebuild_reg,,}" = "n" ]; then
+        # sudo rm -rf /var/cache/apt/archives/*.deb
+        sudo rm -rf /etc/ssl/certs
+        sudo rm -rf /var/lib/apt/lists
+        sudo apt-get --reinstall -yq install ca-certificates && \
+        sudo update-ca-certificates
+        echo "
+        rebuild packages?"
+        read -r -p "
+        (no)
+        " rebuild_pkgs
+        if [ "${rebuild_pkgs,,}" = "" ] || [ "${rebuild_pkgs,,}" = "n" ] || [ "${rebuild_pkgs,,}" = "n" ]; then 
+            echo "
+            rebuild with suggested packages?"
+            read -r -p "
+            (no)
+            " rebuild_pkgs_wsug
+            if [ "${rebuild_pkgs_wsug,,}" = "" ] || [ "${rebuild_pkgs_wsug,,}" = "n" ] || [ "${rebuild_pkgs_wsug,,}" = "n" ]; then 
+                reinstall_all_packages_no_suggests
+            else
+                reinstall_all_packages_with_suggests
+            fi
+        fi
+    fi
+
     sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
     sudo apt-get install -yq powershell net-tools zstd && \
     # sudo apt-get remove -yq ca-certificates-java 
@@ -114,8 +141,6 @@ install cdir?"
 (yes)
 " install_cdir
 if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
     sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
     pip3 install cdir --user && \
@@ -387,8 +412,6 @@ echo "
         sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
         # sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
         sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
-        sudo rm -rf /var/lib/apt/lists && \
-        sudo rm -rf /var/cache/apt/archives/*.deb && \
         sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
         sudo apt-get install -y desktop-base
     else
@@ -404,16 +427,12 @@ echo "
         (yes)
         " install_brave
         if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-            sudo rm -rf /etc/ssl/certs
-            sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
             sudo apt-get --reinstall -yq install ca-certificates && \
             sudo update-ca-certificates && \
             sudo apt-get remove -yq ca-certificates-java && \
             sudo apt-get install --install-recommends -yq apt-transport-https curl 
             sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
             sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
-            sudo rm -rf /var/lib/apt/lists && \
-            sudo apt-get update -yq && sudo apt-get upgrade -yq && sudo apt-get --with-new-pkgs upgrade -yq && \
             # # sudo dpkg-reconfigure libdvd-pkg 
             sudo apt-get install -yq brave-browser vlc x11-apps
             
@@ -736,8 +755,6 @@ read -r -p "
 (no)
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade -y &&
     sudo dpkg --add-architecture i386 &&
     sudo apt-get install -y powershell net-tools wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
@@ -763,8 +780,6 @@ to manually update:
 
 " && read -r -p "(continue)"
 elif [ "${convert_net,,}"  = "revert" ]; then
-    sudo rm -rf /var/lib/apt/lists && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
     sudo apt-get install net-tools powershell wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1"  || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "

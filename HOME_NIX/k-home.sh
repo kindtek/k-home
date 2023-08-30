@@ -1,7 +1,6 @@
 #!/bin/bash
 timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
 filename=k-home-nix_$timestamp
-sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
 sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
 sudo mkdir -pv /etc/apt/keyrings && \
 [ -e "/usr/share/keyrings/docker-archive-keyring.gpg" ] || sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null && \
