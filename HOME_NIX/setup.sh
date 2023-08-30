@@ -119,9 +119,13 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
             (no)
             " rebuild_pkgs_wsug
             if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "y" ]; then 
-                reinstall_all_packages_no_suggests
+                for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
+                    apt-get --reinstall --no-install-suggests -y install "$package"
+                done
             else
-                reinstall_all_packages_with_suggests
+                for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
+                    apt-get --reinstall --install-suggests -y install "$package"
+                done
             fi
         fi
     fi
