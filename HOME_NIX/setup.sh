@@ -147,8 +147,8 @@ import ${kernel_tar_filename} into WSL?"
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
                 sudo apt-get -yq install powershell net-tools && \
-                echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' latest latest '$WSL_DISTRO_NAME'"
-                bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" latest latest "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+                echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
+                bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
             
             fi
         fi
@@ -179,13 +179,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
                             sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER"
                             sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
                 else 
@@ -205,13 +205,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
                             sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER"
                             sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
                     fi 
@@ -231,13 +231,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
                             sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         else
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER"
                             sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER" && \
-                            sudo bash install-kernel.sh "$WIN_USER" "latest"
+                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
                     fi      
