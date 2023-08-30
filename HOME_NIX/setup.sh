@@ -103,7 +103,6 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "" ] || [ "${rebuild_reg,,}" = "n" ] || [ "${rebuild_reg,,}" = "n" ]; then
         # sudo rm -rf /var/cache/apt/archives/*.deb
-        sudo rm -rf /etc/ssl/certs
         sudo rm -rf /var/lib/apt/lists
         sudo apt-get --reinstall -yq install ca-certificates && \
         sudo update-ca-certificates
