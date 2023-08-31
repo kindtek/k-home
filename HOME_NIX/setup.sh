@@ -101,7 +101,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
         read -r -p "
     (no)
     " rebuild_reg
-    if [ "${rebuild_reg,,}" = "" ] || [ "${rebuild_reg,,}" = "n" ] || [ "${rebuild_reg,,}" = "n" ]; then
+    if [ "${rebuild_reg,,}" = "" ] || [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
         # sudo rm -rf /var/cache/apt/archives/*.deb
         sudo rm -rf /var/lib/apt/lists
         sudo apt-get --reinstall -yq install ca-certificates && \
@@ -111,13 +111,13 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
         read -r -p "
         (no)
         " rebuild_pkgs
-        if [ "${rebuild_pkgs,,}" = "" ] || [ "${rebuild_pkgs,,}" = "n" ] || [ "${rebuild_pkgs,,}" = "n" ]; then 
+        if [ "${rebuild_pkgs,,}" = "" ] || [ "${rebuild_pkgs,,}" = "n" ] || [ "${rebuild_pkgs,,}" = "no" ]; then 
             echo "
             rebuild with suggested packages?"
             read -r -p "
             (no)
             " rebuild_pkgs_wsug
-            if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "y" ]; then 
+            if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "yes" ]; then 
                 for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
                     apt-get --reinstall --no-install-suggests -y install "$package"
                 done
