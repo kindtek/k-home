@@ -101,7 +101,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
         read -r -p "
     (no)
     " rebuild_reg
-    if [ "${rebuild_reg,,}" = "" ] || [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
+    if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
         # sudo rm -rf /var/cache/apt/archives/*.deb
         sudo rm -rf /var/lib/apt/lists
         sudo apt-get --reinstall -yq install ca-certificates && \
@@ -111,7 +111,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
         read -r -p "
         (no)
         " rebuild_pkgs
-        if [ "${rebuild_pkgs,,}" = "" ] || [ "${rebuild_pkgs,,}" = "n" ] || [ "${rebuild_pkgs,,}" = "no" ]; then 
+        if [ "${rebuild_pkgs,,}" = "y" ] || [ "${rebuild_pkgs,,}" = "yes" ]; then 
             echo "
             rebuild with suggested packages?"
             read -r -p "
