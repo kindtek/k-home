@@ -427,20 +427,26 @@ fi
 
 
 echo "
-        install brave browser?"
+        install brave browser vlc x11 and other goodies?"
         read -r -p "
         (yes)
         " install_brave
         if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
-            sudo apt-get --reinstall -yq install ca-certificates && \
+            sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y && \
+            sudo apt-get --reinstall -y install ca-certificates && \
             sudo update-ca-certificates && \
-            sudo apt-get remove -yq ca-certificates-java && \
-            sudo apt-get install --install-recommends -yq apt-transport-https curl 
-            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
+            sudo apt-get install --install-recommends -y apt-transport-https curl 
+            # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
+            curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
             echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list 
-            # # sudo dpkg-reconfigure libdvd-pkg 
-            sudo apt-get install -yq brave-browser vlc x11-apps
-            
+            sudo apt-get install --no-install-recommends -y brave-browser && \
+            # change last line of this file - fix for brave-browser displaying empty windows
+            sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old && \
+            sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
+            # now no longer need to add --disable-gpu flag everytime
+            echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser > /dev/null
+            sudo apt-get install --no-install-recommends -y vlc x11-apps
+            cp "$HOME"/repos/dvlw/dvlp/mnt/opt/* /opt/
         fi
 
 # services can be turned on now
