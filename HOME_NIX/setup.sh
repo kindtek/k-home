@@ -199,15 +199,15 @@ import ${kernel_tar_filename} into WSL?"
             echo "
         build stable kernel for WSL? (ZFS available)"
                 read -r -p "
-        (no)
+        (yes)
         " install_stable_kernel
-                if [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
+                if [ "${install_stable_kernel,,}"  = "" ] || [ "${install_stable_kernel,,}"  = "y" ] || [ "${install_stable_kernel,,}" = "yes" ]; then
                         echo "
             build stable kernel for WSL with ZFS?"
                     read -r -p "
-            (no)
+            (yes)
             " install_stable_zfs_kernel
-                    if [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
+                    if [ "${install_stable_zfs_kernel,,}"  = "" ] || [ "${install_stable_zfs_kernel,,}"  = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                             cd "$HOME/dvlw/dvlp/kernels/linux" || exit
                             echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
                             sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" && \
@@ -251,9 +251,9 @@ import ${kernel_tar_filename} into WSL?"
                     echo "
         build basic kernel for WSL (ZFS available ZFS)?"
                     read -r -p "
-        (yes)
+        (no)
         " install_basic_kernel
-                    if [ "${install_basic_kernel,,}"  = "" ] || [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
+                    if [ "${install_basic_kernel,,}"  = "y" ] || [ "${install_latest_kernel,,}" = "yes" ]; then
                         echo "
             build basic kernel for WSL with ZFS?"
                         read -r -p "
@@ -435,7 +435,7 @@ echo "
             sudo apt-get remove -yq ca-certificates-java && \
             sudo apt-get install --install-recommends -yq apt-transport-https curl 
             sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
-            sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list 
+            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list 
             # # sudo dpkg-reconfigure libdvd-pkg 
             sudo apt-get install -yq brave-browser vlc x11-apps
             
