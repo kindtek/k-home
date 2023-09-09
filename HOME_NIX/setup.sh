@@ -165,7 +165,8 @@ import ${kernel_tar_filename} into WSL?"
             set -x
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 sudo mkdir -p "$WIN_USER_KACHE"
-                sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib"  "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
+                sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
             set +x
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
