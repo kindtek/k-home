@@ -426,32 +426,42 @@ fi
 
 
 echo "
-        install brave browser kvm vlc x11 and other goodies?"
+        install brave browser vlc x11 and other goodies?"
         read -r -p "
         (yes)
-        " install_goodies
-        if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
-            sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
-            sudo apt-get --reinstall -y install ca-certificates && \
-            sudo update-ca-certificates && \
-            sudo apt-get install --install-recommends -y apt-transport-https curl 
-            # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
-            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
-            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list 
-            sudo apt-get install --no-install-recommends -y brave-browser vlc x11-apps && \
-            # change last line of this file - fix for brave-browser displaying empty windows
-            sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old && \
-            sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
-            # now no longer need to add --disable-gpu flag everytime
-            echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser > /dev/null
-            if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
-                sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
-            else
-                sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
-            fi
-            cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
-        fi
+" install_goodies
+if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
+    sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
+    sudo apt-get --reinstall -y install ca-certificates && \
+    sudo update-ca-certificates && \
+    sudo apt-get install --install-recommends -y apt-transport-https curl 
+    # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
+    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg 
+    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list 
+    sudo apt-get install --no-install-recommends -y brave-browser vlc x11-apps && \
+    # change last line of this file - fix for brave-browser displaying empty windows
+    sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old && \
+    sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
+    # now no longer need to add --disable-gpu flag everytime
+    echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser > /dev/null
+    cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
+fi
 
+echo "
+install kvm?"
+read -r -p "
+(no)
+" install_kvm
+if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
+    
+    # now no longer need to add --disable-gpu flag everytime
+    if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
+        sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+    else
+        sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+    fi
+    cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
+fi
 # services can be turned on now
 echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
 # make files executable
