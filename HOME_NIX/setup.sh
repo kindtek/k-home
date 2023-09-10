@@ -180,6 +180,7 @@ import ${kernel_tar_filename} into WSL?"
                 sudo apt-get -yq install powershell net-tools && \
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+                sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
                 exit
             fi
         fi
