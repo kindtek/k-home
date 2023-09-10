@@ -404,7 +404,7 @@ echo "
 build KEX gui?"
 read -r -p "
 (yes)
-" build_kex
+" build_gui
 if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
 echo "
     build full KEX gui?"
@@ -455,10 +455,23 @@ read -r -p "
 (no)
 " install_kvm
 if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
+    echo "
+    bypass kvm install prompts?"
+    read -r -p "
+    (yes)
+    " bypass_kvm_prompts
     if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
-        sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
+            yes "" | sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        else
+            sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        fi
     else
-        sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
+            yes "" | sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        else
+            sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+        fi
     fi
 fi
 
