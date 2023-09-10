@@ -90,24 +90,27 @@ C:\\users\\$WIN_USER is not a home directory"
         set +x
     fi
 done
-# update install apt-utils dialog kali-linux-headless upgrade
 
+# update install apt-utils dialog kali-linux-headless upgrade
 echo "
 install/update dependencies?"
     read -r -p "
-(yes)
+(no)
 " update_upgrade
-if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
+if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
+    # update locales
+    sudo locale-gen en_US.UTF-8 && \
+    sudo dpkg-reconfigure locales 
     echo "
     rebuild apt and certificate registries?"
         read -r -p "
     (no)
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
-        # sudo rm -rf /var/cache/apt/archives/*.deb
-        sudo rm -rf /var/lib/apt/lists
         sudo apt-get --reinstall -yq install ca-certificates && \
-        sudo update-ca-certificates
+        sudo update-ca-certificates && \
+        sudo rm -rf /var/lib/apt/lists && \
+        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y 
         echo "
         rebuild packages?"
         read -r -p "
@@ -131,11 +134,7 @@ if [ "${update_upgrade,,}" != "n" ] && [ "${update_upgrade,,}" != "n" ]; then
         fi
     fi
 
-    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
-    sudo apt-get install -yq powershell net-tools zstd && \
-    # sudo apt-get remove -yq ca-certificates-java 
-    sudo locale-gen en_US.UTF-8 && \
-    sudo dpkg-reconfigure locales 
+    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq
 fi
 
 # cdir install
@@ -400,8 +399,9 @@ import ${kernel_tar_filename} into WSL?"
         fi
     done
 
-echo "
-build KEX gui?"
+build_gui='n'
+[ -x /usr/bin/win-kex ] || echo "
+build KEX gui?" && \
 read -r -p "
 (yes)
 " build_gui
@@ -426,10 +426,10 @@ echo "
     fi
 fi 
 
-
-echo "
-        install brave browser vlc x11 and other goodies?"
-        read -r -p "
+install_goodies='n'
+[ -x /usr/bin/brave-browser ] || echo "
+        install brave browser vlc x11 and other goodies?" && \
+read -r -p "
         (yes)
 " install_goodies
 if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
@@ -450,8 +450,8 @@ if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${ins
     sudo cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
 fi
 
-echo "
-install kvm?"
+[ -x /usr/bin/kvm ] || echo "
+install kvm?" && \
 read -r -p "
 (no)
 " install_kvm
@@ -478,7 +478,7 @@ fi
 
 # services can be turned on now
 echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
-if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
+if [ -x /usr/bin/kvm ] || [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
     sudo systemctl enable libvirtd
     sudo systemctl start libvirtd
 fi
