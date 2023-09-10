@@ -398,19 +398,18 @@ import ${kernel_tar_filename} into WSL?"
         fi
     done
 
-
 echo "
 build KEX gui?"
 read -r -p "
 (yes)
 " build_kex
-if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
 echo "
     build full KEX gui?"
     read -r -p "
     (yes)
-    " build_kex
-    if [ "${build_kex}" = "" ] || [ "${build_kex,,}" = "y" ] || [ "${build_kex,,}" = "yes" ]; then
+    " build_full_gui
+    if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
         sudo apt-get install --install-recommends -yq apt-transport-https curl
         sudo dpkg --add-architecture i386 && \
@@ -427,11 +426,11 @@ fi
 
 
 echo "
-        install brave browser vlc x11 and other goodies?"
+        install brave browser kvm vlc x11 and other goodies?"
         read -r -p "
         (yes)
-        " install_brave
-        if [ "${install_brave}" = "" ] || [ "${install_brave,,}" = "y" ] || [ "${install_brave,,}" = "yes" ]; then
+        " install_goodies
+        if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
             sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
             sudo apt-get --reinstall -y install ca-certificates && \
             sudo update-ca-certificates && \
@@ -445,6 +444,11 @@ echo "
             sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
             # now no longer need to add --disable-gpu flag everytime
             echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser > /dev/null
+            if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
+                sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            else
+                sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            fi
             cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
         fi
 
