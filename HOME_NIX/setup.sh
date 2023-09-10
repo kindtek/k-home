@@ -471,6 +471,7 @@ fi
 
 # make files executable
 sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh 
+export DEBIAN_FRONTEND=dialog
 
 # k-home
 ls -al "$HOME" && \
@@ -853,7 +854,8 @@ finishing up...
 # read -r -p "
 # (yes)" start_services
 # if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
-    sudo apt-get install -yq console-setup dialog virtualbox
+    sudo apt-get install -yq console-setup dialog 
+    export DEBIAN_FRONTEND=dialog
     sudo apt-get update -yq && sudo apt-get --with-new-pkgs upgrade -y
 # fi
 
