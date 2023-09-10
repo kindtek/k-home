@@ -445,7 +445,7 @@ echo "
             sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
             # now no longer need to add --disable-gpu flag everytime
             echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser > /dev/null
-            cp "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
+            cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
         fi
 
 # services can be turned on now
