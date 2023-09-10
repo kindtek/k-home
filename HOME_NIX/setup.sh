@@ -440,6 +440,7 @@ if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${ins
     # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list && \
+    sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
     sudo apt-get install --no-install-recommends -y brave-browser vlc x11-apps && \
     # change last line of this file - fix for brave-browser displaying empty windows
     sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old && \
@@ -462,15 +463,15 @@ if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
     " bypass_kvm_prompts
     if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
         if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-            yes "" | sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            yes "" | sudo apt-get install -y virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
         else
-            sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            sudo apt-get install -y virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
         fi
     else
         if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-            yes "" | sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            yes "" | sudo apt-get install -y qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
         else
-            sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            sudo apt-get install -y qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
         fi
     fi
 fi
