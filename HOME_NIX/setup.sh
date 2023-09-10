@@ -453,17 +453,20 @@ read -r -p "
 (no)
 " install_kvm
 if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
-    
-    # now no longer need to add --disable-gpu flag everytime
     if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
         sudo apt-get install -y virt-manager qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
     else
         sudo apt-get install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
     fi
-    cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
 fi
+
 # services can be turned on now
 echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
+    sudo systemctl enable libvirtd
+    sudo systemctl start libvirtd
+fi
+
 # make files executable
 sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh 
 
