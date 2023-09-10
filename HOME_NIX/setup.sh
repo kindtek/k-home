@@ -1,6 +1,8 @@
 #!/bin/bash
 orig_win_user=$WIN_USER
 WIN_USER=$1
+# if arg2 not empty skip import kernel later
+import_kernel=${2:+'n'}
 ssh_dir_default=$HOME/.ssh
 confirm_regen="r"
 warning=""
@@ -179,7 +181,7 @@ import ${kernel_tar_filename} into WSL?"
                 sudo apt-get -yq install powershell net-tools && \
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
-            
+                exit
             fi
         fi
         if [ "$nix_user" = "root" ]; then
