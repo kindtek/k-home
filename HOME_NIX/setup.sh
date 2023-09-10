@@ -180,7 +180,6 @@ import ${kernel_tar_filename} into WSL?"
                 sudo apt-get -yq install powershell net-tools && \
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
-                sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
                 exit
             fi
         fi
@@ -224,6 +223,7 @@ import ${kernel_tar_filename} into WSL?"
                             # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
                 else 
                 
                     echo "
@@ -250,6 +250,7 @@ import ${kernel_tar_filename} into WSL?"
                             # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
                     fi 
 
                     echo "
@@ -276,6 +277,7 @@ import ${kernel_tar_filename} into WSL?"
                             # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
                     fi      
                 fi
             else
@@ -319,6 +321,7 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-stable-zfs --detach
                             sudo docker compose cp make-kernel-stable-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-stable-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -327,11 +330,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-stable --detach
                             sudo docker compose cp make-kernel-stable:/kache/ /
+                            sudo docker compose cp make-kernel-stable:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-gregkh
                 else 
                 
                     echo "
@@ -349,6 +354,7 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest-zfs --detach
                             sudo docker compose cp make-kernel-latest-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-latest-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -357,11 +363,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-latest --detach
                             sudo docker compose cp make-kernel-latest:/kache/ /
+                            sudo docker compose cp make-kernel-latest:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-torvalds
                     fi 
 
                     echo "
@@ -379,6 +387,7 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic-zfs --detach
                             sudo docker compose cp make-kernel-basic-zfs:/kache/ /
+                            sudo docker compose cp make-kernel-basic-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
@@ -387,11 +396,13 @@ import ${kernel_tar_filename} into WSL?"
                             cd "$HOME/dvlw/dvlp/docker/kali" || exit
                             docker compose up --build make-kernel-basic --detach
                             sudo docker compose cp make-kernel-basic:/kache/ /
+                            sudo docker compose cp make-kernel-basic:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                             sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                             sudo chmod +x /kache/*.tar.gz
                             docker compose down
                             cd "$orig_pwd" || exit
                         fi 
+                        sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-msft
                     fi      
                 fi
             else
