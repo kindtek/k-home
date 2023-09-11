@@ -167,12 +167,12 @@ import ${kernel_tar_filename} into WSL?"
 (yes)
 " import_kernel
             if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
-            set -x
+            # set -x
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 sudo mkdir -p "$WIN_USER_KACHE"
                 sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib"  "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
                 sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
-            set +x
+            # set +x
                 bash "$HOME/k-home.sh" && \
                 sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
                 cd "$WIN_USER_KACHE" && \
@@ -185,6 +185,47 @@ import ${kernel_tar_filename} into WSL?"
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
                 exit
+            else
+                WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
+                if ls /kache/*.tar.gz 1> /dev/null 2>&1 || ls "$WIN_USER_KACHE"*.tar.gz 1> /dev/null 2>&1; then
+                    kernel_tar_paths=$(ls -txr /kache/*.tar.gz )
+                    kernel_tar_paths+=$(ls -txr /mnt/c/users/$WIN_USER/kache/*.tar.gz )
+                    kernel_tar_files=${kernel_tar_paths##*/}
+                    kernel_tar_filenames=${kernel_tar_files%.*}
+                    kernel_tar_filenames=${kernel_tar_filenames%.*} 
+                    i=0
+                    for kernel_tar_filename in $kernel_tar_filenames; do
+                        $i++
+                        echo "$i) $kernel_tar_filename"
+                    done
+                    echo "
+    import [number] into WSL?"
+                    read -r -p "
+    (yes)
+    " import_kernel_num
+                    if [ "${import_kernel_num,,}" = "y" ] || [ "${import_kernel_num,,}" = "yes" ] || [ "${import_kernel_num,,}" = "" ] && [ "${import_kernel_num,,}" -le $i ] && [ "${import_kernel_num,,}" -gt 0 ]; then
+                    # set -x
+                        sudo mkdir -p "$WIN_USER_KACHE"
+                        sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib"  "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
+                        sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
+                    # set +x
+                        kernel_tar_file=${kernel_tar_paths}[$import_kernel_num]
+                        kernel_tar_filename=${kernel_tar_file}[$import_kernel_num]
+                        kernel_tar_filename=${kernel_tar_filename}[$import_kernel_num]
+                        bash "$HOME/k-home.sh" && \
+                        sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
+                        cd "$WIN_USER_KACHE" && \
+                        sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
+                        sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
+                        sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                        # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
+                        # bash update-initramfs -u -k !wsl_default_kernel! 
+                        sudo apt-get -yq install powershell net-tools && \
+                        echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
+                        bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
+                        exit
+                    fi
+                fi
             fi
         fi
         if [ "$nix_user" = "root" ]; then
