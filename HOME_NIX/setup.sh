@@ -108,12 +108,12 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
         sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
-        sudo apt-get --reinstall -yq install ca-certificates && \
+        sudo apt-get --reinstall -yqq install ca-certificates && \
         sudo update-ca-certificates ||
         sudo rm -rf /var/lib/apt/lists && \
         sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
         sudo rm -rf /etc/ssl/certs/* && \
-        sudo apt-get --reinstall -yq install ca-certificates && \
+        sudo apt-get --reinstall -yqq install ca-certificates && \
         sudo update-ca-certificates
         echo "
         rebuild packages?"
@@ -138,7 +138,7 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
         fi
     fi
 
-    sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq
+    sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq
 fi
 
 # cdir install
@@ -181,7 +181,7 @@ import ${kernel_tar_filename} into WSL?"
                 sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
                 # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                 # bash update-initramfs -u -k !wsl_default_kernel! 
-                sudo apt-get -yq install powershell net-tools && \
+                sudo apt-get -yqq install powershell net-tools && \
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
                 exit
@@ -220,7 +220,7 @@ import ${kernel_tar_filename} into WSL?"
                         sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
                         # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
                         # bash update-initramfs -u -k !wsl_default_kernel! 
-                        sudo apt-get -yq install powershell net-tools && \
+                        sudo apt-get -yqq install powershell net-tools && \
                         echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                         bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
                         exit
@@ -341,12 +341,12 @@ import ${kernel_tar_filename} into WSL?"
             fi
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
                 import_kernel='y'
-                sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+                sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
                 sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
                 sudo mkdir -pv /etc/apt/keyrings && \
                 [ -e "/usr/share/keyrings/docker-archive-keyring.gpg" ] || sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null && \
                 yes "y" | echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-                sudo apt-get update --fix-missing -yq && sudo apt-get install -f && sudo apt-get upgrade -yq && \
+                sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
                 sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
                 # interop
                 USERNAME=$WIN_USER
@@ -472,7 +472,7 @@ echo "
     " build_full_gui
     if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
     # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-        sudo apt-get install --install-recommends -yq apt-transport-https curl
+        sudo apt-get install --install-recommends -yqq apt-transport-https curl
         sudo dpkg --add-architecture i386 && \
         sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
         # sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
@@ -863,7 +863,7 @@ read -r -p "
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo dpkg --add-architecture i386 &&
-    sudo apt-get update -yq && sudo apt-get --with-new-pkgs upgrade -y
+    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -y
     sudo apt-get install -y powershell net-tools wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
@@ -932,9 +932,9 @@ finishing up...
 # read -r -p "
 # (yes)" start_services
 # if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
-    sudo apt-get install -yq console-setup dialog 
+    sudo apt-get install -yqq console-setup dialog 
     export DEBIAN_FRONTEND=dialog
-    sudo apt-get update -yq && sudo apt-get --with-new-pkgs upgrade -y
+    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -y
 # fi
 
 echo "setup operation complete ..."
