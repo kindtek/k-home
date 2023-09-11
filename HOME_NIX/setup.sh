@@ -416,11 +416,13 @@ import ${kernel_tar_filename} into WSL?"
     done
 
 build_gui='n'
-[ -x /usr/bin/win-kex ] || echo "
+if [ ! -x /usr/bin/win-kex ]; then
+echo "
 build KEX gui?" && \
 read -r -p "
 (yes)
 " build_gui
+fi
 if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
 echo "
     build full KEX gui?"
@@ -443,11 +445,13 @@ echo "
 fi 
 
 install_goodies='n'
-[ -x /usr/bin/brave-browser ] || echo "
+if [ ! -x /usr/bin/brave-browser ]; then
+echo "
         install brave browser vlc x11 and other goodies?" && \
 read -r -p "
         (yes)
 " install_goodies
+fi
 if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
     sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
     sudo apt-get --reinstall -y install ca-certificates && \
@@ -466,11 +470,14 @@ if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${ins
     sudo cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
 fi
 
-[ -x /usr/bin/kvm ] || echo "
+install_kvm='n'
+if [ ! -x /usr/bin/kvm ]; then
+echo "
 install kvm?" && \
 read -r -p "
 (no)
 " install_kvm
+fi
 if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
     echo "
     bypass kvm install prompts?"
