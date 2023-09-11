@@ -515,7 +515,6 @@ if [ "${update_home,,}"  = "y" ] || [ "${update_home,,}" = "yes" ]; then
     sudo service docker start
     cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
     bash "$HOME/k-home.sh" "$WIN_USER"
-    ls -al "$HOME"
 fi
 if [ "$nix_user" != "r00t" ]; then
     echo "
@@ -543,8 +542,8 @@ pull k-home files from repo to $WIN_USER_HOME ?"
         sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
         sudo service docker start
         bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
+        cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$WIN_USER_HOME/dvlp.ps1"
         cd "$orig_pwd" || exit
-        ls -al "$WIN_USER_HOME"
     fi
 fi
 # ssh gen
