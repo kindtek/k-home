@@ -169,6 +169,9 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_CLI_EXPERIMENTAL=enabled
 export LFS
+if sudo [ -d "$LFS" ]; then
+    sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
+fi
 
 alias cdir='source cdir.sh'
 alias grep='grep --color=auto'
