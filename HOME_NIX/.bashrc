@@ -168,6 +168,7 @@ export _AGL=${_AGL:-agl}
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_CLI_EXPERIMENTAL=enabled
+export LFS
 
 alias cdir='source cdir.sh'
 alias grep='grep --color=auto'
