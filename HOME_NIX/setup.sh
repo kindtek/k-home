@@ -189,13 +189,14 @@ import ${kernel_tar_filename} into WSL?"
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 if ls /kache/*.tar.gz 1> /dev/null 2>&1 || ls "$WIN_USER_KACHE"*.tar.gz 1> /dev/null 2>&1; then
                     kernel_tar_paths=$(ls -txr /kache/*.tar.gz )
-                    kernel_tar_paths+=$(ls -txr /mnt/c/users/$WIN_USER/kache/*.tar.gz )
-                    kernel_tar_files=${kernel_tar_paths##*/}
-                    kernel_tar_filenames=${kernel_tar_files%.*}
-                    kernel_tar_filenames=${kernel_tar_filenames%.*} 
+                    kernel_tar_paths+=$(ls -txr "$WIN_USER_KACHE"/*.tar.gz )
+                    
                     i=0
-                    for kernel_tar_filename in $kernel_tar_filenames; do
-                        $i++
+                    for kernel_tar_path in $kernel_tar_paths; do
+                        kernel_tar_file=${kernel_tar_path##*/}
+                        kernel_tar_filename=${kernel_tar_file%.*}
+                        kernel_tar_filename=${kernel_tar_filename%.*} 
+                        i=$((i + 1))
                         echo "$i) $kernel_tar_filename"
                     done
                     echo "
@@ -203,17 +204,18 @@ import ${kernel_tar_filename} into WSL?"
                     read -r -p "
     (yes)
     " import_kernel_num
-                    if [ "${import_kernel_num,,}" = "y" ] || [ "${import_kernel_num,,}" = "yes" ] || [ "${import_kernel_num,,}" = "" ] && [ "${import_kernel_num,,}" -le $i ] && [ "${import_kernel_num,,}" -gt 0 ]; then
+                    if [ "${import_kernel_num,,}" -le $i ] && [ "${import_kernel_num,,}" -gt 0 ]; then
                     # set -x
                         sudo mkdir -p "$WIN_USER_KACHE"
                         sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib"  "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
                         sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
                     # set +x
-                        kernel_tar_file=${kernel_tar_paths}[$import_kernel_num]
-                        kernel_tar_filename=${kernel_tar_file}[$import_kernel_num]
-                        kernel_tar_filename=${kernel_tar_filename}[$import_kernel_num]
+                        kernel_tar_file=${kernel_tar_paths}[$((import_kernel_num - 1))]
+                        kernel_tar_file=${kernel_tar_file##*/}
                         bash "$HOME/k-home.sh" && \
+                        # the tar is in one of these places but copy to both
                         sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" && \
+                        sudo cp -rfv "$kernel_tar_path" "/kache/$kernel_tar_file" && \
                         cd "$WIN_USER_KACHE" && \
                         sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" && \
                         sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
