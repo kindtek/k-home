@@ -107,10 +107,14 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
     (no)
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
+        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
         sudo apt-get --reinstall -yq install ca-certificates && \
-        sudo update-ca-certificates && \
+        sudo update-ca-certificates ||
         sudo rm -rf /var/lib/apt/lists && \
-        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y 
+        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
+        sudo rm -rf /etc/ssl/certs/* && \
+        sudo apt-get --reinstall -yq install ca-certificates && \
+        sudo update-ca-certificates
         echo "
         rebuild packages?"
         read -r -p "
