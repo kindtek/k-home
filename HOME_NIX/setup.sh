@@ -601,8 +601,9 @@ clone/pull devels workshop repo using git and update files in $HOME?" &&
 (no)
 " clone_pull_home
 if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ]; then
-    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/reclone-gh.sh" "$HOME/reclone-gh.sh" || wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh 
-    bash "$HOME/reclone-gh.sh" 
+    cd "$HOME" || exit
+    wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh | bash
+    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/" "$HOME/"
 fi
 if [ "$setup_type" = 'quick' ]; then
     echo "
@@ -630,8 +631,8 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
     if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
         sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
         sudo service docker start
-        cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
-        bash "$HOME/k-home.sh"
+        cd "$HOME" || exit
+        wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/k-home.sh | bash
     fi
     if [ "$nix_user" != "r00t" ]; then
         echo "
