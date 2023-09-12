@@ -107,11 +107,11 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
     (no)
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
-        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
+        sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
         sudo apt-get --reinstall -yqq install ca-certificates && \
         sudo update-ca-certificates ||
         sudo rm -rf /var/lib/apt/lists && \
-        sudo apt-get update --fix-missing -y && apt-get install -f && apt-get upgrade -y
+        sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
         sudo rm -rf /etc/ssl/certs/* && \
         sudo apt-get --reinstall -yqq install ca-certificates && \
         sudo update-ca-certificates
@@ -128,11 +128,11 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
             " rebuild_pkgs_wsug
             if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "yes" ]; then 
                 for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    apt-get --reinstall --no-install-suggests -y install "$package"
+                    apt-get --reinstall --no-install-suggests -yqq install "$package"
                 done
             else
                 for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    apt-get --reinstall --install-suggests -y install "$package"
+                    apt-get --reinstall --install-suggests -yqq install "$package"
                 done
             fi
         fi
@@ -149,10 +149,10 @@ install cdir?"
 (yes)
 " install_cdir
 if [ "${install_cdir}"  = "" ] || [ "${install_cdir,,}"  = "y" ] || [ "${install_cdir,,}" = "yes" ]; then
-    sudo apt-get install --no-install-recommends -y jq python3-pip python3-venv && \
+    sudo apt-get install --no-install-recommends -yqq jq python3-pip python3-venv && \
     pip3 install pip --upgrade --no-warn-script-location --no-deps && \
     pip3 install cdir --user && \
-    sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
+    sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade
 fi
 
     while [ "${import_kernel,,}" != "n" ]  && [ "${import_kernel,,}" != "no" ]; do 
@@ -242,10 +242,10 @@ import ${kernel_tar_filename} into WSL?"
             fi
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
                 import_kernel='y'
-                sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade && sudo apt-get -y install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
+                sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade && sudo apt-get -yqq install alien autoconf bison bc build-essential console-setup cpio dbus-user-session daemonize dwarves fakeroot \
                 flex fontconfig gawk kmod libblkid-dev libffi-dev lxcfs libudev-dev libaio-dev libattr1-dev libelf-dev libpam-systemd \
                 python3-dev python3-setuptools python3-cffi net-tools rsync snapd systemd-sysv sysvinit-utils uuid-dev zstd && \
-                sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade 
+                sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade 
             echo "
         build stable kernel for WSL? (ZFS available)"
                 read -r -p "
@@ -344,12 +344,12 @@ import ${kernel_tar_filename} into WSL?"
             if [ "${build_kernel,,}" = "y" ] || [ "${build_kernel,,}" = "yes" ]; then
                 import_kernel='y'
                 sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
-                sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
+                sudo apt-get install --no-install-recommends -yqq ca-certificates curl lsb-release gpg && \
                 sudo mkdir -pv /etc/apt/keyrings && \
                 [ -e "/usr/share/keyrings/docker-archive-keyring.gpg" ] || sudo curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null && \
                 yes "y" | echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bookworm stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
                 sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
-                sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
+                sudo apt-get install --no-install-recommends -yqq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
                 # interop
                 USERNAME=$WIN_USER
                 sudo service docker start
@@ -473,17 +473,17 @@ echo "
     (yes)
     " build_full_gui
     if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
-    # sudo apt --reinstall --no-install-suggests -y virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+    # sudo apt --reinstall --no-install-suggests -yqq virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
         sudo apt-get install --install-recommends -yqq apt-transport-https curl
         sudo dpkg --add-architecture i386 && \
-        sudo apt-get -y update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -y upgrade && \
-        # sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-        sudo apt-get -y install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
-        sudo apt-get -y update && sudo apt-get -y upgrade && sudo apt-get --with-new-pkgs -y upgrade
-        sudo apt-get install -y desktop-base
+        sudo apt-get -yqq update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -yqq upgrade && \
+        # sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+        sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
+        sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade
+        sudo apt-get install -yqq desktop-base
     else
-        # sudo apt-get -y install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-        sudo apt-get -y install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
+        # sudo apt-get -yqq install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+        sudo apt-get -yqq install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
     fi
 fi 
 
@@ -496,15 +496,15 @@ read -r -p "
 " install_goodies
 fi
 if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
-    sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
-    sudo apt-get --reinstall -y install ca-certificates && \
+    sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
+    sudo apt-get --reinstall -yqq install ca-certificates && \
     sudo update-ca-certificates && \
-    sudo apt-get install --install-recommends -y apt-transport-https curl 
+    sudo apt-get install --install-recommends -yqq apt-transport-https curl 
     # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list && \
-    sudo apt-get update --fix-missing -y && sudo apt-get install -f && sudo apt-get upgrade -y && \
-    sudo apt-get install --no-install-recommends -y brave-browser vlc x11-apps && \
+    sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
+    sudo apt-get install --no-install-recommends -yqq brave-browser vlc x11-apps && \
     # change last line of this file - fix for brave-browser displaying empty windows
     sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old && \
     sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser > /dev/null && \
@@ -529,15 +529,15 @@ if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
     " bypass_kvm_prompts
     if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
         if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-            yes "" | sudo apt-get install -y virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            yes "" | sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
         else
-            sudo apt-get install -y virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
+            sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils 
         fi
     else
         if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-            yes "" | sudo apt-get install -y qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
+            yes "" | sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
         else
-            sudo apt-get install -y qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
+            sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils 
         fi
     fi
 fi
@@ -865,8 +865,8 @@ read -r -p "
 " convert_net
 if [ "${convert_net,,}"  = "y" ] || [ "${convert_net,,}" = "yes" ]; then
     sudo dpkg --add-architecture i386 &&
-    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -y
-    sudo apt-get install -y powershell net-tools wine32:i386
+    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -yqq
+    sudo apt-get install -yqq powershell net-tools wine32:i386
     Start-Process powershell.exe -Verb RunAs -ArgumentList "-file \"${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1\"" || \
     pwsh.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || powershell.exe -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || pwsh -ExecutionPolicy unrestricted -file "${HOME}/dvlw/dvlp/mnt/HOME_NIX/bridge-wsl2-net.ps1" || echo "
 ------------------------------- copy_start -------------------------------
@@ -936,11 +936,11 @@ finishing up...
 # if [ "$start_services" = "" ] || [ "${start_services,,}" = "y" ] || [ "${start_services,,}" = "yes" ]; then
     sudo apt-get install -yqq console-setup dialog 
     export DEBIAN_FRONTEND=dialog
-    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -y
+    sudo apt-get update -yqq && sudo apt-get --with-new-pkgs upgrade -yqq
 # fi
 
 echo "setup operation complete ..."
-# sudo apt-get install -y aptitude
+# sudo apt-get install -yqq aptitude
 # sudo aptitude purge nvidia-current
 # sudo systemctl set-default graphical.target
 # sudo apt-get install xserver-xephyr accountsservice dialog apt-utils
@@ -953,8 +953,8 @@ echo "setup operation complete ..."
 # sudo systemctl enable xrdp.service
 # sudo systemctl enable systemd-journald-audit.socket
 # sudo systemctl enable upower.service
-# sudo apt-get -y install lightdm-gtk-greeter
-# sudo apt-get install -y --reinstall lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+# sudo apt-get -yqq install lightdm-gtk-greeter
+# sudo apt-get install -yqq --reinstall lightdm kali-defaults kali-root-login desktop-base kali-win-kex
 # sudo mkdir -p /var/lib/lightdm/data
 # sudo apt-get install --reinstall gnome-session
 # make modules_install

@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get update -y && sudo apt-get -y upgrade
+sudo apt-get update -yqq && sudo apt-get -yqq upgrade
 win_user=${1:-'no-user-selectedlkadjfasdf'}
 while [ ! -d "/mnt/c/users/$win_user" ]; do
     echo " 
