@@ -868,11 +868,19 @@ generate ssh keys?"
         if [ "$host_fingerprint_actually_ecdsa" = "$host_fingerprint_expected_ecdsa" ]; then matching_prints_rsa=true; fi
         if [ "$host_fingerprint_actually_ed25519" = "$host_fingerprint_expected_ed25519" ]; then matching_prints_ed25519=true; fi
         if [ "$host_fingerprint_actually_ecdsa" = "$host_fingerprint_expected_ecdsa" ]; then matching_prints_ecdsa=true; fi
+
+        # gh auth login after adding to known hosts
         if [ "$matching_prints_rsa" ] && [ "$matching_prints_ed25519" ] && [ "$matching_prints_ecdsa" ]; then
             echo "
         github host confirmed and verified
         "
-            if [ -f "$ssh_dir/known_hosts" ]; then ssh-keyscan github.com >>"$ssh_dir/known_hosts"; else ssh-keyscan github.com >"$ssh_dir/known_hosts"; fi
+        
+            if [ -f "$ssh_dir/known_hosts" ]; then 
+                ssh-keyscan github.com >>"$ssh_dir/known_hosts" 
+            else 
+                ssh-keyscan github.com >"$ssh_dir/known_hosts" 
+            fi
+            gh auth login
         else
             echo '
 
@@ -927,6 +935,7 @@ generate ssh keys?"
         
         
     '
+        
         fi
     fi
 fi
