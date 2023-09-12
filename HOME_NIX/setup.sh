@@ -424,6 +424,7 @@ read -r -p "
 (no)
 " update_upgrade
 if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
+    sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
     # update locales
     sudo locale-gen en_US.UTF-8 &&
         sudo dpkg-reconfigure locales
@@ -433,7 +434,6 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
     (no)
     " rebuild_reg
     if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
-        sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
         sudo apt-get --reinstall -yqq install ca-certificates &&
             sudo update-ca-certificates ||
             sudo rm -rf /var/lib/apt/lists &&
