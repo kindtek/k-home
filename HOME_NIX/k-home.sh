@@ -9,6 +9,7 @@ yes "y" | echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyr
 sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
 sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
 sudo service docker start
+[ -f .bashrc ] && cp -fv .bashrc .bashrc.old
 # log save location 
 mkdir -p logs
 tee "logs/$filename.sh" >/dev/null <<'TXT'
