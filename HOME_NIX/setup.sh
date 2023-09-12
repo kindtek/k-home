@@ -415,8 +415,9 @@ done
 
 # install/update/repair stuff
 echo "
-    LINUX - $WSL_DISTRO_NAME
-    user $nix_user
+
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
 
 install/update dependencies?"
 read -r -p "
