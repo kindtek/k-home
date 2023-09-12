@@ -454,11 +454,11 @@ if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
             " rebuild_pkgs_wsug
             if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "yes" ]; then
                 for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    apt-get --reinstall --no-install-suggests -yqq install "$package"
+                    sudo apt-get --reinstall --no-install-suggests -yqq install "$package"
                 done
             else
                 for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    apt-get --reinstall --install-suggests -yqq install "$package"
+                    sudo apt-get --reinstall --install-suggests -yqq install "$package"
                 done
             fi
         fi
