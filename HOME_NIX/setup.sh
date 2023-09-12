@@ -57,7 +57,7 @@ integrate windows home directory?
 this directory will be used for:
     - WSL configuration management
     - kernel installations
-    - sync home directory with repo
+    - syncing home directories and devels workshop repo
 
     choose from:
     "
@@ -99,7 +99,7 @@ done
 
 # kernel import stuff
 while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
-    if ls /kache/*.tar.gz 1>/dev/null 2>&1; then
+    if ls /kache/*.tar.gz 1>/dev/null 2>&1 && [ -f "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" ]; then
         kernel_tar_path=$(ls -txr1 /kache/*.tar.gz | tail --lines=1)
         kernel_tar_file=${kernel_tar_path##*/}
         kernel_tar_filename=${kernel_tar_file%.*}
@@ -107,10 +107,13 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
         # if import_kernel was preset to y or import_kernel was not reset to 'n' then read input - otherwise skip to importing
         if [ "${quick_import_kernel,,}" = "y" ]; then
             echo "
-    import ${kernel_tar_filename} into WSL?" && \
+WINDOWS
+user $WIN_USER
+
+import ${kernel_tar_filename} into WSL?" && \
             read -r -p "
-    (yes)
-    " import_kernel
+(yes)
+" import_kernel
         fi
         if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
             # set -x
@@ -146,9 +149,12 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
                     echo "$i) $kernel_tar_filename"
                 done
                 echo "
+    WINDOWS
+    user $WIN_USER
+            
     import [number] into WSL?"
                 read -r -p "
-    (yes)
+    (skip)
     " import_kernel_num
                 if [ "${import_kernel_num,,}" -le $i ] && [ "${import_kernel_num,,}" -gt 0 ]; then
                     # set -x
@@ -176,13 +182,13 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
             fi
         fi
     fi
-    if [ "$nix_user" = "root" ]; then
+    if [ "$nix_user" = "root" ] && [ -f "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" ]; then
         if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
             echo "
-            build/install kernel for WSL?"
-            read -r -p "
-            (no)
-            " build_kernel
+    build/install kernel for WSL?"
+    read -r -p "
+    (no)
+    " build_kernel
         else
             build_kernel=n
         fi
@@ -276,14 +282,17 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
         else
             import_kernel="n"
         fi
-
-    else
+    elif [ -f "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" ]; then
         if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
             echo "
-            build/install kernel for WSL?"
-            read -r -p "
-            (no)
-            " build_kernel
+    
+    WINDOWS
+    user $WIN_USER
+
+    build/install kernel for WSL?"
+    read -r -p "
+    (no)
+    " build_kernel
         else
             build_kernel=n
         fi
@@ -406,6 +415,9 @@ done
 
 # install/update/repair stuff
 echo "
+    LINUX - $WSL_DISTRO_NAME
+    user $nix_user
+
 install/update dependencies?"
 read -r -p "
 (no)
@@ -457,6 +469,10 @@ fi
 # cdir install
 install_cdir=n
 [ -f '.local/bin/cdir.sh' ] || echo "
+
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
+
 install cdir?"
 [ -f '.local/bin/cdir.sh' ] || read -r -p "
 (yes)
@@ -470,9 +486,13 @@ fi
 
 install_kvm='n'
 build_gui='n'
-if [ "${setup_type,,}" != 'quick' ]; then
+# if [ "${setup_type,,}" != 'quick' ]; then
     if [ ! -x /usr/bin/win-kex ]; then
         echo "
+
+    LINUX - $WSL_DISTRO_NAME
+    user $nix_user
+
     build KEX gui?" &&
             read -r -p "
     (yes)
@@ -527,6 +547,10 @@ if [ "${setup_type,,}" != 'quick' ]; then
 
     if [ ! -x /usr/bin/kvm ]; then
         echo "
+
+    LINUX - $WSL_DISTRO_NAME
+    user $nix_user
+    
     install kvm?" &&
             read -r -p "
     (no)
@@ -552,7 +576,7 @@ if [ "${setup_type,,}" != 'quick' ]; then
             fi
         fi
     fi
-fi
+# fi
 
 # services can be turned on now
 echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
@@ -568,16 +592,20 @@ export DEBIAN_FRONTEND=dialog
 # k-home
 ls -al "$HOME" &&
     echo "
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
+
 clone/pull devels workshop repo using git and update files in $HOME?" &&
     read -r -p "
 (no)
 " clone_pull_home
 if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ]; then
-    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/reclone-gh.sh" "$HOME/reclone-gh.sh"
+    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/reclone-gh.sh" "$HOME/reclone-gh.sh" || wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh 
     bash "$HOME/reclone-gh.sh" 
 fi
 if [ "$setup_type" = 'quick' ]; then
     echo "
+LINUX - $WSL_DISTRO_NAME
 
     update environment? (update files in /etc)?"
     read -r -p "
@@ -590,10 +618,13 @@ fi
 if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ] || [ "$setup_type" != 'quick' ]; then
     ls -al "$HOME" &&
     echo "
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
+
 update devels workshop repo using docker overlay and update files in $HOME?" &&
     read -r -p "
 (no)
-    " update_home
+" update_home
     if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
         sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
         sudo service docker start
@@ -603,10 +634,10 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
     if [ "$nix_user" != "r00t" ]; then
         echo "
 
-        update environment? (update files in /etc)?"
+    update environment? (update files in /etc)?"
         read -r -p "
-        (no)
-        " update_home
+    (no)
+    " update_home
         if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
             sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
         fi
@@ -616,7 +647,10 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
     if [ "$WIN_USER_HOME" != "" ]; then
         ls -al "$WIN_USER_HOME"
         echo "
-    pull k-home files from repo to $WIN_USER_HOME ?"
+WINDOWS 
+user $WIN_USER
+
+update devels workshop repo using docker overlay and update files in $WIN_USER_HOME ?"
         read -r -p "
     (no)
     " update_home
@@ -635,6 +669,9 @@ fi
 if [ "${setup_type,,}" != 'quick' ]; then
     if [ -f "$HOME/.ssh/known_hosts" ]; then
         echo "
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
+
 regenerate ssh keys?"
         read -r -p "
 (no)
@@ -894,6 +931,8 @@ fi
 if [ "${setup_type,,}" != 'quick' ]; then
 
     echo "
+    WINDOWS
+
     convert virtual network connection to bridged? (requires elevated access privileges)"
     read -r -p "
     (no)
