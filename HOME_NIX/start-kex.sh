@@ -21,7 +21,7 @@ if [ ! -d "$HOME/dvlw/dvlp/mnt/etc" ]; then
 fi
 sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
 sudo cp -rfv /mnt/data/HOME_WIN/KEX-GUI.rdp /mnt/c/users/$win_user/KEX-GUI.rdp
-
+sudo mkdir -pv /var/lib/lightdm/data
 
 kex --win --start-client --sound || sudo rm -rf /var/lib/apt/lists && \
 sudo rm -rf /var/cache/apt/archives/*.deb && \
