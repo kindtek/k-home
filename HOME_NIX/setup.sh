@@ -636,7 +636,7 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
         echo "
     LINUX - $WSL_DISTRO_NAME
     user $nix_user
-    
+
     update environment? (update files in /etc)?"
         read -r -p "
     (no)
@@ -655,8 +655,8 @@ user $WIN_USER
 
 update devels workshop repo using docker overlay and update files in $WIN_USER_HOME ?"
         read -r -p "
-    (no)
-    " update_home
+(no)
+" update_home
         if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
             cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
             cd "$WIN_USER_HOME" || exit
