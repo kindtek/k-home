@@ -605,7 +605,8 @@ if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ]; then
 fi
 if [ "$setup_type" = 'quick' ]; then
     echo "
-LINUX - $WSL_DISTRO_NAME
+    LINUX - $WSL_DISTRO_NAME
+    user $nix_user
 
     update environment? (update files in /etc)?"
     read -r -p "
@@ -633,7 +634,9 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
     fi
     if [ "$nix_user" != "r00t" ]; then
         echo "
-
+    LINUX - $WSL_DISTRO_NAME
+    user $nix_user
+    
     update environment? (update files in /etc)?"
         read -r -p "
     (no)
