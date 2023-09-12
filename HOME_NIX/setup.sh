@@ -568,20 +568,18 @@ export DEBIAN_FRONTEND=dialog
 # k-home
 ls -al "$HOME" &&
     echo "
-pull k-home files from repo to $HOME?" &&
+clone/pull devels workshop repo using git and update files in $HOME?" &&
     read -r -p "
 (no)
-" update_home
-if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
-    sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
-    sudo service docker start
-    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
-    bash "$HOME/k-home.sh" "$WIN_USER"
+" clone_pull_home
+if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ]; then
+    cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/reclone-gh.sh" "$HOME/reclone-gh.sh"
+    bash "$HOME/reclone-gh.sh" 
 fi
-if [ "$nix_user" != "r00t" ]; then
+if [ "$setup_type" = 'quick' ]; then
     echo "
 
-    pull k-home files from repo to /etc?"
+    update environment? (update files in /etc)?"
     read -r -p "
     (no)
     " update_home
@@ -589,23 +587,48 @@ if [ "$nix_user" != "r00t" ]; then
         sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
     fi
 fi
-
-cd "$orig_pwd" || exit
-if [ "$WIN_USER_HOME" != "" ]; then
-    ls -al "$WIN_USER_HOME"
+if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ] || [ "$setup_type" != 'quick' ]; then
+    ls -al "$HOME" &&
     echo "
-pull k-home files from repo to $WIN_USER_HOME ?"
+update devels workshop repo using docker overlay and update files in $HOME?" &&
     read -r -p "
 (no)
-" update_home
+    " update_home
     if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
-        cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
-        cd "$WIN_USER_HOME" || exit
         sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
         sudo service docker start
-        bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
-        cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$WIN_USER_HOME/dvlp.ps1"
-        cd "$orig_pwd" || exit
+        cp -fv "$HOME/dvlw/dvlp/mnt/HOME_NIX/k-home.sh" "$HOME/k-home.sh"
+        bash "$HOME/k-home.sh"
+    fi
+    if [ "$nix_user" != "r00t" ]; then
+        echo "
+
+        update environment? (update files in /etc)?"
+        read -r -p "
+        (no)
+        " update_home
+        if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
+            sudo cp -rfv "$HOME/dvlw/dvlp/mnt/etc/" "/"
+        fi
+    fi
+
+    cd "$orig_pwd" || exit
+    if [ "$WIN_USER_HOME" != "" ]; then
+        ls -al "$WIN_USER_HOME"
+        echo "
+    pull k-home files from repo to $WIN_USER_HOME ?"
+        read -r -p "
+    (no)
+    " update_home
+        if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
+            cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
+            cd "$WIN_USER_HOME" || exit
+            sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
+            sudo service docker start
+            bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
+            cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$WIN_USER_HOME/dvlp.ps1"
+            cd "$orig_pwd" || exit
+        fi
     fi
 fi
 # ssh gen
