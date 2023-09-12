@@ -500,6 +500,7 @@ build_gui='n'
     " build_gui
     fi
     if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
+        sudo apt-get install --install-recommends -yqq apt-transport-https accountsservice apt-utils curl kali-desktop-xfce lightdm lightdm-gtk-greeter vlc x11-apps xrdp xfce4 xfce4-goodies
         echo "
         build full KEX gui?"
         read -r -p "
@@ -507,16 +508,16 @@ build_gui='n'
         " build_full_gui
         if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
             # sudo apt --reinstall --no-install-suggests -yqq virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-            sudo apt-get install --install-recommends -yqq apt-transport-https curl
             sudo dpkg --add-architecture i386 &&
                 sudo apt-get -yqq update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -yqq upgrade &&
                 # sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-                sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
+                sudo apt-get -yqq install kali-defaults kali-root-login kali-win-kex kali-linux-headless wine32:i386
             sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade
             sudo apt-get install -yqq desktop-base
         else
             # sudo apt-get -yqq install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-            sudo apt-get -yqq install apt-utils desktop-base kali-linux-core kali-desktop-xfce vlc x11-apps xrdp xfce4 xfce4-goodies
+            
+            sudo apt-get -yqq install desktop-base kali-linux-core
         fi
     fi
 
