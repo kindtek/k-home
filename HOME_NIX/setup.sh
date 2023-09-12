@@ -184,7 +184,7 @@ import ${kernel_tar_filename} into WSL?"
                 sudo apt-get -yqq install powershell net-tools && \
                 echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                 bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
-                exit
+                pwsh "$HOME/dvlw/dvlp/kernels/linux/kache/wsl-restart.ps1"
             else
                 WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
                 if ls /kache/*.tar.gz 1> /dev/null 2>&1 || ls "$WIN_USER_KACHE"*.tar.gz 1> /dev/null 2>&1; then
@@ -225,7 +225,7 @@ import ${kernel_tar_filename} into WSL?"
                         sudo apt-get -yqq install powershell net-tools && \
                         echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
                         bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd" 
-                        exit
+                        pwsh "$HOME/dvlw/dvlp/kernels/linux/kache/wsl-restart.ps1"
                     fi
                 fi
             fi
