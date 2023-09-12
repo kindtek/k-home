@@ -678,7 +678,7 @@ user $nix_user
 regenerate ssh keys?"
         read -r -p "
 (no)
-    " regen_ssh
+" regen_ssh
         if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "n" ] || [ "${regen_ssh,,}" = "no" ]; then
             confirm_regen=""
         fi
@@ -687,7 +687,7 @@ regenerate ssh keys?"
 generate ssh keys?"
         read -r -p "
 (yes)
-    " regen_ssh
+" regen_ssh
         if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "y" ] || [ "${regen_ssh,,}" = "yes" ]; then
             confirm_regen="r"
         else
