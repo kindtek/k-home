@@ -65,8 +65,7 @@ this directory will be used for:
 
     read -r -p "
 
-(skip)  C:\\users\\
-" WIN_USER
+(skip)  C:\\users\\" WIN_USER
     if [ "$WIN_USER" = "" ]; then
 
         break
@@ -613,18 +612,18 @@ fi
 if [ "${setup_type,,}" != 'quick' ]; then
     if [ -f "$HOME/.ssh/known_hosts" ]; then
         echo "
-    regenerate ssh keys?"
+regenerate ssh keys?"
         read -r -p "
-    (no)
+(no)
     " regen_ssh
         if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "n" ] || [ "${regen_ssh,,}" = "no" ]; then
             confirm_regen=""
         fi
     else
         echo "
-    generate ssh keys?"
+generate ssh keys?"
         read -r -p "
-    (yes)
+(yes)
     " regen_ssh
         if [ "${regen_ssh}" = "" ] || [ "${regen_ssh,,}" = "y" ] || [ "${regen_ssh,,}" = "yes" ]; then
             confirm_regen="r"
