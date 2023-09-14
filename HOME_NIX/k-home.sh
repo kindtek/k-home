@@ -37,8 +37,8 @@ set -x
 #              ---------------------------------------------------                #
 #
                     docker compose up --build ${docker_service} --detach && \
-                    docker compose cp ${docker_service}:\ .
-                    . 2>&1 || exit<<'scratchpad'
+                    docker compose cp ${docker_service}:\ . \
+                    2>&1 || exit<<'scratchpad'
 scratchpad
 # 
 #                -----------------------------------------------                   #
