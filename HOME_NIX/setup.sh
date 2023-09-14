@@ -426,7 +426,7 @@ install/update dependencies?"
 (no)
 " update_upgrade
     if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
-        sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
+        sudo apt-get update --fix-missing -yq && apt-get install -f && apt-get upgrade -yq
         # update locales
         sudo locale-gen en_US.UTF-8 &&
             sudo dpkg-reconfigure locales
