@@ -1,6 +1,14 @@
 #!/bin/bash
 timestamp=$(date -d "today" +"%Y%m%d%H%M%S")
 filename=k-home-nix_$timestamp
+nix_user=$(whoami)
+if [ "$nix_user" = 'root' ]; then
+    khome_user='-r00t'
+elif [ "$nix_user" = 'dvl' ]; then
+    khome_user='-devel'
+else
+    khome_user='-angel'
+fi
 sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq && \
 sudo apt-get install --no-install-recommends -y ca-certificates curl lsb-release gpg && \
 sudo mkdir -pv /etc/apt/keyrings && \
@@ -22,7 +30,7 @@ set -x
 #
                     docker buildx build ${build_cache} \
                     --file dvlw/dvlp/docker/kali/Dockerfile \
-                    --target dvlp_k-home-nix \
+                    --target dvlp_k-home-nix$khome_user \
                     --output type=local,dest=. \
                     --no-cache \
                     --progress=plain \
