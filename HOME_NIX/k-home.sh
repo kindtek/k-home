@@ -38,7 +38,7 @@ fi
 #              ---------------------------------------------------                #
 #
                     docker compose \
-                    -f $WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
+                    -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     up --build ${docker_service} --detach && \
                     docker compose cp ${docker_service}:/ . \
                     2>&1 || exit<<'scratchpad'
