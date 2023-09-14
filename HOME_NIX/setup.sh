@@ -110,8 +110,8 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
 WINDOWS
 user $WIN_USER
 
-import ${kernel_tar_filename} into WSL?" && \
-            read -r -p "
+import ${kernel_tar_filename} into WSL?" &&
+                read -r -p "
 (yes)
 " import_kernel
         fi
@@ -186,7 +186,7 @@ import ${kernel_tar_filename} into WSL?" && \
         if [ "${build_kernel,,}" != "y" ] && [ "${build_kernel,,}" != "yes" ]; then
             echo "
     build/install kernel for WSL?"
-    read -r -p "
+            read -r -p "
     (no)
     " build_kernel
         else
@@ -290,7 +290,7 @@ import ${kernel_tar_filename} into WSL?" && \
     user $WIN_USER
 
     build/install kernel for WSL?"
-    read -r -p "
+            read -r -p "
     (no)
     " build_kernel
         else
@@ -414,57 +414,60 @@ import ${kernel_tar_filename} into WSL?" && \
 done
 
 # install/update/repair stuff
-echo "
+if [ "$setup_type" != 'quick' ]; then
+
+    echo "
 
 LINUX - $WSL_DISTRO_NAME
 user $nix_user
 
 install/update dependencies?"
-read -r -p "
+    read -r -p "
 (no)
 " update_upgrade
-if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
-    sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
-    # update locales
-    sudo locale-gen en_US.UTF-8 &&
-        sudo dpkg-reconfigure locales
-    echo "
+    if [ "${update_upgrade,,}" = "y" ] && [ "${update_upgrade,,}" = "yes" ]; then
+        sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
+        # update locales
+        sudo locale-gen en_US.UTF-8 &&
+            sudo dpkg-reconfigure locales
+        echo "
     rebuild apt and certificate registries?"
-    read -r -p "
+        read -r -p "
     (no)
     " rebuild_reg
-    if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
-        sudo apt-get --reinstall -yqq install ca-certificates &&
-            sudo update-ca-certificates ||
-            sudo rm -rf /var/lib/apt/lists &&
-            sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
-        sudo rm -rf /etc/ssl/certs/* &&
+        if [ "${rebuild_reg,,}" = "y" ] || [ "${rebuild_reg,,}" = "yes" ]; then
             sudo apt-get --reinstall -yqq install ca-certificates &&
-            sudo update-ca-certificates
-        echo "
+                sudo update-ca-certificates ||
+                sudo rm -rf /var/lib/apt/lists &&
+                sudo apt-get update --fix-missing -yqq && apt-get install -f && apt-get upgrade -yqq
+            sudo rm -rf /etc/ssl/certs/* &&
+                sudo apt-get --reinstall -yqq install ca-certificates &&
+                sudo update-ca-certificates
+            echo "
         rebuild packages?"
-        read -r -p "
+            read -r -p "
         (no)
         " rebuild_pkgs
-        if [ "${rebuild_pkgs,,}" = "y" ] || [ "${rebuild_pkgs,,}" = "yes" ]; then
-            echo "
+            if [ "${rebuild_pkgs,,}" = "y" ] || [ "${rebuild_pkgs,,}" = "yes" ]; then
+                echo "
             rebuild with suggested packages?"
-            read -r -p "
+                read -r -p "
             (no)
             " rebuild_pkgs_wsug
-            if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "yes" ]; then
-                for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    sudo apt-get --reinstall --no-install-suggests -yqq install "$package"
-                done
-            else
-                for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
-                    sudo apt-get --reinstall --install-suggests -yqq install "$package"
-                done
+                if [ "${rebuild_pkgs_wsug,,}" = "y" ] || [ "${rebuild_pkgs_wsug,,}" = "yes" ]; then
+                    for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
+                        sudo apt-get --reinstall --no-install-suggests -yqq install "$package"
+                    done
+                else
+                    for package in $(apt list --installed | grep -P ".*(?=/)" -o); do
+                        sudo apt-get --reinstall --install-suggests -yqq install "$package"
+                    done
+                fi
             fi
         fi
-    fi
 
-    sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq
+        sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq
+    fi
 fi
 
 # cdir install
@@ -488,96 +491,120 @@ fi
 install_kvm='n'
 build_gui='n'
 # if [ "${setup_type,,}" != 'quick' ]; then
-    if [ ! -x /usr/bin/win-kex ]; then
-        echo "
+if [ ! -x /usr/bin/win-kex ]; then
+    echo "
 
     LINUX - $WSL_DISTRO_NAME
     user $nix_user
 
-    build KEX gui?" &&
-            read -r -p "
-    (yes)
-    " build_gui
+    build KEX gui?"
+    if [ "$setup_type" != 'quick' ]; then
+        read -r -p "
+        (yes)
+        " build_gui
+        if [ "$build_gui" = "" ]; then
+            build_gui='y'
+        fi
+    else
+        read -r -p "
+        (no)
+        " build_gui
+        if [ "$build_gui" = "" ]; then
+            build_gui='n'
+        fi
     fi
-    if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
-        sudo apt-get install --install-recommends -yqq apt-transport-https accountsservice apt-utils curl kali-desktop-xfce lightdm lightdm-gtk-greeter vlc x11-apps xrdp xfce4 xfce4-goodies
-        echo "
+fi
+if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
+    sudo apt-get install --install-recommends -yqq apt-transport-https accountsservice apt-utils curl kali-desktop-xfce lightdm lightdm-gtk-greeter vlc x11-apps xrdp xfce4 xfce4-goodies
+    echo "
         build full KEX gui?"
+    if [ "$setup_type" != 'quick' ]; then
         read -r -p "
         (yes)
         " build_full_gui
-        if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
-            # sudo apt --reinstall --no-install-suggests -yqq virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
-            sudo dpkg --add-architecture i386 &&
-                sudo apt-get -yqq update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -yqq upgrade &&
-                # sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-                sudo apt-get -yqq install kali-defaults kali-root-login kali-win-kex kali-linux-headless wine32:i386
-            sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade
-            sudo apt-get install -yqq desktop-base
-        else
-            # sudo apt-get -yqq install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
-            
-            sudo apt-get -yqq install desktop-base kali-linux-core
+        if [ "$build_full_gui" = "" ]; then
+            build_full_gui='y'
+        fi
+    else
+        read -r -p "
+        (no)
+        " build_full_gui
+        if [ "$build_full_gui" = "" ]; then
+            build_full_gui='n'
         fi
     fi
+    if [ "${build_full_gui}" = "" ] || [ "${build_full_gui,,}" = "y" ] || [ "${build_full_gui,,}" = "yes" ]; then
+        # sudo apt --reinstall --no-install-suggests -yqq virtualbox vlc x11-apps xrdp xfce4 xfce4-goodies lightdm kali-defaults kali-root-login desktop-base kali-win-kex
+        sudo dpkg --add-architecture i386 &&
+            sudo apt-get -yqq update && sudo apt-get- y upgrade && sudo apt-get --with-new-pkgs -yqq upgrade &&
+            # sudo apt-get -yqq install apt-utils kali-defaults kali-root-login kali-win-kex kali-linux-headless kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
+            sudo apt-get -yqq install kali-defaults kali-root-login kali-win-kex kali-linux-headless wine32:i386
+        sudo apt-get -yqq update && sudo apt-get -yqq upgrade && sudo apt-get --with-new-pkgs -yqq upgrade
+        sudo apt-get install -yqq desktop-base
+    else
+        # sudo apt-get -yqq install apt-utils  desktop-base kali-linux-core kali-desktop-xfce vlc wine32:i386 x11-apps xrdp xfce4 xfce4-goodies
 
-    install_goodies='n'
-    if [ ! -x /usr/bin/brave-browser ]; then
-        echo "
+        sudo apt-get -yqq install desktop-base kali-linux-core
+    fi
+fi
+
+install_goodies='n'
+if [ ! -x /usr/bin/brave-browser ]; then
+    echo "
             install brave browser vlc x11 and other goodies?" &&
-            read -r -p "
+        read -r -p "
             (yes)
     " install_goodies
-    fi
-    if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
+fi
+if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
+    sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq &&
+        sudo apt-get --reinstall -yqq install ca-certificates &&
+        sudo update-ca-certificates &&
+        sudo apt-get install --install-recommends -yqq apt-transport-https curl
+    # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
+    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg &&
+        echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list &&
         sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq &&
-            sudo apt-get --reinstall -yqq install ca-certificates &&
-            sudo update-ca-certificates &&
-            sudo apt-get install --install-recommends -yqq apt-transport-https curl
-        # for brave install - https://linuxhint.com/install-brave-browser-ubuntu22-04/
-        sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg &&
-            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list &&
-            sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq &&
-            sudo apt-get install --no-install-recommends -yqq brave-browser vlc x11-apps &&
-            # change last line of this file - fix for brave-browser displaying empty windows
-            sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old &&
-            sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser >/dev/null &&
-            # now no longer need to add --disable-gpu flag everytime
-            echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser >/dev/null
-        sudo cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
-    fi
+        sudo apt-get install --no-install-recommends -yqq brave-browser vlc x11-apps &&
+        # change last line of this file - fix for brave-browser displaying empty windows
+        sudo cp /opt/brave.com/brave/brave-browser /opt/brave.com/brave/brave-browser.old &&
+        sudo head -n -1 /opt/brave.com/brave/brave-browser.old | sudo tee /opt/brave.com/brave/brave-browser >/dev/null &&
+        # now no longer need to add --disable-gpu flag everytime
+        echo '"$HERE/brave" "$@" " --disable-gpu " || true' | sudo tee --append /opt/brave.com/brave/brave-browser >/dev/null
+    sudo cp -rf "$HOME"/dvlw/dvlp/mnt/opt/* /opt/
+fi
 
-    if [ ! -x /usr/bin/kvm ]; then
-        echo "
+if [ ! -x /usr/bin/kvm ]; then
+    echo "
 
     LINUX - $WSL_DISTRO_NAME
     user $nix_user
     
     install kvm?" &&
-            read -r -p "
+        read -r -p "
     (no)
     " install_kvm
-    fi
-    if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
-        echo "
+fi
+if [ "${install_kvm,,}" = "y" ] || [ "${install_kvm,,}" = "yes" ]; then
+    echo "
         bypass kvm install prompts?"
-        read -r -p "
+    read -r -p "
         (yes)
         " bypass_kvm_prompts
-        if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
-            if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-                yes "" | sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils
-            else
-                sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils
-            fi
+    if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
+        if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
+            yes "" | sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils
         else
-            if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
-                yes "" | sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils
-            else
-                sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils
-            fi
+            sudo apt-get install -yqq virt-manager qemu-system-gui qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils
+        fi
+    else
+        if [ "${bypass_kvm_prompts}" = "" ] || [ "${bypass_kvm_prompts,,}" = "y" ] || [ "${bypass_kvm_prompts,,}" = "yes" ]; then
+            yes "" | sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils
+        else
+            sudo apt-get install -yqq qemu-kvm qemu-system-gui libvirt-clients libvirt-daemon-system bridge-utils
         fi
     fi
+fi
 # fi
 
 # services can be turned on now
@@ -621,12 +648,12 @@ if [ "$setup_type" = 'quick' ]; then
 fi
 if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ] || [ "$setup_type" != 'quick' ]; then
     ls -al "$HOME" &&
-    echo "
+        echo "
 LINUX - $WSL_DISTRO_NAME
 user $nix_user
 
 update devels workshop repo using docker overlay and update files in $HOME?" &&
-    read -r -p "
+        read -r -p "
 (no)
 " update_home
     if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
@@ -876,11 +903,11 @@ generate ssh keys?"
             echo "
         github host confirmed and verified
         "
-        
-            if [ -f "$ssh_dir/known_hosts" ]; then 
-                ssh-keyscan github.com >>"$ssh_dir/known_hosts" 
-            else 
-                ssh-keyscan github.com >"$ssh_dir/known_hosts" 
+
+            if [ -f "$ssh_dir/known_hosts" ]; then
+                ssh-keyscan github.com >>"$ssh_dir/known_hosts"
+            else
+                ssh-keyscan github.com >"$ssh_dir/known_hosts"
             fi
             gh auth login
         else
@@ -937,7 +964,7 @@ generate ssh keys?"
         
         
     '
-        
+
         fi
     fi
 fi
