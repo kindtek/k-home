@@ -15,6 +15,7 @@ docker_service=k-home-win
 #              ---------------------------------------------------                #
 #
                     docker compose up --build ${docker_service} --detach && \
+                    -f $WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml --detach && \
                     docker compose cp ${docker_service}:\ . \
                     2>&1 || exit<<'scratchpad'
                     . 2>&1 || exit<<'scratchpad'

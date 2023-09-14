@@ -37,8 +37,9 @@ fi
 #                |||| |           Executing ...           | ||||                  #
 #              ---------------------------------------------------                #
 #
-                    docker compose up --build ${docker_service} --detach && \
-                    docker compose cp ${docker_service}:\ . \
+                    docker compose up --build ${docker_service} \
+                    -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml --detach && \
+                    docker compose cp ${docker_service}:/ . \
                     2>&1 || exit<<'scratchpad'
 scratchpad
 # 
