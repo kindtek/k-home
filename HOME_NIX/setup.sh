@@ -494,21 +494,21 @@ build_gui='n'
 if [ ! -x /usr/bin/win-kex ]; then
     echo "
 
-    LINUX - $WSL_DISTRO_NAME
-    user $nix_user
+LINUX - $WSL_DISTRO_NAME
+user $nix_user
 
-    build KEX gui?"
+build KEX gui?"
     if [ "$setup_type" != 'quick' ]; then
         read -r -p "
-        (yes)
-        " build_gui
+(yes)
+" build_gui
         if [ "$build_gui" = "" ]; then
             build_gui='y'
         fi
     else
         read -r -p "
-        (no)
-        " build_gui
+(no)
+" build_gui
         if [ "$build_gui" = "" ]; then
             build_gui='n'
         fi
@@ -517,18 +517,18 @@ fi
 if [ "${build_gui}" = "" ] || [ "${build_gui,,}" = "y" ] || [ "${build_gui,,}" = "yes" ]; then
     sudo apt-get install --install-recommends -yqq apt-transport-https accountsservice apt-utils curl kali-desktop-xfce lightdm lightdm-gtk-greeter vlc x11-apps xrdp xfce4 xfce4-goodies
     echo "
-        build full KEX gui?"
+    build full KEX gui?"
     if [ "$setup_type" != 'quick' ]; then
         read -r -p "
-        (yes)
-        " build_full_gui
+    (yes)
+    " build_full_gui
         if [ "$build_full_gui" = "" ]; then
             build_full_gui='y'
         fi
     else
         read -r -p "
-        (no)
-        " build_full_gui
+    (no)
+    " build_full_gui
         if [ "$build_full_gui" = "" ]; then
             build_full_gui='n'
         fi
