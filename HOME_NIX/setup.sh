@@ -321,21 +321,19 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_stable_zfs_kernel
                 if [ "${install_stable_zfs_kernel,,}" = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                    docker compose up --build make-kernel-stable-zfs --detach
+                    docker compose build make-kernel-stable-zfs
                     sudo docker compose cp make-kernel-stable-zfs:/kache/ /
                     sudo docker compose cp make-kernel-stable-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                     sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                     sudo chmod +x /kache/*.tar.gz
-                    docker compose down
                     cd "$orig_pwd" || exit
                 else
                     cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                    docker compose up --build make-kernel-stable --detach
+                    docker compose build make-kernel-stable
                     sudo docker compose cp make-kernel-stable:/kache/ /
                     sudo docker compose cp make-kernel-stable:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                     sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                     sudo chmod +x /kache/*.tar.gz
-                    docker compose down
                     cd "$orig_pwd" || exit
                 fi
                 sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-gregkh
@@ -354,21 +352,19 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_latest_zfs_kernel
                     if [ "${install_latest_zfs_kernel,,}" = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                         cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                        docker compose up --build make-kernel-latest-zfs --detach
+                        docker compose build make-kernel-latest-zfs
                         sudo docker compose cp make-kernel-latest-zfs:/kache/ /
                         sudo docker compose cp make-kernel-latest-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                         sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                         sudo chmod +x /kache/*.tar.gz
-                        docker compose down
                         cd "$orig_pwd" || exit
                     else
                         cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                        docker compose up --build make-kernel-latest --detach
+                        docker compose build make-kernel-latest
                         sudo docker compose cp make-kernel-latest:/kache/ /
                         sudo docker compose cp make-kernel-latest:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                         sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                         sudo chmod +x /kache/*.tar.gz
-                        docker compose down
                         cd "$orig_pwd" || exit
                     fi
                     sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-torvalds
@@ -387,21 +383,19 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_basic_zfs_kernel
                     if [ "${install_basic_zfs_kernel,,}" = "" ] || [ "${install_basic_zfs_kernel,,}" = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                         cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                        docker compose up --build make-kernel-basic-zfs --detach
+                        docker compose build make-kernel-basic-zfs
                         sudo docker compose cp make-kernel-basic-zfs:/kache/ /
                         sudo docker compose cp make-kernel-basic-zfs:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                         sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                         sudo chmod +x /kache/*.tar.gz
-                        docker compose down
                         cd "$orig_pwd" || exit
                     else
                         cd "$HOME/dvlw/dvlp/docker/kali" || exit
-                        docker compose up --build make-kernel-basic --detach
+                        docker compose build make-kernel-basic
                         sudo docker compose cp make-kernel-basic:/kache/ /
                         sudo docker compose cp make-kernel-basic:/r00t/dvlw/dvlp/kernels/ /r00t/dvlw/dvlp/kernels/
                         sudo chown "$nix_user:$nix_group" /kache/*.tar.gz
                         sudo chmod +x /kache/*.tar.gz
-                        docker compose down
                         cd "$orig_pwd" || exit
                     fi
                     sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir /r00t/dvlw/dvlp/kernels/linux-build-msft
