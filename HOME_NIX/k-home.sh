@@ -20,6 +20,14 @@ sudo service docker start
 [ -f .bashrc ] && cp -fv .bashrc .bashrc.old
 # log save location 
 mkdir -p logs
+nix_user=$(whoami)
+if [ "$nix_user" = "r00t" ]; then
+    docker_service=k-home-nix-r00t
+elif [ "$nix_user" = "dvl" ]; then
+    docker_service=k-home-nix-devel
+else
+    docker_service=k-home-nix-angel
+fi
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
@@ -28,12 +36,8 @@ set -x
 #                |||| |           Executing ...           | ||||                  #
 #              ---------------------------------------------------                #
 #
-                    docker buildx build ${build_cache} \
-                    --file dvlw/dvlp/docker/kali/Dockerfile \
-                    --target dvlp_k-home-nix$khome_user \
-                    --output type=local,dest=. \
-                    --no-cache \
-                    --progress=plain \
+                    docker compose up --build ${docker_service} --detach && \
+                    docker compose cp ${docker_service}:\ .
                     . 2>&1 || exit<<'scratchpad'
 scratchpad
 # 
