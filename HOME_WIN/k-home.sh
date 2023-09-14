@@ -4,10 +4,11 @@ filename=k-home-win_${timestamp}
 sudo service docker start
 # log save location 
 mkdir -p logs
-docker_service=k-home-win
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
+
+docker_service=k-home-win
 
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #

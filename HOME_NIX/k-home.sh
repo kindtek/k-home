@@ -20,6 +20,10 @@ sudo service docker start
 [ -f .bashrc ] && cp -fv .bashrc .bashrc.old
 # log save location 
 mkdir -p logs
+tee "logs/$filename.sh" >/dev/null <<'TXT'
+#!/bin/bash
+set -x
+
 nix_user=$(whoami)
 if [ "$nix_user" = "r00t" ]; then
     docker_service=k-home-nix-r00t
@@ -28,9 +32,6 @@ elif [ "$nix_user" = "dvl" ]; then
 else
     docker_service=k-home-nix-angel
 fi
-tee "logs/$filename.sh" >/dev/null <<'TXT'
-#!/bin/bash
-set -x
 
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #
