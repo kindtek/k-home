@@ -40,7 +40,9 @@ fi
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     build ${docker_service} --no-cache && \
-                    docker compose cp ${docker_service}:/ . \
+                    docker compose \
+                    -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
+                    cp ${docker_service}:/ . \
                     2>&1 || exit<<'scratchpad'
 scratchpad
 # 
