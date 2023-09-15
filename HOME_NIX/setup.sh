@@ -625,7 +625,6 @@ clone/pull devels workshop repo using git and update files in $HOME?" &&
 if [ "${clone_pull_home,,}" = "y" ] || [ "${clone_pull_home,,}" = "yes" ]; then
     cd "$HOME" || exit
     wget -O - https://raw.githubusercontent.com/kindtek/k-home/main/HOME_NIX/reclone-gh.sh | bash
-    cp -rfv "./$HOME/dvlw/dvlp/mnt/HOME_NIX/" "./$HOME/"
 fi
 if [ "$setup_type" = 'quick' ]; then
     echo "

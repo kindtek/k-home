@@ -55,7 +55,9 @@ else
     git submodule update --init --remote --progress -- $kernels_name
 fi
 
-cd "$orig_path" && exit
+cd "$orig_path" || exit
+cp -rfv "$HOME"/dvlw/dvlp/mnt/HOME_NIX/* "$HOME"/dvlw/dvlp/mnt/HOME_NIX/.* $HOME
+sudo chmod +x k-home.sh start-kde.sh start-kex.sh setup.sh reclone-gh.sh
 # if [ "$1" = "force" ]; then
 #     reclone=""
 #     sudo apt-get install -yq git
