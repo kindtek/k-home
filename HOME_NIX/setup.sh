@@ -211,15 +211,15 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_stable_zfs_kernel
                 if [ "${install_stable_zfs_kernel,,}" = "" ] || [ "${install_stable_zfs_kernel,,}" = "y" ] || [ "${install_stable_zfs_kernel,,}" = "yes" ] || [ "${install_stable_zfs_kernel}" = "" ]; then
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "stable" "" "zfs" "$WIN_USER" &&
-                        # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                    echo sudo bash build-export-kernel.sh "stable" "" "zfs"
+                    sudo bash build-export-kernel.sh "stable" "" "zfs" &&
+                        # sudo bash install-kernel.sh "latest" "latest"
                         cd "$orig_pwd" || exit
                 else
                     cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                    echo sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER"
-                    sudo bash build-export-kernel.sh "stable" "" "" "$WIN_USER" &&
-                        # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                    echo sudo bash build-export-kernel.sh "stable" "" ""
+                    sudo bash build-export-kernel.sh "stable" "" "" &&
+                        # sudo bash install-kernel.sh "latest" "latest"
                         cd "$orig_pwd" || exit
                 fi
                 sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
@@ -238,15 +238,15 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_latest_zfs_kernel
                     if [ "${install_latest_zfs_kernel,,}" = "y" ] || [ "${install_latest_zfs_kernel,,}" = "yes" ] || [ "${install_latest_zfs_kernel}" = "" ]; then
                         cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                        echo sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER"
-                        sudo bash build-export-kernel.sh "latest" "" "zfs" "$WIN_USER" &&
-                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                        echo sudo bash build-export-kernel.sh "latest" "" "zfs"
+                        sudo bash build-export-kernel.sh "latest" "" "zfs" &&
+                            # sudo bash install-kernel.sh "latest" "latest"
                             cd "$orig_pwd" || exit
                     else
                         cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                        echo sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER"
-                        sudo bash build-export-kernel.sh "latest" "" "" "$WIN_USER" &&
-                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                        echo sudo bash build-export-kernel.sh "latest" "" ""
+                        sudo bash build-export-kernel.sh "latest" "" "" &&
+                            # sudo bash install-kernel.sh "latest" "latest"
                             cd "$orig_pwd" || exit
                     fi
                     sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
@@ -265,15 +265,15 @@ import ${kernel_tar_filename} into WSL?" &&
             " install_basic_zfs_kernel
                     if [ "${install_basic_zfs_kernel,,}" = "" ] || [ "${install_basic_zfs_kernel,,}" = "y" ] || [ "${install_basic_zfs_kernel,,}" = "yes" ] || [ "${install_basic_zfs_kernel}" = "" ]; then
                         cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                        echo sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER"
-                        sudo bash build-export-kernel.sh "basic" "" "zfs" "$WIN_USER" &&
-                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                        echo sudo bash build-export-kernel.sh "basic" "" "zfs"
+                        sudo bash build-export-kernel.sh "basic" "" "zfs" &&
+                            # sudo bash install-kernel.sh "latest" "latest"
                             cd "$orig_pwd" || exit
                     else
                         cd "$HOME/dvlw/dvlp/kernels/linux" || exit
-                        echo sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER"
-                        sudo bash build-export-kernel.sh "basic" "" "" "$WIN_USER" &&
-                            # sudo bash install-kernel.sh "$WIN_USER" "latest" "latest"
+                        echo sudo bash build-export-kernel.sh "basic" "" ""
+                        sudo bash build-export-kernel.sh "basic" "" "" &&
+                            # sudo bash install-kernel.sh "latest" "latest"
                             cd "$orig_pwd" || exit
                     fi
                     sudo bash dkms autoinstall --modprobe-on-install --kernelsourcedir "$LFS"
@@ -686,7 +686,7 @@ update devels workshop repo using docker overlay and update files in $WIN_USER_H
             cd "$WIN_USER_HOME" || exit
             sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
             sudo service docker start
-            bash "$WIN_USER_HOME/k-home.sh" "$WIN_USER"
+            bash "$WIN_USER_HOME/k-home.sh"
             cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$WIN_USER_HOME/dvlp.ps1"
             cd "$orig_pwd" || exit
         fi
