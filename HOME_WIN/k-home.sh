@@ -15,10 +15,10 @@ docker_service=k-home-win
 #              ---------------------------------------------------                #
 #
                     docker compose \
-                    -f $WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
+                    -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     build ${docker_service} --no-cache && \
                     docker compose \
-                    -f $WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
+                    -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     cp ${docker_service}:/ . \
                     2>&1 || exit<<'scratchpad'
                     . 2>&1 || exit<<'scratchpad'

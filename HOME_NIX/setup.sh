@@ -1,6 +1,6 @@
 #!/bin/bash
-orig_win_user=$WIN_USER
-WIN_USER=$1
+orig_win_user=$_WIN_USER
+_WIN_USER=$1
 # if arg2 empty skip import kernel and do quick install
 setup_type=${2:+'full'}
 setup_type=${2:-'quick'}
@@ -17,35 +17,35 @@ orig_pwd=$(pwd)
 nix_user=$(whoami)
 nix_group=$(id -g -n)
 
-if [ "$WIN_USER" != "" ] && [ -d "/mnt/c/users/$WIN_USER" ]; then
-    echo "setting linux environment variables for $WIN_USER"
+if [ "$_WIN_USER" != "" ] && [ -d "/mnt/c/users/$_WIN_USER" ]; then
+    echo "setting linux environment variables for $_WIN_USER"
     set -x
-    WIN_USER_HOME=/mnt/c/users/$WIN_USER
-    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-    export WIN_USER
-    export WIN_USER_HOME
-    export WIN_USER_KACHE
-    PATH="$PATH:$WIN_USER_KACHE"
+    _WIN_USER_HOME=/mnt/c/users/$_WIN_USER
+    _WIN_USER_KACHE=/mnt/c/users/$_WIN_USER/kache
+    export _WIN_USER
+    export _WIN_USER_HOME
+    export _WIN_USER_KACHE
+    PATH="$PATH:$_WIN_USER_KACHE"
     set +x
 elif [ "$orig_win_user" != "" ] && [ -d "/mnt/c/users/$orig_win_user" ]; then
-    WIN_USER=$orig_win_user
-    echo "setting linux environment variables for $WIN_USER"
+    _WIN_USER=$orig_win_user
+    echo "setting linux environment variables for $_WIN_USER"
     set -x
-    WIN_USER_HOME=/mnt/c/users/$WIN_USER
-    WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-    export WIN_USER
-    export WIN_USER_HOME
-    export WIN_USER_KACHE
-    PATH="$PATH:$WIN_USER_KACHE"
+    _WIN_USER_HOME=/mnt/c/users/$_WIN_USER
+    _WIN_USER_KACHE=/mnt/c/users/$_WIN_USER/kache
+    export _WIN_USER
+    export _WIN_USER_HOME
+    export _WIN_USER_KACHE
+    PATH="$PATH:$_WIN_USER_KACHE"
     set +x
 fi
 
 # %USERPROFILE% integration
-while [ ! -d "/mnt/c/users/$WIN_USER" ]; do
+while [ ! -d "/mnt/c/users/$_WIN_USER" ]; do
     [ ! -d "/mnt/c/users" ] || cd "/mnt/c/users" || break
     if [ ! -d "/mnt/c/users" ]; then
-        if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
-            echo "/mnt/c/users/$WIN_USER is not a directory - skipping prompt for home directory"
+        if [ ! -d "/mnt/c/users/$_WIN_USER" ]; then
+            echo "/mnt/c/users/$_WIN_USER is not a directory - skipping prompt for home directory"
         fi
         break
     fi
@@ -65,12 +65,12 @@ this directory will be used for:
 
     read -r -p "
 
-(skip)  C:\\users\\" WIN_USER
-    if [ "$WIN_USER" = "" ]; then
+(skip)  C:\\users\\" _WIN_USER
+    if [ "$_WIN_USER" = "" ]; then
 
         break
     fi
-    if [ ! -d "/mnt/c/users/$WIN_USER" ]; then
+    if [ ! -d "/mnt/c/users/$_WIN_USER" ]; then
         echo "
 
         
@@ -83,16 +83,16 @@ this directory will be used for:
 
 
 
-C:\\users\\$WIN_USER is not a home directory"
+C:\\users\\$_WIN_USER is not a home directory"
     else
-        echo "setting linux environment variables for $WIN_USER"
+        echo "setting linux environment variables for $_WIN_USER"
         set -x
-        WIN_USER_HOME=/mnt/c/users/$WIN_USER
-        WIN_USER_KACHE=/mnt/c/users/$WIN_USER/kache
-        export WIN_USER
-        export WIN_USER_HOME
-        export WIN_USER_KACHE
-        PATH="$PATH:$WIN_USER_KACHE"
+        _WIN_USER_HOME=/mnt/c/users/$_WIN_USER
+        _WIN_USER_KACHE=/mnt/c/users/$_WIN_USER/kache
+        export _WIN_USER
+        export _WIN_USER_HOME
+        export _WIN_USER_KACHE
+        PATH="$PATH:$_WIN_USER_KACHE"
         set +x
     fi
 done
@@ -108,7 +108,7 @@ while [ "${import_kernel,,}" != "n" ] && [ "${import_kernel,,}" != "no" ]; do
         if [ "${quick_import_kernel,,}" = "y" ]; then
             echo "
 WINDOWS
-user $WIN_USER
+user $_WIN_USER
 
 import ${kernel_tar_filename} into WSL?" &&
                 read -r -p "
@@ -117,28 +117,28 @@ import ${kernel_tar_filename} into WSL?" &&
         fi
         if [ "${import_kernel,,}" = "y" ] || [ "${import_kernel,,}" = "yes" ] || [ "${import_kernel,,}" = "" ]; then
             # set -x
-            WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
-            sudo mkdir -p "$WIN_USER_KACHE"
-            sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib" "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
-            sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
+            _WIN_USER_KACHE="/mnt/c/users/$_WIN_USER/kache"
+            sudo mkdir -p "$_WIN_USER_KACHE"
+            sudo rm -rf "/mnt/c/users/$_WIN_USER/kache/usr" "/mnt/c/users/$_WIN_USER/kache/lib" "/mnt/c/users/$_WIN_USER/kache/src" "/mnt/c/users/$_WIN_USER/kache/boot"
+            sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* /mnt/c/users/"$_WIN_USER"/.wsl* "$_WIN_USER_KACHE"/*_* "$_WIN_USER_KACHE" "$kernel_tar_path"
             # set +x
             bash "$HOME/k-home.sh" &&
-                sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" &&
-                cd "$WIN_USER_KACHE" &&
+                sudo cp -rfv "$kernel_tar_path" "$_WIN_USER_KACHE/$kernel_tar_file" &&
+                cd "$_WIN_USER_KACHE" &&
                 sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" &&
-                sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
-            sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
-            # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
+                sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* /mnt/c/users/"$_WIN_USER"/.wsl* "$_WIN_USER_KACHE"/*_* "$_WIN_USER_KACHE" "$kernel_tar_path"
+            sudo chmod +x "/mnt/c/users/$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* "$_WIN_USER_KACHE"/*_* "$kernel_tar_path"
+            # sudo chown -R "${nix_user}:$(id -g -n)" "$_WIN_USER_KACHE"
             # bash update-initramfs -u -k !wsl_default_kernel!
             sudo apt-get -yqq install powershell net-tools &&
-                echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
-            bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd"
+                echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$_WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
+            bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$_WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd"
             pwsh "$HOME/dvlw/dvlp/kernels/linux/kache/wsl-restart.ps1"
         else
-            WIN_USER_KACHE="/mnt/c/users/$WIN_USER/kache"
-            if ls /kache/*.tar.gz 1>/dev/null 2>&1 || ls "$WIN_USER_KACHE"*.tar.gz 1>/dev/null 2>&1; then
+            _WIN_USER_KACHE="/mnt/c/users/$_WIN_USER/kache"
+            if ls /kache/*.tar.gz 1>/dev/null 2>&1 || ls "$_WIN_USER_KACHE"*.tar.gz 1>/dev/null 2>&1; then
                 kernel_tar_paths=$(ls -txr /kache/*.tar.gz)
-                kernel_tar_paths+=$(ls -txr "$WIN_USER_KACHE"/*.tar.gz)
+                kernel_tar_paths+=$(ls -txr "$_WIN_USER_KACHE"/*.tar.gz)
 
                 i=0
                 for kernel_tar_path in $kernel_tar_paths; do
@@ -150,7 +150,7 @@ import ${kernel_tar_filename} into WSL?" &&
                 done
                 echo "
     WINDOWS
-    user $WIN_USER
+    user $_WIN_USER
             
     import [number] into WSL?"
                 read -r -p "
@@ -158,25 +158,25 @@ import ${kernel_tar_filename} into WSL?" &&
     " import_kernel_num
                 if [ "${import_kernel_num,,}" -le $i ] && [ "${import_kernel_num,,}" -gt 0 ]; then
                     # set -x
-                    sudo mkdir -p "$WIN_USER_KACHE"
-                    sudo rm -rf "/mnt/c/users/$WIN_USER/kache/usr" "/mnt/c/users/$WIN_USER/kache/lib" "/mnt/c/users/$WIN_USER/kache/src" "/mnt/c/users/$WIN_USER/kache/boot"
-                    sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
+                    sudo mkdir -p "$_WIN_USER_KACHE"
+                    sudo rm -rf "/mnt/c/users/$_WIN_USER/kache/usr" "/mnt/c/users/$_WIN_USER/kache/lib" "/mnt/c/users/$_WIN_USER/kache/src" "/mnt/c/users/$_WIN_USER/kache/boot"
+                    sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* /mnt/c/users/"$_WIN_USER"/.wsl* "$_WIN_USER_KACHE"/*_* "$_WIN_USER_KACHE" "$kernel_tar_path"
                     # set +x
                     kernel_tar_file=${kernel_tar_paths}[$((import_kernel_num - 1))]
                     kernel_tar_file=${kernel_tar_file##*/}
                     bash "$HOME/k-home.sh" &&
                         # the tar is in one of these places but copy to both
-                        sudo cp -rfv "$kernel_tar_path" "$WIN_USER_KACHE/$kernel_tar_file" &&
+                        sudo cp -rfv "$kernel_tar_path" "$_WIN_USER_KACHE/$kernel_tar_file" &&
                         sudo cp -rfv "$kernel_tar_path" "/kache/$kernel_tar_file" &&
-                        cd "$WIN_USER_KACHE" &&
+                        cd "$_WIN_USER_KACHE" &&
                         sudo tar --owner="${nix_user}" --group="${nix_group}" --overwrite -xzvf "${kernel_tar_filename}.tar.gz" &&
-                        sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* /mnt/c/users/"$WIN_USER"/.wsl* "$WIN_USER_KACHE"/*_* "$WIN_USER_KACHE" "$kernel_tar_path"
-                    sudo chmod +x "/mnt/c/users/$WIN_USER"/wsl-* "$WIN_USER_KACHE"/wsl-* "$WIN_USER_KACHE"/.wsl* "$WIN_USER_KACHE"/*_* "$kernel_tar_path"
-                    # sudo chown -R "${nix_user}:$(id -g -n)" "$WIN_USER_KACHE"
+                        sudo chown -R "${nix_user}:${nix_group}" /mnt/c/users/"$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* /mnt/c/users/"$_WIN_USER"/.wsl* "$_WIN_USER_KACHE"/*_* "$_WIN_USER_KACHE" "$kernel_tar_path"
+                    sudo chmod +x "/mnt/c/users/$_WIN_USER"/wsl-* "$_WIN_USER_KACHE"/wsl-* "$_WIN_USER_KACHE"/.wsl* "$_WIN_USER_KACHE"/*_* "$kernel_tar_path"
+                    # sudo chown -R "${nix_user}:$(id -g -n)" "$_WIN_USER_KACHE"
                     # bash update-initramfs -u -k !wsl_default_kernel!
                     sudo apt-get -yqq install powershell net-tools &&
-                        echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
-                    bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd"
+                        echo "running bash '$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh' '$_WIN_USER' 'latest' 'latest' '$WSL_DISTRO_NAME'"
+                    bash "$HOME/dvlw/dvlp/kernels/linux/install-kernel.sh" "$_WIN_USER" 'latest' 'latest' "$WSL_DISTRO_NAME" && cd "$orig_pwd" || cd "$orig_pwd"
                     pwsh "$HOME/dvlw/dvlp/kernels/linux/kache/wsl-restart.ps1"
                 fi
             fi
@@ -287,7 +287,7 @@ import ${kernel_tar_filename} into WSL?" &&
             echo "
     
     WINDOWS
-    user $WIN_USER
+    user $_WIN_USER
 
     build/install kernel for WSL?"
             read -r -p "
@@ -306,7 +306,7 @@ import ${kernel_tar_filename} into WSL?" &&
                 sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq &&
                 sudo apt-get install --no-install-recommends -yqq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin gnupg
             # interop
-            USERNAME=$WIN_USER
+            USERNAME=$_WIN_USER
             sudo service docker start
             echo "
         build stable kernel for WSL? (ZFS available)"
@@ -671,23 +671,23 @@ update devels workshop repo using docker overlay and update files in $HOME?" &&
     fi
 
     cd "$orig_pwd" || exit
-    if [ "$WIN_USER_HOME" != "" ]; then
-        ls -al "$WIN_USER_HOME"
+    if [ "$_WIN_USER_HOME" != "" ]; then
+        ls -al "$_WIN_USER_HOME"
         echo "
 WINDOWS 
-user $WIN_USER
+user $_WIN_USER
 
-update devels workshop repo using docker overlay and update files in $WIN_USER_HOME ?"
+update devels workshop repo using docker overlay and update files in $_WIN_USER_HOME ?"
         read -r -p "
 (no)
 " update_home
         if [ "${update_home,,}" = "y" ] || [ "${update_home,,}" = "yes" ]; then
-            cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$WIN_USER_HOME/k-home.sh"
-            cd "$WIN_USER_HOME" || exit
+            cp -fv "$_WIN_USER_HOME/repos/kindtek/dvlw/dvlp/mnt/HOME_WIN/k-home.sh" "$_WIN_USER_HOME/k-home.sh"
+            cd "$_WIN_USER_HOME" || exit
             sudo echo 'exit 0' | sudo tee /usr/sbin/policy-rc.d
             sudo service docker start
-            bash "$WIN_USER_HOME/k-home.sh"
-            cp -fv "$WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$WIN_USER_HOME/dvlp.ps1"
+            bash "$_WIN_USER_HOME/k-home.sh"
+            cp -fv "$_WIN_USER_HOME/repos/kindtek/dvlw/powerhell/devel-spawn.ps1" "$_WIN_USER_HOME/dvlp.ps1"
             cd "$orig_pwd" || exit
         fi
     fi
@@ -1039,7 +1039,7 @@ finishing up...
 # (no)
 # " build_kde
 # if [ "${build_kde,,}"  = "y" ] || [ "${build_kde,,}" = "yes" ]; then
-#     ./start-kde.sh "$WIN_USER"
+#     ./start-kde.sh "$_WIN_USER"
 # fi
 # echo 'start services?'
 # read -r -p "
