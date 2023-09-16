@@ -19,7 +19,7 @@ docker_service=build-k-home-win
                     build ${docker_service} --no-cache && \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    up ${docker_service} && \
+                    up ${docker_service} --detach && \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     cp ${docker_service}:/ . \

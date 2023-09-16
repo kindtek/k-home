@@ -42,7 +42,7 @@ fi
                     build ${docker_service} --no-cache && \
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    up ${docker_service} && \
+                    up ${docker_service} --detach && \
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     cp ${docker_service}:/ . \
