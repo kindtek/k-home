@@ -8,7 +8,7 @@ tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
 
-docker_service=k-home-win
+docker_service=build-k-home-win
 
 #               _________________________________________________                 #
 #                |||| |           Executing ...           | ||||                  #
