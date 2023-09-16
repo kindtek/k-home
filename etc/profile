@@ -2,8 +2,8 @@
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
 # wsl path interop
-IS_WSL=$(grep -i microsoft /proc/version) # WSL already sets PATH, shouldn't be overridden
-if [ "$IS_WSL" = "" ]; then
+IS_WSL_NO_BASH=$(grep -i microsoft /proc/version) # WSL already sets PATH, shouldn't be overridden
+if [ "$IS_WSL_NO_BASH" = "" ] && [ "$IS_WSL_BASH" != "" ]; then # override if $IS_WSL_BASH is set
   if [ "$(id -u)" -eq 0 ]; then
     PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   else
