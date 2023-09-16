@@ -30,7 +30,7 @@ if [ "$nix_user" = "r00t" ]; then
 elif [ "$nix_user" = "dvl" ]; then
     docker_service=k-home-nix-devel
 else
-    docker_service=k-home-nix-angel
+    docker_service=build-k-home-nix-angel
 fi
 
 #               _________________________________________________                 #
