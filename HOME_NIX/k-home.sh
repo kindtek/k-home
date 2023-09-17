@@ -26,11 +26,11 @@ set -x
 
 nix_user=$(whoami)
 if [ "$nix_user" = "r00t" ]; then
-    docker_service=k-home-nix-r00t
+    src_path=/r00t
 elif [ "$nix_user" = "dvl" ]; then
-    docker_service=k-home-nix-devel
+    src_path=/dvl
 else
-    docker_service=build-k-home-nix-angel
+    src_path=/agl
 fi
 
 #               _________________________________________________                 #
@@ -39,13 +39,13 @@ fi
 #
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    build ${docker_service} --no-cache && \
+                    build vols-kernel --no-cache && \
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    up ${docker_service} --detach && \
+                    up vols-kernel --detach && \
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    cp ${docker_service}:/ . \
+                    cp vols-kernel:${src_path}/ . \
                     2>&1 || exit<<'scratchpad'
 scratchpad
 # 

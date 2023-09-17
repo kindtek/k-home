@@ -4,6 +4,7 @@ filename=k-home-win_${timestamp}
 sudo service docker start
 # log save location 
 mkdir -p logs
+mkdir -p repos/kindtek/dvlw
 tee "logs/$filename.sh" >/dev/null <<'TXT'
 #!/bin/bash
 set -x
@@ -16,13 +17,16 @@ docker_service=build-k-home-win
 #
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    build ${docker_service} --no-cache && \
+                    build vol-kernel --no-cache && \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    up ${docker_service} --detach && \
+                    up vols-kernel --detach && \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    cp ${docker_service}:/ . \
+                    cp vols-kernel:/hal/dvlw/dvlp/mnt/HOME_WIN/ . \
+                    docker compose \
+                    -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
+                    cp vols-kernel:/hal/dvlw/ repos/kindtek/dvlw/ \
                     2>&1 || exit<<'scratchpad'
                     . 2>&1 || exit<<'scratchpad'
 scratchpad
