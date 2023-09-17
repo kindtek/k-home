@@ -30,7 +30,7 @@ if [ "$nix_user" = "r00t" ]; then
 elif [ "$nix_user" = "dvl" ]; then
     src_path=/dvl
 else
-    src_path=/agl
+    src_path=/hal
 fi
 
 #               _________________________________________________                 #
