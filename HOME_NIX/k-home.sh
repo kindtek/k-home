@@ -28,7 +28,7 @@ nix_user=$(whoami)
 if [ "$nix_user" = "r00t" ]; then
     src_path=/r00t
 elif [ "$nix_user" = "dvl" ]; then
-    src_path=/dvl
+    src_path=/hel
 else
     src_path=/hal
 fi
