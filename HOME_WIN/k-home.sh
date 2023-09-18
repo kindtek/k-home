@@ -23,7 +23,7 @@ docker_service=build-k-home-win
                     up vols-kernel --detach && \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    cp vols-kernel:/hal/dvlw/dvlp/mnt/HOME_WIN/ . \
+                    cp vols-kernel:/hal/dvlw/dvlp/mnt/HOME_WIN/* . \
                     docker compose \
                     -f $_WIN_USER_HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
                     cp vols-kernel:/hal/dvlw/ repos/kindtek/dvlw/ \

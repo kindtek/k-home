@@ -45,7 +45,7 @@ fi
                     up vols-kernel --detach && \
                     docker compose \
                     -f $HOME/dvlw/dvlp/docker/kali/docker-compose.yaml \
-                    cp vols-kernel:${src_path}/ . \
+                    cp vols-kernel:${src_path}/ ../ \
                     2>&1 || exit<<'scratchpad'
 scratchpad
 # 
