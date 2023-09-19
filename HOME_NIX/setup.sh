@@ -548,7 +548,7 @@ if [ ! -x /usr/bin/brave-browser ]; then
             install brave browser vlc x11 and other goodies?" &&
         read -r -p "
             (yes)
-    " install_goodies
+            " install_goodies
 fi
 if [ "${install_goodies}" = "" ] || [ "${install_goodies,,}" = "y" ] || [ "${install_goodies,,}" = "yes" ]; then
     sudo apt-get update --fix-missing -yqq && sudo apt-get install -f && sudo apt-get upgrade -yqq &&
