@@ -17,8 +17,9 @@ HISTCONTROL=ignoredups
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=9999
+HISTSIZE=-1
+HISTFILESIZE=-1
+HISTFILE="$HOME/.local/share/bash/history"
 
 # timestamp
 HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S "
