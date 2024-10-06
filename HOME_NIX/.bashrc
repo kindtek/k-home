@@ -20,6 +20,8 @@ shopt -s histappend
 HISTSIZE=-1
 HISTFILESIZE=-1
 HISTFILE="$HOME/.local/share/bash/history"
+HISTCONTROL='ignoreboth'
+HISTIGNORE='exit:history:l:l[1als]:lla:lal+(.)'
 
 # timestamp
 HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S "
