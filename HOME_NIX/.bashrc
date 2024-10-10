@@ -138,6 +138,65 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
+# enter client hostname to be ignored
+ignored_hostnames=("examplehostname1" "examplehostname2")
+
+# Get the current hostname
+current_hostname=$(hostname)
+
+# Check if the current host is in the array
+ignored_hostname=false
+for this_hostname in "${ignored_hostnames[@]}"; do
+    echo "checking if $this_hostname == $current_hostname; ignored_hostname=$ignored_hostname"
+    if [ "$this_hostname" == "$current_hostname" ]; then
+        ignored_hostname=true
+        echo "ignoring $this_hostname; ignored_hostname=$ignored_hostname"
+        break
+    fi
+done
+
+# Check if we are on the host system not client
+if [ "$ignored_hostname" == false ]; then
+    # Cleanup any extra ssh-agent processes
+    for pid in $(pgrep -u "$USER" ssh-agent); do
+        echo "found ssh-agent $pid running with SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+        if [ -n "$SSH_AGENT_PID" ] && [ "$SSH_AGENT_PID" -ne "$pid" ] || [ -z "$SSH_AUTH_SOCK" ]; then
+            # Kill extra ssh-agents or those without $SSH_AUTH_SOCK set properly
+            kill -9 "$pid"
+            echo "killed ssh-agent $pid"
+        fi
+    done
+    # Check if an ssh-agent is already running
+    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+        # Start a new ssh-agent if no valid agent is running
+        echo "Starting ssh-agent..."
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_rsa # Add the private key
+    else
+        # Export SSH_AGENT_PID and SSH_AUTH_SOCK if not already set
+        if [ -z "$SSH_AGENT_PID" ]; then
+            # shellcheck disable=SC2155
+            export SSH_AGENT_PID=$(pgrep -u "$USER" ssh-agent)
+        fi
+        if [ -z "$SSH_AUTH_SOCK" ]; then
+            # shellcheck disable=SC2155
+            export SSH_AUTH_SOCK=$(find /tmp -type s -user "$USER" -name 'agent.*' 2>/dev/null | head -n 1)
+        fi
+    fi
+
+    # Check if variables are set correctly
+    if [ -z "$SSH_AGENT_PID" ]; then
+            echo "ssh-agent is not running"
+    fi
+    if [ -z "$SSH_AUTH_SOCK" ]; then
+            echo "no socket found for ssh-agent $SSH_AGENT_PID"
+    fi
+    echo "SSH_AGENT_PID=$SSH_AGENT_PID"
+    echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+else
+    echo "ssh-agent not initialized for $current_hostname" 
+fi
+
 # some more ls aliases
 alias l='ls -CF'
 alias ll='ls -CFlh'
